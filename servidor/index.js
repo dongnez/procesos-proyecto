@@ -1,6 +1,7 @@
 import express from "express";
 import path from 'path';
 import { fileURLToPath } from "url";
+import { Sistema } from "./modelo.js";
 
 const app = express();
 
@@ -20,6 +21,13 @@ app.get("/", function (request, response) {
   response.sendFile(
     path.join(__dirname, "/cliente/dist/index.html")
   )
+});
+
+app.get("/agregarUsuario/:nick",function(request,response){
+  const sistema = new Sistema()
+  let nick=request.params.nick; 
+  let res= sistema.agregarUsuario(nick);
+  response.send(res);
 });
 
 app.listen(PORT, () => {
