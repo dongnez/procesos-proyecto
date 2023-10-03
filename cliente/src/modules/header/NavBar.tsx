@@ -1,10 +1,14 @@
-import React from 'react'
+import { componentMeasures } from 'src/constants/compontents'
 
 
 export const NavBar = () => {
   return (
-	<nav className='flex w-full'>
-
+	<nav
+	style={{
+		height:componentMeasures.navbarHeight
+	}}
+	 className={`flex items-center px-1`}>
+		<p>s</p>
 	</nav>
   )
 }

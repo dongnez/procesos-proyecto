@@ -1,13 +1,20 @@
-import { LetterEditor } from "src/components/LetterEditor";
-
+import { NavBar } from "src/modules/header/NavBar";
+import { LetterEditor } from "src/modules/letterEditor/LetterEditor";
 import { ThemeProvider } from "src/context/ThemeProvider";
+import { componentMeasures } from "src/constants/compontents";
 // import { Button } from "./@/components/ui/button";
 
 function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <div className="min-h-screen h-screen w-full ">
-        
+      <div 
+      style={{
+        height:`calc(100vh - ${componentMeasures.navbarHeight}px)`,
+        minHeight:`calc(100vh - ${componentMeasures.navbarHeight}px)`,
+      }} 
+      className="w-full">
+
+        <NavBar/> 
         <LetterEditor />
 
       </div>
