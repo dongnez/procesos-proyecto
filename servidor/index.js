@@ -23,12 +23,46 @@ app.get("/", function (request, response) {
   )
 });
 
+
+//Simulacion Base de datos
+const sistema = new Sistema();
+
 app.get("/agregarUsuario/:nick",function(request,response){
-  const sistema = new Sistema()
   let nick=request.params.nick; 
-  let res= sistema.agregarUsuario(nick);
+
+  //Check if nick is already in use
+  if (sistema.obtenerUsuarios()[nick]){
+    console.log("Usuario ya existe", nick);
+    //error response
+    response.send({error: "Usuario ya existe"});
+    return;
+  }
+
+  let res = sistema.agregarUsuario(nick);
+  console.log("Agregando usuario", nick,res);
   response.send(res);
 });
+
+app.get("/obtenerUsuarios",function(request,response){
+  let res = sistema.obtenerUsuarios();
+  console.log("Obteniendo usuarios",res);
+  response.send(res);
+});
+
+app.get("/eliminarUsuario/:nick",function(request,response){
+  let nick=request.params.nick; 
+  let res = sistema.deleteUsuario(nick);
+  console.log("Eliminando usuario", nick,res);
+  response.send(res);
+});
+
+app.get("/usuarioActivo/:nick",function(request,response){
+  let nick=request.params.nick; 
+  let res = sistema.usuarioActivo(nick);
+  console.log("Usuario activo", nick,res);
+  response.send(res);
+}
+);
 
 app.listen(PORT, () => {
   console.log(`App está escuchando en el puerto ${URL}${PORT}`);

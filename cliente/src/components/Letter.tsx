@@ -1,4 +1,4 @@
-import { HTMLAttributes, useMemo, useRef } from "react";
+import { HTMLAttributes } from "react";
 import { LetterType } from "src/interfaces/LettersTypes";
 
 export const Letter = ({
@@ -9,12 +9,10 @@ export const Letter = ({
 }: HTMLAttributes<HTMLSpanElement> & LetterType) => {
 	
   return (
-	<div className="relative bg-red-400 overflow-hidden group px-0">
+	<div className="relative overflow-hidden group px-0">
 		<span
 			{...rest}
-			style={{...letterStyle}}
-		  	
-			>
+			style={{...letterStyle}}>
 			{text}
 		</span>
 	</div>

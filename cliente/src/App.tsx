@@ -1,7 +1,7 @@
-import { NavBar } from "src/modules/header/NavBar";
-import { LetterEditor } from "src/modules/letterEditor/LetterEditor";
 import { ThemeProvider } from "src/context/ThemeProvider";
 import { componentMeasures } from "src/constants/compontents";
+import { RouterProvider } from "react-router-dom";
+import { router } from "src/router/router";
 // import { Button } from "./@/components/ui/button";
 
 function App() {
@@ -14,8 +14,10 @@ function App() {
       }} 
       className="w-full">
 
-        <NavBar/> 
-        <LetterEditor />
+        <RouterProvider
+          router={router}
+          fallbackElement={<p>404</p>}
+        />
 
       </div>
     </ThemeProvider>

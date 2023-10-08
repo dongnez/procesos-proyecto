@@ -1,8 +1,14 @@
-import { atom, useAtom } from "jotai";
-import { LetterPropsStyle } from "src/interfaces/LettersTypes";
+import { atom, useAtom, useAtomValue } from "jotai";
+import { LetterType } from "src/interfaces/LettersTypes";
 
-export const letterEditorAtom = atom<LetterPropsStyle>({})
+export const letterEditorAtom = atom<LetterType>({
+	text:""
+})
 
 export const useLetterEditorAtom = ()=>{
-	return useAtom(letterEditorAtom)
+	return useAtom(letterEditorAtom);
+}
+
+export const useGetLetterEditorAtom = ()=>{
+	return useAtomValue(letterEditorAtom);
 }
