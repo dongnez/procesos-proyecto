@@ -5,7 +5,7 @@
   "type":"module",
   "scripts": {
     "start": "node index.js",
-    "build": "cd ../cliente/ && yarn build"
+    "build": "cd ../cliente/ && yarn install && yarn build"
   },
   "license": "MIT",
   "dependencies": {
