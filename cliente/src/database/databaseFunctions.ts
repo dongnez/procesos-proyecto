@@ -1,6 +1,6 @@
 const SERVER_NAME = window.location.hostname;
 const SERVER_PORT = process.env.PORT || "3000"; // Puedes definir el puerto necesario
-const API_URL = `http://${SERVER_NAME}/`;
+const API_URL = `https://${SERVER_NAME}/`;
 console.log(API_URL,SERVER_NAME,SERVER_PORT);
 
 export function databaseAgregarUsuario(nick: string) {
