@@ -8,6 +8,7 @@ export const NavBar = () => {
 		height:componentMeasures.navbarHeight
 	}}
 	 className={`flex items-center px-1`}>
+		<h1 className='text-3xl font-semibold'>Proyecto Base</h1>
 	</nav>
   )
 }
