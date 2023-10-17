@@ -1,3 +1,5 @@
+import $ from 'jquery'
+
 const SERVER_NAME = window.location.hostname;
 const SERVER_PORT = "3000"; // Puedes definir el puerto necesario
 const API_URL = `http://${SERVER_NAME}:${SERVER_PORT}/`;
