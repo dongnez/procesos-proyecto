@@ -1,7 +1,7 @@
 import express from "express";
 import path from 'path';
 import { fileURLToPath } from "url";
-import { Sistema } from "./modelo.js";
+import { Sistema } from "./servidor/modelo.js";
 
 const app = express();
 
@@ -9,10 +9,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const URL = process.env.URL || 'http://localhost:'
 
+console.log("URL", URL, "PORT", PORT);
+
 const __filename = fileURLToPath(import.meta.url)
 
 //Obtenemos path raiz del proyecto
-const __dirname = path.dirname(path.dirname(__filename)) 
+const __dirname = path.dirname(__filename) 
 console.log("Ruta raiz", __dirname)
 
 app.use(express.static(__dirname + "/cliente/dist/"));

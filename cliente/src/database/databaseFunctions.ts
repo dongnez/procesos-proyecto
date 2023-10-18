@@ -1,12 +1,12 @@
-import $ from 'jquery'
+// import $ from 'jquery'
 
 const SERVER_NAME = window.location.hostname;
-const SERVER_PORT = process.env.PORT || "3000"; // Puedes definir el puerto necesario
-const API_URL = `https://${SERVER_NAME}/`;
+const SERVER_PORT = import.meta.env.PORT || "3000"; // Puedes definir el puerto necesario
+const API_URL = SERVER_NAME === "localhost" ? `http://${SERVER_NAME}:${SERVER_PORT}/` :`https://${SERVER_NAME}/`;
 console.log(API_URL,SERVER_NAME,SERVER_PORT);
 
-export function databaseAgregarUsuario(nick: string) {
-  return fetch(`${API_URL}agregarUsuario/${nick}`)
+  export function databaseAgregarUsuario(nick: string) {
+    return fetch(`${API_URL}agregarUsuario/${nick}`)
      .then(response => response.json())
       .then(data => data);
 }
