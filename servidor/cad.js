@@ -1,4 +1,4 @@
-import mongo from "mongodb";
+import {MongoClient} from "mongodb";
 
 export function CAD(){
 	this.usuario;
@@ -7,19 +7,36 @@ export function CAD(){
 		obtenerOCrear(this.usuarios,{email:email},callback)
 	}
 
-	this.obtenerOCrear = function(){
-		//TODO
-	}
+	function obtenerOCrear(coleccion,criterio,callback)
+    {
+		console.log("Buscando o creando usuario...");
+
+        coleccion.findOneAndUpdate(criterio, {$set: criterio}, {upsert: true,returnDocument:"after",projection:{email:1}}, function(err,doc) {
+           if (err) { throw err; }
+           else { 
+                console.log("Elemento actualizado"); 
+                console.log(doc.value.email);
+                callback({email:doc.value.email});
+            }
+         }).then(()=>{
+			callback({email:criterio.email});
+		 })
+    }
+
 
 	this.conectar = async function(callback){
 		// Conecta con el servidor
 		let cad = this;
-		let client= new mongo("mongodb+srv://gnezdeveloper:<2MW4Irv2lYh0wnBQ>@cluster0.8ipdsqw.mongodb.net/?retryWrites=true&w=majority");
+		let client = new MongoClient("mongodb+srv://gnez:gnez@cluster0.43kwtts.mongodb.net/?retryWrites=true&w=majority");
 		await client.connect();
 
-		console.log("Conectado a la base de datos")
+		
 		const database=client.db("sistema");
+        cad.usuarios=database.collection("usuarios");
+		
+		console.log("Conectado a mongodb")
 
+		// callback(database)
 
 	}
 }

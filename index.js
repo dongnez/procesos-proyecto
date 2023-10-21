@@ -1,70 +1,120 @@
 import express from "express";
-import path from 'path';
+import session from "express-session";
+import path from "path";
 import { fileURLToPath } from "url";
 import { Sistema } from "./servidor/modelo.js";
+import passport from "passport";
+import "./servidor/passport-setup.js";
 
 const app = express();
 
-//const modelo = require("./servidor/modelo.js");
 const PORT = process.env.PORT || 3000;
-const URL = process.env.URL || 'http://localhost:'
+const URL = process.env.URL || "http://localhost:";
+const __filename = fileURLToPath(import.meta.url);
 
-console.log("URL", URL, "PORT", PORT);
-
-const __filename = fileURLToPath(import.meta.url)
+//sistema
+const sistema = new Sistema();
 
 //Obtenemos path raiz del proyecto
-const __dirname = path.dirname(__filename) 
-console.log("Ruta raiz", __dirname)
+const __dirname = path.dirname(__filename);
 
+console.log("Ruta raiz", __dirname);
+
+//ROOT
 app.use(express.static(__dirname + "/cliente/dist/"));
 
 app.get("/", function (request, response) {
-  response.sendFile(
-    path.join(__dirname, "/cliente/dist/index.html")
-  )
+  response.sendFile(path.join(__dirname, "/cliente/dist/index.html"));
+});
+
+app.get("/app", function (request, response) {
+  response.sendFile(path.join(__dirname, "/cliente/dist/index.html"));
+});
+
+//PASSPORT SETUP
+app.use(
+  session({
+    secret: "procesos-secret",
+    resave: false,
+    saveUninitialized: false,
+    name: "Sistema",
+    store: new session.MemoryStore(),
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.get("/auth/google",passport.authenticate('google', { scope: ['profile','email'] }));
+
+app.get(
+  "/google/callback",
+  passport.authenticate("google", { failureRedirect: "/fallo" }),
+  function (req, res) {
+    res.redirect("/good");
+  }
+);
+
+app.get("/good", function (request, response) {
+  /*   let nick=request.user.emails[0].value;
+  if (nick){
+  sistema.agregarUsuario(nick);
+  }
+  //console.log(request.user.emails[0].value);
+  response.cookie('nick',nick);
+  response.redirect('/'); */
+
+
+  let email = request.user.emails[0].value;
+  sistema.buscarOCrearUsuario(email, function (obj) {
+    console.log("Usuario creado...");
+    response.cookie("nick", obj.email);
+    response.redirect("/app");
+  });
+});
+
+app.get("/fallo", function (request, response) {
+  response.errored("Fallo al autenticar");
 });
 
 
-//Simulacion Base de datos
-const sistema = new Sistema();
 
-app.get("/agregarUsuario/:nick",function(request,response){
-  let nick=request.params.nick; 
+
+app.get("/agregarUsuario/:nick", function (request, response) {
+  let nick = request.params.nick;
 
   //Check if nick is already in use
-  if (sistema.obtenerUsuarios()[nick]){
+  if (sistema.obtenerUsuarios()[nick]) {
     console.log("Usuario ya existe", nick);
     //error response
-    response.send({error: "Usuario ya existe"});
+    response.send({ error: "Usuario ya existe" });
     return;
   }
 
   let res = sistema.agregarUsuario(nick);
-  console.log("Agregando usuario", nick,res);
+  console.log("Agregando usuario", nick);
   response.send(res);
 });
 
-app.get("/obtenerUsuarios",function(request,response){
+app.get("/obtenerUsuarios", function (request, response) {
   let res = sistema.obtenerUsuarios();
-  console.log("Obteniendo usuarios",res);
+  console.log("Obteniendo usuarios", res);
   response.send(res);
 });
 
-app.get("/eliminarUsuario/:nick",function(request,response){
-  let nick=request.params.nick; 
+app.get("/eliminarUsuario/:nick", function (request, response) {
+  let nick = request.params.nick;
   let res = sistema.deleteUsuario(nick);
-  console.log("Eliminando usuario", nick,res);
+  console.log("Eliminando usuario", nick, res);
   response.send(res);
 });
 
-app.get("/usuarioActivo/:nick",function(request,response){
-  let nick=request.params.nick; 
+app.get("/usuarioActivo/:nick", function (request, response) {
+  let nick = request.params.nick;
   let res = sistema.usuarioActivo(nick);
-  console.log("Usuario activo", nick,res);
+  console.log("Usuario activo", nick, res);
   response.send(res);
-}
-);
+});
 
 app.listen(PORT, () => {
   console.log(`App está escuchando en el puerto ${URL}${PORT}`);
