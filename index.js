@@ -20,6 +20,8 @@ console.log("Ruta raiz", __dirname);
 
 //ROOT
 app.use(express.static(__dirname + "/cliente/dist/"));
+app.use(express.json());
+
 
 
 initClases(app);

@@ -18,7 +18,6 @@ export function Sistema() {
   };
 
   this.buscarOCrearUsuario = function (email, callback) {
-    console.log("Creado usuario", email)
     this.cad.buscarOCrearUsuario(email,function(obj){
       callback(obj);
     });

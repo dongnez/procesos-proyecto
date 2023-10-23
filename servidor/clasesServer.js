@@ -86,11 +86,12 @@ export function initClases(app) {
   });
 
   app.post("/enviarJwt", function (request, response) {
-    console.log("Enviando jwt EJECUTA");
+    
     let jwt = request.body.jwt;
     let user = JSON.parse(atob(jwt.split(".")[1]));
     let email = user.email;
     sistema.buscarOCrearUsuario(email, function (obj) {
+      response.cookie("nick", obj.email);
       response.send({ nick: obj.email });
     });
   });

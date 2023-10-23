@@ -22,7 +22,7 @@ export const useOneTap = (user:any) => {
  			// let user=JSON.parse(atob(jwt.split(".")[1]));
 
 
-			databaseEnviarJWT(JSON.stringify({"jwt":jwt})).then((res:any) => {
+			databaseEnviarJWT({"jwt":jwt}).then((res:any) => {
 				console.log("useOneTap CALLBACK", res);
 
 				window.location.href = "/app";

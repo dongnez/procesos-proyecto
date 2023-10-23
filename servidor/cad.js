@@ -9,7 +9,7 @@ export function CAD(){
 
 	function obtenerOCrear(coleccion,criterio,callback)
     {
-		console.log("Buscando o creando usuario...");
+		
 
         coleccion.findOneAndUpdate(criterio, {$set: criterio}, {upsert: true,returnDocument:"after",projection:{email:1}}, function(err,doc) {
            if (err) { throw err; }
