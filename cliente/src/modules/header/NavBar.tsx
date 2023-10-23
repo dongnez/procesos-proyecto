@@ -7,7 +7,7 @@ export const NavBar = () => {
 	style={{
 		height:componentMeasures.navbarHeight
 	}}
-	 className={`flex items-center px-1`}>
+	 className={`flex items-center px-1 border bg-secondary`}>
 		<h1 className='text-3xl font-semibold'>Proyecto Base</h1>
 	</nav>
   )

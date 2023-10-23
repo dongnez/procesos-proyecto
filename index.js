@@ -23,13 +23,10 @@ console.log("Ruta raiz", __dirname);
 //ROOT
 app.use(express.static(__dirname + "/cliente/dist/"));
 
-app.get("/", function (request, response) {
-  response.sendFile(path.join(__dirname, "/cliente/dist/index.html"));
-});
 
-app.get("/app", function (request, response) {
-  response.sendFile(path.join(__dirname, "/cliente/dist/index.html"));
-});
+// app.get("/app", function (request, response) {
+//   response.sendFile(path.join(__dirname, "/cliente/dist/index.html"));
+// });
 
 //PASSPORT SETUP
 app.use(
@@ -80,19 +77,22 @@ app.get("/fallo", function (request, response) {
 
 
 
-app.get("/agregarUsuario/:nick", function (request, response) {
+app.get("/agregarUsuario/:nick",async function (request, response) {
   let nick = request.params.nick;
 
   //Check if nick is already in use
   if (sistema.obtenerUsuarios()[nick]) {
     console.log("Usuario ya existe", nick);
-    //error response
-    response.send({ error: "Usuario ya existe" });
+      response.cookie("nick", nick);
+      response.send(res);
+    
     return;
   }
 
-  let res = sistema.agregarUsuario(nick);
+  let res = await sistema.agregarUsuario(nick);
+
   console.log("Agregando usuario", nick);
+  response.cookie("nick", nick);
   response.send(res);
 });
 
@@ -119,4 +119,10 @@ app.get("/usuarioActivo/:nick", function (request, response) {
 app.listen(PORT, () => {
   console.log(`App está escuchando en el puerto ${URL}${PORT}`);
   console.log("Ctrl+C para salir");
+});
+
+
+// Ruta para cualquier otro GET que no sea las rutas definidas (APP)
+app.get("*", function (request, response) {
+  response.sendFile(path.join(__dirname, "/cliente/dist/index.html"));
 });

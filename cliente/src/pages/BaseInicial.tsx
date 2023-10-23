@@ -22,8 +22,8 @@ export const BaseInicial = () => {
   }, [user]);
 
   return (
-    <div className="h-full w-full">
-      <div className="p-3 flex flex-col items-center justify-center border-2 border-secondary rounded-md mx-5 ">
+    <div className="h-full w-full ">
+      <div className="w-fit p-10  flex flex-col items-center justify-center border-2 border-secondary rounded-md mx-auto">
         <section>
           <h2 className="text-gray-500 text-xl font-bold">Iniciar Sesión</h2>
           <div className="flex flex-col gap-2 w-fit">
@@ -42,8 +42,6 @@ export const BaseInicial = () => {
 
                 setNick("");
 
-                //TODO REMOVE
-                // setUser({ nick });
 
                 databaseAgregarUsuario(nick).then(() => {
                   setUser({ nick });
