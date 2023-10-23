@@ -22,20 +22,24 @@ export const BaseInicial = () => {
   }, [user]);
 
   return (
-    <div className="h-full w-full ">
-      <div className="w-fit p-10  flex flex-col items-center justify-center border-2 border-secondary rounded-md mx-auto">
-        <section>
-          <h2 className="text-gray-500 text-xl font-bold">Iniciar Sesión</h2>
-          <div className="flex flex-col gap-2 w-fit">
+    <div className="h-full w-full pt-20 bg-background">
+      <div className="w-fit p-20   border-2 border-secondary rounded-md mx-auto bg-card">
+        <section className="flex flex-col items-center justify-center gap-4 w-[300px]">
+          <h2 className="text-center text-4xl font-bold text-primary">Iniciar Sesión</h2>
+          <p className="mb-4 text-sm text-card-foreground">Introduce tu nombre o un email para continuar</p>
+    
+          <div className="flex flex-col gap-4 w-full">
             <Input
               type="text"
               placeholder="Nick"
+              
               value={nick}
               onChange={(e) => {
                 setNick(e.target.value);
               }}
             />
             <Button
+              size={"sm"}
               onClick={async () => {
                 if (nick === "")
                   return alert("No se puede agregar un usuario sin nick");
@@ -50,6 +54,9 @@ export const BaseInicial = () => {
               type="submit">
               Add
             </Button>
+
+            <p className="text-center text-secondary-foreground">o continuar con</p>
+            
 
             <div className="px-6 sm:px-0 max-w-sm">
               <button

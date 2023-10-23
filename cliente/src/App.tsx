@@ -5,10 +5,9 @@ import { router } from "src/router/router";
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <div 
-
-      className="w-full h-full">
+      className="w-full h-screen ">
 
         <RouterProvider
           router={router}
