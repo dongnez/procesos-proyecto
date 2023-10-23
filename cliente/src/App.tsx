@@ -1,22 +1,17 @@
 import { ThemeProvider } from "src/context/ThemeProvider";
 import { RouterProvider } from "react-router-dom";
 import { router } from "src/router/router";
-// import { Button } from "./@/components/ui/button";
+import { ErrorPage } from "src/pages/ErrorPage";
 
 function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <div 
-        className="w-full h-screen bg-background text-foreground"
-      //   style={{
-      //   height:`calc(100vh - ${componentMeasures.navbarHeight}px)`,
-      //   minHeight:`calc(100vh - ${componentMeasures.navbarHeight}px)`,
-      // }}
-        >
+        className="w-full h-screen bg-background text-foreground">
 
         <RouterProvider
           router={router}
-          fallbackElement={<p>404</p>}
+          fallbackElement={<ErrorPage />}
         />
 
       </div>
