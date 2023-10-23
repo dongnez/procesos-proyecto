@@ -5,9 +5,14 @@ import { router } from "src/router/router";
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <div 
-      className="w-full h-screen ">
+        className="w-full h-screen bg-background text-foreground"
+      //   style={{
+      //   height:`calc(100vh - ${componentMeasures.navbarHeight}px)`,
+      //   minHeight:`calc(100vh - ${componentMeasures.navbarHeight}px)`,
+      // }}
+        >
 
         <RouterProvider
           router={router}

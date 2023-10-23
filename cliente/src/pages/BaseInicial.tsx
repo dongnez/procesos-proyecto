@@ -23,7 +23,7 @@ export const BaseInicial = () => {
 
   return (
     <div className="h-full w-full pt-20 bg-background">
-      <div className="w-fit p-20   border-2 border-secondary rounded-md mx-auto bg-card">
+      <div className="w-fit p-20  border-2 border-secondary rounded-xl mx-auto bg-card">
         <section className="flex flex-col items-center justify-center gap-4 w-[300px]">
           <h2 className="text-center text-4xl font-bold text-primary">Iniciar Sesión</h2>
           <p className="mb-4 text-sm text-card-foreground">Introduce tu nombre o un email para continuar</p>
@@ -55,7 +55,9 @@ export const BaseInicial = () => {
               Add
             </Button>
 
-            <p className="text-center text-secondary-foreground">o continuar con</p>
+            <div className="relative w-full h-[1px] bg-foreground/40 my-4">
+              <p className="absolute bg-card w-fit top-[-13px] mx-auto px-2 right-0 left-0 text-center text-card-foreground/40">o continuar con</p>
+            </div>
             
 
             <div className="px-6 sm:px-0 max-w-sm">
