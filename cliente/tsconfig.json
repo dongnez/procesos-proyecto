@@ -21,11 +21,12 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "src": ["src/*"]
+      "src": ["src/*"],
+      "servidor": ["servidor/*"], // Alias existentes
     }
     
     
   },
-  "include": ["src"],
+  "include": ["src",],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

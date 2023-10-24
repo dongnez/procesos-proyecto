@@ -1,6 +1,6 @@
 import {Schema,model} from "mongoose";
 
-const UserSchema = new Schema({
+const UserSchema = new Schema<UserInterface>({
 	email:{
 		type: String,
 		unique: true,
@@ -11,13 +11,18 @@ const UserSchema = new Schema({
 		unique: true,
 		select: false,
 	},
-	fullname:{
+	name:{
 		type: String,
 		unique: false,
 		required: [true, 'El nombre es necesario'],
 		minLenght: [3, 'El nombre es muy corto'],
 		maxLenght: [40, 'El nombre es muy largo'],
-	}
+	},
+	templates: [{
+		type: Schema.Types.ObjectId,
+		ref: 'Template'
+	}]	
+
 })
 
 export const UserModel = model('User', UserSchema)

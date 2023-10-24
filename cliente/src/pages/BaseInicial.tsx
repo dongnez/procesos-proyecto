@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useOneTap } from "src/hooks/useOneTap"
 
+
 type User = {
   nick: string;
 };
@@ -14,6 +15,7 @@ export const BaseInicial = () => {
   const [user, setUser] = useState<User | null>(null);
 
   const navigate = useNavigate();
+  
 
   useOneTap(user);
 
@@ -25,9 +27,9 @@ export const BaseInicial = () => {
   }, [user]);
 
   return (
-    <div className="h-full w-full pt-20 bg-background">
-      <div className="w-fit p-20  border-2 border-secondary rounded-xl mx-auto bg-card">
-        <section className="flex flex-col items-center justify-center gap-4 w-[300px]">
+    <div className="h-full w-full pt-20 bg-background px-2 sm:px-0">
+      <div className="w-full px-4 py-10 sm:w-fit sm:p-20  border-2 border-secondary rounded-xl mx-auto bg-card">
+        <section className="flex flex-col m-auto items-center justify-center gap-4 w-[300px]">
           <h2 className="text-center text-4xl font-bold text-primary">
             Iniciar Sesión
           </h2>
@@ -38,6 +40,7 @@ export const BaseInicial = () => {
           <div className="flex flex-col gap-4 w-full">
             <Input
               type="text"
+              className="text-lg"
               placeholder="Nick"
               value={nick}
               onChange={(e) => {
