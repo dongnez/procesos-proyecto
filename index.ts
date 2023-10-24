@@ -4,11 +4,13 @@ import { fileURLToPath } from "url";
 import "./servidor/clase/passport-setup.js";
 import { initClases } from "./servidor/clase/clasesServer.js";
 import {authRoutes} from "./servidor/routes/authRoutes.js"
+import { connectMongoDB } from "./servidor/db.js";
 
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
+
 const URL = process.env.URL || "http://localhost:";
 const __filename = fileURLToPath(import.meta.url);
 
@@ -22,8 +24,10 @@ console.log("Ruta raiz", __dirname);
 app.use(express.static(__dirname + "/cliente/dist/"));
 app.use(express.json());
 
+//MONGO
+connectMongoDB();
 
-
+//Clase
 initClases(app);
 
 //RUTAS
@@ -35,7 +39,7 @@ app.listen(PORT, () => {
 });
 
 
-// Ruta para cualquier otro GET que no sea las rutas definidas (APP)
-// app.get("*", function (request, response) {
-//   response.sendFile(path.join(__dirname, "/cliente/dist/index.html"));
-// });
+//Ruta para cualquier otro GET que no sea las rutas definidas (APP)
+app.get("*", function (request, response) {
+  response.sendFile(path.join(__dirname, "/cliente/dist/index.html"));
+});

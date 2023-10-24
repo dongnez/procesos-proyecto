@@ -23,6 +23,6 @@ const UserSchema = new Schema<UserInterface>({
 		ref: 'Template'
 	}]	
 
-})
+},{collection: 'usuarios'})
 
 export const UserModel = model('User', UserSchema)
