@@ -10,8 +10,8 @@ export const AppLayout = () => {
     <div
       className="h-full bg-background"
       style={{
-        height: `calc(100vh - ${componentMeasures.navbarHeight}px)`,
-        minHeight: `calc(100vh - ${componentMeasures.navbarHeight}px)`,
+        height: `calc(100dvh - ${componentMeasures.navbarHeight}px)`,
+        minHeight: `calc(100dvh - ${componentMeasures.navbarHeight}px)`,
       }}>
       <NavBar className="" />
       <div className="h-full flex ">

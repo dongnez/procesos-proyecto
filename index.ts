@@ -1,8 +1,8 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
-import "./servidor/passport-setup.js";
-import { initClases } from "./servidor/clasesServer.js";
+import "./servidor/clase/passport-setup.js";
+import { initClases } from "./servidor/clase/clasesServer.js";
 import {authRoutes} from "./servidor/routes/authRoutes.js"
 
 
@@ -36,6 +36,6 @@ app.listen(PORT, () => {
 
 
 // Ruta para cualquier otro GET que no sea las rutas definidas (APP)
-app.get("*", function (request, response) {
-  response.sendFile(path.join(__dirname, "/cliente/dist/index.html"));
-});
+// app.get("*", function (request, response) {
+//   response.sendFile(path.join(__dirname, "/cliente/dist/index.html"));
+// });

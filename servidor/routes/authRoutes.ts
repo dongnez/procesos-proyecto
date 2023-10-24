@@ -9,6 +9,10 @@ router.post('/login', (req, res) => {
 
 router.post('/register', (req, res) => {
   // Tu lógica de registro
+
+  console.log(req.body);
+  res.send('registrando')
+
 });
 
 export const authRoutes = router;

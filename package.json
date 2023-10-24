@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
-    "esModuleInterop": true,
+  "esModuleInterop": true,
   "scripts": {
     "dev": "cd cliente && yarn && yarn dev",
     "start-old": "ts-node index.ts",
