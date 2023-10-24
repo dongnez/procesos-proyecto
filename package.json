@@ -6,7 +6,8 @@
     "esModuleInterop": true,
   "scripts": {
     "dev": "cd cliente && yarn && yarn dev",
-    "start": "ts-node index.ts",
+    "start-old": "ts-node index.ts",
+    "start": " node --loader ts-node/esm index.ts",
     "build": "cd cliente/ && yarn install && yarn build"
   },
   "license": "MIT",
