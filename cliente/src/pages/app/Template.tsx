@@ -5,19 +5,17 @@ export const Template = () => {
 
    const { templateId } = useParams()
 
-   const [template,setTemplate] = useTemplateAtoms(templateId || "")
+   const [template,_] = useTemplateAtoms(templateId || "")
 
-   console.log("Now",template)
-
-		
 
   return (
 	<div className='w-full h-full bg-background'>
 		Template {templateId}
-		<p>{template?.name}</p>
-		<p>{template?.visibility}</p>
 
-		<button> SET TEMPLATE</button>
+		<p>Name {template?.name}</p>
+		<p>Visibility {template?.visibility}</p>
+
+		
 	</div>
   )
 }
