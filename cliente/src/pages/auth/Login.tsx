@@ -3,19 +3,18 @@ import { Button } from "src/@/components/ui/button";
 import { Input } from "src/@/components/ui/input";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useOneTap } from "src/hooks/useOneTap"
-
+import { useOneTap } from "src/hooks/useOneTap";
 
 type User = {
   nick: string;
 };
 
-export const BaseInicial = () => {
-  const [nick, setNick] = useState("");
+export const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [user, setUser] = useState<User | null>(null);
 
   const navigate = useNavigate();
-  
 
   useOneTap(user);
 
@@ -41,22 +40,31 @@ export const BaseInicial = () => {
             <Input
               type="text"
               className="text-lg"
-              placeholder="Nick"
-              value={nick}
+              placeholder="Email"
+              value={email}
               onChange={(e) => {
-                setNick(e.target.value);
+                setEmail(e.target.value);
+              }}
+            />
+            <Input
+              type="password"
+              className="text-lg"
+              placeholder="********"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
               }}
             />
             <Button
               size={"sm"}
               onClick={async () => {
-                if (nick === "")
+                if (email === "")
                   return alert("No se puede agregar un usuario sin nick");
 
-                setNick("");
+                setEmail("");
 
-                databaseAgregarUsuario(nick).then(() => {
-                  setUser({ nick });
+                databaseAgregarUsuario(email).then(() => {
+                  setUser({ nick: email });
                 });
               }}
               type="submit">
@@ -91,6 +99,12 @@ export const BaseInicial = () => {
                 </svg>
                 Iniciar con Google<div></div>
               </button>
+
+              <p className="text-center w-full mt-5">
+                <a href="/register" className="hover:underline text-primary ">
+                  ¿Todavia no tienes una cuenta? 
+                </a>
+              </p>
             </div>
           </div>
         </section>

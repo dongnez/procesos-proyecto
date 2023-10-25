@@ -1,13 +1,22 @@
 import { createBrowserRouter } from "react-router-dom";
 import { AppLayout } from "src/pages/app/AppLayout";
-import { BaseInicial } from "src/pages/BaseInicial";
+import { Login } from "src/pages/auth/Login";
+import { Register } from "src/pages/auth/Register";
 import { ErrorPage } from "src/pages/ErrorPage";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <BaseInicial />,
+    element: <p>Hey :)</p>,
     errorElement: <ErrorPage />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
   },
   {
     path: "/app",
