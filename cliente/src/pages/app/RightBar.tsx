@@ -7,8 +7,12 @@ import {
   AccordionTrigger,
 } from "src/@/components/ui/accordion";
 import { TemplateListItem } from "src/components/TemplateListItem";
+import { HTMLAttributes } from "react";
+import { cn } from "src/@/lib/utils";
 
-export const Sidebar = () => {
+export const RightBar = ({className,...rest}:HTMLAttributes<HTMLDivElement>) => {
+
+  // TODO: get templates from api
   const templates: TemplateInterface[] = [
     {
       id: "tempalte12312",
@@ -25,11 +29,9 @@ export const Sidebar = () => {
     },
   ];
 
-  
 
   return (
-    <section className="bg-card h-full w-[200px] p-2">
-      <p>List</p>
+    <section {...rest} className={cn("bg-card h-full w-[300px] py-3 px-4 rounded-l-3xl",className)}>
 
       <Accordion
         type="single"
