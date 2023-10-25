@@ -1,10 +1,9 @@
 import { Outlet } from "react-router-dom";
 import { NavBar } from "src/modules/header/NavBar";
-import Cookies from "js-cookie";
 import { componentMeasures } from "src/constants/compontents";
+import { Sidebar } from "src/pages/app/Sidebar";
 
 export const AppLayout = () => {
-  const nickValue = Cookies.get("nick");
 
   return (
     <div
@@ -15,15 +14,11 @@ export const AppLayout = () => {
       }}>
       <NavBar className="" />
       <div className="h-full flex ">
-        <section className="bg-card h-full w-[200px]">
-          <p>List</p>
-        </section>
+
+        <Sidebar />
 
         <section className="h-full bg-accent w-10 flex-1">
-          <h1 className="text-foreground text-4x">
-            Bienvenido: {nickValue}{" "}
       		<Outlet />
-          </h1>
         </section>
       </div>
     </div>

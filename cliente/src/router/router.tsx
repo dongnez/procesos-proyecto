@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import { Template } from "src/pages/app/Template";
 import { AppLayout } from "src/pages/app/AppLayout";
 import { Login } from "src/pages/auth/Login";
 import { Register } from "src/pages/auth/Register";
@@ -23,8 +24,8 @@ export const router = createBrowserRouter([
     element: <AppLayout/>,
     children: [
       {
-        path: "",
-        element: <h1>Home</h1>,
+        path: "template/:templateId",
+        element: <Template />,
       },
       {
         path: "test",
