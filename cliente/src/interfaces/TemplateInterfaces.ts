@@ -1,4 +1,6 @@
-interface TemplateInterface {
+import { FoodInterface } from "src/interfaces/FoodInterfaces"
+
+export interface TemplateInterface {
 	id:string
 	visibility: "public" | "private" 
 	name: string

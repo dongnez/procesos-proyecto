@@ -1,28 +1,29 @@
-import { databaseAgregarUsuario } from "src/database/databaseFunctions";
 import { Button } from "src/@/components/ui/button";
 import { Input } from "src/@/components/ui/input";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useOneTap } from "src/hooks/useOneTap"
-
-type User = {
-  nick: string;
-};
+import { useState } from "react";
+// import { useNavigate } from "react-router-dom";
+import { useOneTap } from "src/hooks/useOneTap";
+import { UserInterface } from "src/interfaces/UserInterfaces";
+import { databaseAuthRegister } from "src/database/databaseAuth";
 
 export const Register = () => {
-  const [nick, setNick] = useState("");
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserInterface>({
+    id: "",
+    email: "",
+    name: "",
+    password: "",
+  });
 
-  const navigate = useNavigate();
+//   const navigate = useNavigate();
 
   useOneTap(user);
 
-  useEffect(() => {
-    if (user?.nick) {
-      navigate("/app");
-      //LOGUEADO
-    }
-  }, [user]);
+  //   useEffect(() => {
+  // if (user?.nick) {
+  //   navigate("/app");
+  //LOGUEADO
+  // }
+  //   }, [user]);
 
   return (
     <div className="h-full w-full pt-20 bg-background px-2 sm:px-0">
@@ -32,30 +33,50 @@ export const Register = () => {
             Registrarse
           </h2>
           <p className="mb-4 text-sm text-card-foreground">
-		  	Introduce todos los datos para continuar
+            Introduce todos los datos para continuar
           </p>
 
           <div className="flex flex-col gap-4 w-full">
             <Input
               type="text"
               className="text-lg"
-              placeholder="Nick"
-              value={nick}
+              placeholder="Nombre"
+              value={user.name}
               onChange={(e) => {
-                setNick(e.target.value);
+                setUser((user) => ({ ...user, name: e.target.value }));
+              }}
+            />
+            <Input
+              type="text"
+              className="text-lg"
+              placeholder="Email"
+              value={user.email}
+              onChange={(e) => {
+                setUser((user) => ({ ...user, email: e.target.value }));
+              }}
+            />
+            <Input
+              type="password"
+              className="text-lg"
+              placeholder="Contraseña"
+              value={user.password}
+              onChange={(e) => {
+                setUser((user) => ({ ...user, password: e.target.value }));
               }}
             />
             <Button
               size={"sm"}
               onClick={async () => {
-                if (nick === "")
+				await databaseAuthRegister(user).then((user) => {
+					console.log("Registrado", user);	
+				})
+                /*                 if (nick === "")
                   return alert("No se puede agregar un usuario sin nick");
 
-                setNick("");
-
-                databaseAgregarUsuario(nick).then(() => {
+                setNick(""); */
+                /*                 databaseAgregarUsuario(nick).then(() => {
                   setUser({ nick });
-                });
+                }); */
               }}
               type="submit">
               Registrarse
@@ -90,12 +111,11 @@ export const Register = () => {
                 Iniciar con Google<div></div>
               </button>
 
-			  <p className="text-center w-full mt-5">
+              <p className="text-center w-full mt-5">
                 <a href="/login" className="hover:underline text-primary ">
-                  ¿Ya tienes una cuenta? 
+                  ¿Ya tienes una cuenta?
                 </a>
               </p>
-
             </div>
           </div>
         </section>

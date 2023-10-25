@@ -1,7 +1,7 @@
-interface UserInterface {
+export interface UserInterface {
 	id:string
 	name:string
 	email:string
 	password:string
-	templates: string[]
+	templates?: string[]
 }

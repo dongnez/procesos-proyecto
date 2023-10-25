@@ -1,5 +1,5 @@
 import {useEffect} from 'react';
-import {  databaseEnviarJWT } from 'src/database/databaseFunctions';
+import {  databaseEnviarJWT } from 'src/database/databaseClaseFunctions';
 
 export const useOneTap = (user:any) => {
 	useEffect(() => {

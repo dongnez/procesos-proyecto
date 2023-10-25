@@ -1,4 +1,4 @@
-interface FoodInterface {
+export interface FoodInterface {
 	id:string
 	name:string,
 	image:string,

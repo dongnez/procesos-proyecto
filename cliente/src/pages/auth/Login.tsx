@@ -1,4 +1,4 @@
-import { databaseAgregarUsuario } from "src/database/databaseFunctions";
+import { databaseAgregarUsuario } from "src/database/databaseClaseFunctions";
 import { Button } from "src/@/components/ui/button";
 import { Input } from "src/@/components/ui/input";
 import { useEffect, useState } from "react";
@@ -49,7 +49,7 @@ export const Login = () => {
             <Input
               type="password"
               className="text-lg"
-              placeholder="********"
+              placeholder="Contraseña"
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
