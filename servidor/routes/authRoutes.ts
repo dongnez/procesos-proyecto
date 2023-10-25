@@ -2,11 +2,36 @@ import bycrypt from 'bcrypt';
 import { UserModel } from '../../servidor/models/user';
 import {Router} from 'express'
 const router = Router();
+import { createAccesstoken } from '../libs/createAccessToken';
 
 // Define rutas y controladores para la autenticación
-router.post('/login', (req, res) => {
-  // Tu lógica de autenticación
-    res.send("LOGIN");
+router.post('/login', async (req, res) => {
+  const {email,password} = req.body;
+
+  try {
+  
+    const userFound = await UserModel.findOne({email});
+
+    if(!userFound) return res.status(400).json({message:"Usuario no encontrado"})
+
+    // Check password is the same
+    const isPasswordMatch = await bycrypt.compare(password,userFound.password)
+    if(!isPasswordMatch) return res.status(400).json({message:"Contraseña incorrecta"})
+  
+    const token = await createAccesstoken({id:userFound._id})
+
+    res.cookie('jwt',token)
+		res.json({
+      id:userFound._id,
+      name:userFound.name,
+      email:userFound.email,
+      templates:userFound.templates,
+		})
+    
+  } catch (error) {
+    console.log("Login",error);
+    res.send(error)
+  }
 });
 
 router.post('/register', async (req, res) => {
@@ -24,12 +49,14 @@ router.post('/register', async (req, res) => {
     })
   
     const userSaved = await newUser.save();
+
+    const token = await createAccesstoken({id:userSaved._id})
+
+    res.cookie('jwt',token)
+		res.json({
+		  'message': 'User created successfully',
+		})
   
-    res.json({
-      id: userSaved._id,
-      name: userSaved.name,
-      email: userSaved.email
-    });
     
   } catch (error) {
     console.log("Register",error);

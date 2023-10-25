@@ -9,7 +9,7 @@ const UserSchema = new Schema<UserInterface>({
 	password:{
 		type: String,
 		unique: true,
-		select: false,
+		// select: false,
 	},
 	name:{
 		type: String,
