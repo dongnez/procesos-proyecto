@@ -21,17 +21,28 @@ export const router = createBrowserRouter([
   },
   {
     path: "/app",
-    element: <AppLayout/>,
+    element: <AppLayout />,
     children: [
       {
         path: "template/:templateId",
         element: <Template />,
       },
       {
+        path: "template/:templateId/food/:foodId",
+        element: <Template />,
+      },
+      {
+        path: "template/:templateId/food/",
+        element: <Template />,
+      },
+      {
+        path: "template/:templateId/settings",
+        element: <p>Template Settings</p>,
+      },
+      {
         path: "test",
         element: <h1>TEST</h1>,
       },
-
-    ]
-  }
+    ],
+  },
 ]);

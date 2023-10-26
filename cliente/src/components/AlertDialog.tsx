@@ -27,7 +27,7 @@ export function AlertDialog({
   onResult: (result: boolean) => void;
 }) {
   return (
-    <AlertDialogUI>
+    <AlertDialogUI >
       <AlertDialogTrigger asChild>{triggerComponent}</AlertDialogTrigger>
 
       <AlertDialogContent>

@@ -7,7 +7,7 @@ function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <div 
-        className="w-full h-screen bg-background text-foreground">
+        className="w-full h-[100dvh] bg-background text-foreground">
 
         <RouterProvider
           router={router}
