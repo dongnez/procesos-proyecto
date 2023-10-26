@@ -1,7 +1,7 @@
 import { FoodInterface } from "src/interfaces/FoodInterfaces"
 
 export interface TemplateInterface {
-	id:string
+	_id:string
 	visibility: "public" | "private" 
 	name: string
 	users: Array<{

@@ -22,7 +22,12 @@
     "strict": true,                                      /* Enable all strict type-checking options. */
     "noImplicitAny": false,
     /* Completeness */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
+    "baseUrl": ".",
+    "paths": {
+      "cliente": ["cliente/*"],
+      "server": ["server/*"],
+    }
   },
     "ts-node": {
         "esm": true

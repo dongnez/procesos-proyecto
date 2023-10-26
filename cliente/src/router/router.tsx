@@ -4,6 +4,7 @@ import { AppLayout } from "src/pages/app/AppLayout";
 import { Login } from "src/pages/auth/Login";
 import { Register } from "src/pages/auth/Register";
 import { ErrorPage } from "src/pages/ErrorPage";
+import { ProtectedRoute } from "src/context/AuthProvider";
 
 export const router = createBrowserRouter([
   {
@@ -14,6 +15,7 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+    
   },
   {
     path: "/register",
@@ -21,7 +23,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/app",
-    element: <AppLayout />,
+    element: 
+    <ProtectedRoute>
+      <AppLayout />
+    </ProtectedRoute>,
+    
     children: [
       {
         path: "template/:templateId",

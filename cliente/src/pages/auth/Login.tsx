@@ -1,29 +1,15 @@
-import { databaseAgregarUsuario } from "src/database/databaseClaseFunctions";
 import { Button } from "src/@/components/ui/button";
 import { Input } from "src/@/components/ui/input";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useOneTap } from "src/hooks/useOneTap";
-
-type User = {
-  nick: string;
-};
+import { useAuth } from "src/context/AuthProvider";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState<User | null>(null);
+  const {login} = useAuth();
 
-  const navigate = useNavigate();
-
-  useOneTap(user);
-
-  useEffect(() => {
-    if (user?.nick) {
-      navigate("/app");
-      //LOGUEADO
-    }
-  }, [user]);
+  useOneTap();
 
   return (
     <div className="h-full w-full pt-20 bg-background px-2 sm:px-0">
@@ -58,14 +44,13 @@ export const Login = () => {
             <Button
               size={"sm"}
               onClick={async () => {
-                if (email === "")
-                  return alert("No se puede agregar un usuario sin nick");
+                if (email === "" || password === "")
+                  return alert("Rellena todos los campos");
 
-                setEmail("");
 
-                databaseAgregarUsuario(email).then(() => {
-                  setUser({ nick: email });
-                });
+                const error = await login({email, password});
+                if(error) alert(error)
+
               }}
               type="submit">
               Iniciar Sesión

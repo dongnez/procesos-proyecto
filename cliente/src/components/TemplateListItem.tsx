@@ -7,16 +7,16 @@ export const TemplateListItem = ({
 }: {
   template: TemplateInterface;
 }) => {
-  const [_, setTemplateAtom] = useTemplateAtoms(template.id);
+  const [_, setTemplateAtom] = useTemplateAtoms(template._id);
   const navigate = useNavigate();
 
   return (
     <div
       onClick={() => {
         setTemplateAtom(template);
-        navigate("template/" + template.id);
+        navigate("template/" + template._id);
       }}
-      className="hover:bg-secondary p-2 rounded-md flex">
+      className="hover:bg-secondary p-2 rounded-md flex cursor-pointer">
       <p>{template.name}</p>
     </div>
   );

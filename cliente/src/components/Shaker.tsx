@@ -11,7 +11,7 @@ export const Shaker = ({
 }) => {
   return (
     <div {...rest} className="flex flex-col">
-      <div className="relative w-full sm:w-[300px] h-[300px] mx-auto hover:scale-110 hover:translate-y-[-10px] duration-150">
+      <div className="relative w-[300px] h-[300px] mx-auto sm:hover:scale-110 sm:hover:translate-y-[-10px] duration-150">
         <h3 className="absolute top-1 right-0 left-0 text-center font-bold text-3xl text-white bg-black/20 w-fit mx-auto rounded-full py-1 px-4">
           {food.name}
         </h3>
@@ -23,9 +23,9 @@ export const Shaker = ({
       </div>
 
       <Button className=" z-10 rounded-full mx-auto w-fit text-2xl p-6 mt-[-5px]">
-        <Repeat className="mt-1" size={18} />
+        <Repeat className="" size={18} />
         <p className="px-10">Shake It</p>
-        <Heart className="mt-1" size={18} />
+        <Heart className="" size={18} />
       </Button>
     </div>
   );

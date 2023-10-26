@@ -1,10 +1,8 @@
 import {useEffect} from 'react';
 import {  databaseEnviarJWT } from 'src/database/databaseClaseFunctions';
 
-export const useOneTap = (user:any) => {
+export const useOneTap = () => {
 	useEffect(() => {
-	  if(user) return;
-
 
 	  const script = document.createElement("script");
 	  script.src = "https://accounts.google.com/gsi/client";
@@ -21,8 +19,8 @@ export const useOneTap = (user:any) => {
 			let jwt=info.credential;
  			// let user=JSON.parse(atob(jwt.split(".")[1]));
 
-
 			databaseEnviarJWT({"jwt":jwt}).then((res:any) => {
+				//Call Register
 				console.log("useOneTap CALLBACK", res);
 
 				window.location.href = "/app";
@@ -35,5 +33,5 @@ export const useOneTap = (user:any) => {
 	  };
 
 	  document.body.appendChild(script);
-	}, [user]);
+	}, []);
 }

@@ -4,15 +4,22 @@ import { fileURLToPath } from "url";
 import "./servidor/clase/passport-setup.js";
 import { initClases } from "./servidor/clase/clasesServer.js";
 import {authRoutes} from "./servidor/routes/authRoutes.js"
+import { templateRoutes } from "./servidor/routes/templateRoutes.js";
 import { connectMongoDB } from "./servidor/db.js";
-
-
-const app = express();
-
+import cors from "cors";
 const PORT = process.env.PORT || 3000;
 
 const URL = process.env.URL || "http://localhost:";
 const __filename = fileURLToPath(import.meta.url);
+
+
+const app = express();
+
+app.use(
+  cors({
+    credentials: false,
+  })
+);
 
 
 //Obtenemos path raiz del proyecto
@@ -32,6 +39,7 @@ initClases(app);
 
 //RUTAS
 app.use('/auth', authRoutes);
+app.use("/templates", templateRoutes)
 
 app.listen(PORT, () => {
   console.log(`App está escuchando en el puerto ${URL}${PORT}`);

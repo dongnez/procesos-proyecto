@@ -1,29 +1,20 @@
 import { Button } from "src/@/components/ui/button";
 import { Input } from "src/@/components/ui/input";
 import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
 import { useOneTap } from "src/hooks/useOneTap";
 import { UserInterface } from "src/interfaces/UserInterfaces";
-import { databaseAuthRegister } from "src/database/databaseAuth";
+import { useAuth } from "src/context/AuthProvider";
 
 export const Register = () => {
   const [user, setUser] = useState<UserInterface>({
-    id: "",
+    _id: "",
     email: "",
     name: "",
     password: "",
   });
 
-//   const navigate = useNavigate();
-
-  useOneTap(user);
-
-  //   useEffect(() => {
-  // if (user?.nick) {
-  //   navigate("/app");
-  //LOGUEADO
-  // }
-  //   }, [user]);
+  const {register} = useAuth();
+  useOneTap();
 
   return (
     <div className="h-full w-full pt-20 bg-background px-2 sm:px-0">
@@ -67,9 +58,7 @@ export const Register = () => {
             <Button
               size={"sm"}
               onClick={async () => {
-				await databaseAuthRegister(user).then((user) => {
-					console.log("Registrado", user);	
-				})
+                  register(user);
                 /*                 if (nick === "")
                   return alert("No se puede agregar un usuario sin nick");
 

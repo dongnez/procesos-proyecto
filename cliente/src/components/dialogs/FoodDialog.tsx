@@ -14,9 +14,9 @@ export const FoodDialog = ({
   ...rest
 }: React.ComponentPropsWithoutRef<typeof Dialog>) => {
   const location = useLocation();
-  const { foodId } = useParams();
+  const { templateId,foodId } = useParams();
   const [open, setOpen] = useState(false);
-  const [showFood, setShowFood] = useState(false);
+  const [_, setShowFood] = useState(false);
   const navigate = useNavigate();
   // OPEN DIALOG
   const openDialog = location.pathname.includes("food");
@@ -47,7 +47,7 @@ export const FoodDialog = ({
   return (
     <Dialog {...rest} defaultOpen={openDialog} open={open} onOpenChange={(open)=>{
       if(!open){
-        navigate('template')        
+        navigate(`/app/template/${templateId}`)        
       } 
     }} >
       

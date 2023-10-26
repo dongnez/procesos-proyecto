@@ -22,7 +22,7 @@ router.post('/login', async (req, res) => {
 
     res.cookie('jwt',token)
 		res.json({
-      id:userFound._id,
+      _id:userFound._id,
       name:userFound.name,
       email:userFound.email,
       templates:userFound.templates,
