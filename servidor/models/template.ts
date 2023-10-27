@@ -12,7 +12,7 @@ const TemplateSchema = new Schema<TemplateInterface>({
 		type:String,
 		required:true
 	},
-	food:{
+	foods:{
 		type:[],
 		required:true
 	},

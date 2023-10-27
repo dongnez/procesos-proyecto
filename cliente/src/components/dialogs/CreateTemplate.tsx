@@ -72,7 +72,7 @@ export const CreateTemplate = ({
                     template: {
                       _id: "",
                       name: name,
-                      food: [],
+                      foods: [],
                       users: [
                         {
                           userId: user!._id,

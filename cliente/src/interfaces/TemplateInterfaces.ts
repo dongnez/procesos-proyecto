@@ -8,5 +8,5 @@ export interface TemplateInterface {
 		userId: string
 		role: string
 	}>
-	food: Array<FoodInterface>
+	foods: Array<FoodInterface>
 }

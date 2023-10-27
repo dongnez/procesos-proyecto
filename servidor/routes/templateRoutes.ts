@@ -1,6 +1,10 @@
 import { TemplateModel } from 'servidor/models/template';
 import { UserModel } from 'servidor/models/user';
+import { FoodInterfaceSchema, FoodInterface } from 'cliente/src/interfaces/FoodInterfaces';
+
 import {Router} from 'express'
+
+import { ZodError } from 'zod';
 const router = Router();
 
 router.post('/createTemplate', async (req, res) => {
@@ -57,5 +61,95 @@ router.post('/getTemplates', async (req, res) => {
 	}
 
 });
+
+router.post('/deleteTemplate', async (req, res) => {
+	const {templateId} = req.body;
+
+	try {
+		const templateFound = await TemplateModel.findByIdAndDelete(templateId);
+
+		if(!templateFound) return res.status(400).json({message:"Template no encontrado"})
+
+		res.status(200).json({
+			message: 'Template eliminado correctamente',
+		});
+		
+	} catch (error) {
+		console.log("Error en deleteTemplate",error);	
+		res.status(500).json({
+			message: 'Error en deleteTemplate',
+		});
+	}
+})
+
+router.post('/addFood', async (req, res) => {
+	const {templateId, food} = req.body;
+	
+	//validte food
+	
+	try {
+		//generate food id
+		food._id = new Date().getTime().toString();
+		const foodParse = FoodInterfaceSchema.parse(food)
+
+		await TemplateModel.findByIdAndUpdate(
+			templateId,
+			{ $push: { foods: food } },
+			{ new: true }
+		);
+
+		return res.status(200).json({
+			message: 'Comida añadida correctamente',
+			food: foodParse
+		});
+
+	}catch(error){
+		if(error instanceof ZodError){
+			return res.status(400).json({
+				message: 'Error comida no válida',
+				errors:error.issues
+			});
+		}
+
+		res.status(500).json({
+			message: 'Error al añadir comida al template',
+		});	
+	}
+})
+
+//get Food by Id
+
+
+router.post('/getFood', async (req, res) => {
+	const {templateId, foodId} = req.body;
+
+	try {
+		const template = await TemplateModel.findById(templateId);
+		if (!template) {
+			return res.status(404).json({
+				message: 'Template not found'
+			});
+		}
+
+		const food: FoodInterface | undefined = template.foods.find((f: FoodInterface) => f._id === foodId);
+
+		if (!food) {
+			return res.status(404).json({
+				message: 'Food not found in template'
+			});
+		}
+
+		return res.status(200).json({
+			message: 'Food found in template',
+			food
+		});
+
+	} catch (error) {
+		res.status(500).json({
+			message: 'Error finding food in template',
+			error
+		});
+	}
+})
 
 export {router as templateRoutes}

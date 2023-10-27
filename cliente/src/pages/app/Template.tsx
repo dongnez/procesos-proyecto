@@ -26,11 +26,6 @@ export const Template = () => {
     //Fetch from server
   }, [templateAtom]);
 
-  const food: FoodInterface = {
-    id: "1",
-    name: "Pizza",
-    image: "https://images.pexels.com/photos/5903101/pexels-photo-5903101.jpeg",
-  };
 
   if (!template) return <div>Loading...</div>;
 
@@ -42,8 +37,8 @@ export const Template = () => {
 
           <button
             onClick={() => navigate("food")}
-            className="px-5 py-2 border-2 border-card rounded-full mr-2 flex gap-2">
-            <Drumstick className="" /> Añadir Comida
+            className="px-4 py-2 border-2 border-card rounded-full mr-2 flex gap-2">
+              <Drumstick className="" /> Comida
           </button>
 
           <Button variant={"outline"} size={"icon"} className="rounded-full">
@@ -51,7 +46,7 @@ export const Template = () => {
           </Button>
         </section>
 
-        <Shaker food={food} />
+        <Shaker food={template.foods} />
       </section>
 
       <FoodDialog />

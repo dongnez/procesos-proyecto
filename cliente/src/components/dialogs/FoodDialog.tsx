@@ -17,13 +17,18 @@ import { AvatarIcon } from "src/components/AvatarIcon";
 import { ArrowLeft } from "react-feather";
 import { Button } from "src/@/components/ui/button";
 import { Plus } from "lucide-react";
+import { Loader } from "src/components/Loader";
 
 export const FoodDialog = ({
+  foodParam,
   ...rest
-}: React.ComponentPropsWithoutRef<typeof Dialog>) => {
+}: React.ComponentPropsWithoutRef<typeof Dialog> & {
+  foodParam?: FoodInterface[];
+}) => {
   const location = useLocation();
   const { templateId, foodId } = useParams();
   const [open, setOpen] = useState(false);
+  const [food, setFood] = useState<FoodInterface[]>(foodParam || []);
   const [selectedFood, setSelectedFood] = useState<FoodInterface | null>(null);
   const [createShow, setCreateShow] = useState(false);
 
@@ -50,14 +55,14 @@ export const FoodDialog = ({
     // setSelectedFood();
   }, [foodId]);
 
-  const food: FoodInterface[] = [
+/*   const food: FoodInterface[] = [
     {
-      id: "1",
+      _id: "1",
       name: "food 1",
       image:
         "https://images.pexels.com/photos/18444579/pexels-photo-18444579/free-photo-of-slices-of-apple-and-golden-rings-lying-on-a-plate.jpeg",
     },
-  ];
+  ]; */
 
   return (
     <Dialog
@@ -69,7 +74,9 @@ export const FoodDialog = ({
           navigate(`/app/template/${templateId}`);
         }
       }}>
-      <DialogContent showClose={!foodId && !createShow}>
+      <DialogContent
+        showClose={!foodId && !createShow}
+        className="min-h-[450px]">
         {!foodId && !createShow && (
           <AnimatePresence>
             <motion.div
@@ -80,7 +87,7 @@ export const FoodDialog = ({
                 food={food}
                 onFoodPick={(food) => {
                   setSelectedFood(food);
-                  navigate(food.id);
+                  navigate(food._id);
                 }}
                 onFoodCreate={() => setCreateShow(true)}
               />
@@ -97,13 +104,13 @@ export const FoodDialog = ({
             </motion.div>
           </AnimatePresence>
         )}
-        {createShow &&(
+        {createShow && (
           <AnimatePresence>
             <motion.div
               initial={{ x: 50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: 50, opacity: 0 }}>
-              <AddFood close={()=>setCreateShow(false)}/>
+              <AddFood close={() => setCreateShow(false)} />
             </motion.div>
           </AnimatePresence>
         )}
@@ -119,7 +126,7 @@ const FoodSearch = ({
 }: {
   food: FoodInterface[];
   onFoodPick: (food: FoodInterface) => void;
-  onFoodCreate: ( ) => void;
+  onFoodCreate: () => void;
 }) => {
   const [filter, setFilter] = useState("");
 
@@ -132,8 +139,12 @@ const FoodSearch = ({
           className="w-[80%]"
           onChange={(e) => setFilter(e.currentTarget.value)}
         />
-        <Button size={'icon'} variant={'outline'} onClick={onFoodCreate} className="rounded-full bg-transparent"  >
-          <Plus size={24}/> 
+        <Button
+          size={"icon"}
+          variant={"outline"}
+          onClick={onFoodCreate}
+          className="rounded-full bg-transparent">
+          <Plus size={24} />
         </Button>
       </DialogTitle>
       {food
@@ -169,41 +180,36 @@ const FoodSelected = ({
   useEffect(() => {
     if (!foodSelected) {
       //API GET FOOD
-      setTimeout(() => {
-        setFood({
-          id: "1",
-          name: "Pissa",
-          image:
-            "https://images.pexels.com/photos/18444579/pexels-photo-18444579/free-photo-of-slices-of-apple-and-golden-rings-lying-on-a-plate.jpeg",
-        });
-      }, 1000);
     }
   }, [foodSelected]);
 
-  if (!food) return <p>...Loading</p>;
-
   return (
-    <DialogHeader>
-      <Button
-        variant={"ghost"}
-        size={"icon"}
-        className="w-6 h-6 "
-        onClick={() => navigate(`/app/template/${templateId}/food`)}>
-        <ArrowLeft className="w-5" />
-      </Button>
-      <DialogTitle className="flex flex-col items-center">
-        <AvatarIcon image={food.image} fallback={food.name} size={205} />
-        <p className="text-2xl">{food.name}</p>
-      </DialogTitle>
-      <DialogDescription></DialogDescription>
-    </DialogHeader>
+    <>
+      <DialogHeader>
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          className="w-6 h-6 "
+          onClick={() => navigate(`/app/template/${templateId}/food`)}>
+          <ArrowLeft className="w-5" />
+        </Button>
+      </DialogHeader>
+      {food ? (
+        <DialogTitle className="flex flex-col items-center">
+          <AvatarIcon image={food.image} fallback={food.name} size={205} />
+          <p className="text-2xl">{food.name}</p>
+        </DialogTitle>
+      ) : (
+        <div className="h-full pb-10 flex items-center justify-center">
+          <Loader />
+        </div>
+      )}
+    </>
   );
 };
 
-const AddFood = ({close}:{
-  close: ()=>void
-}) => {
-  const [food,setFood] = useState<FoodInterface | null>(null)
+const AddFood = ({ close }: { close: () => void }) => {
+  // const [food,setFood] = useState<FoodInterface | null>(null)
 
   return (
     <DialogHeader>
@@ -212,14 +218,13 @@ const AddFood = ({close}:{
         size={"icon"}
         className="w-6 h-6"
         onClick={close}>
-        <ArrowLeft  className="w-5"/>
+        <ArrowLeft className="w-5" />
       </Button>
       <DialogTitle className="flex flex-col items-center">
         {/* <AvatarIcon image={food.image} fallback={food.name} size={205} /> */}
         <p className="text-2xl">Crea una nueva Comida</p>
       </DialogTitle>
       <DialogDescription></DialogDescription>
-
     </DialogHeader>
   );
 };
