@@ -4,7 +4,9 @@ import { TemplateInterface } from "cliente/src/interfaces/TemplateInterfaces";
 const TemplateSchema = new Schema<TemplateInterface>({
 	name:{
 		type:String,
-		required:true
+		required:true,
+		minlength:3,
+		maxlength:40
 	},
 	visibility:{
 		type:String,
@@ -18,8 +20,6 @@ const TemplateSchema = new Schema<TemplateInterface>({
 		type:[{userId:Schema.Types.ObjectId,role:String}],
 		required:true
 	}
-
-	
 
 },{collection: 'templates'})
 

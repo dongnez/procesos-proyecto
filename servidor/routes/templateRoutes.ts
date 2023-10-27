@@ -7,6 +7,7 @@ router.post('/createTemplate', async (req, res) => {
 	const {template, userId} = req.body;
 
 	try {
+		delete template._id;
 		const newTemplate = new TemplateModel(template);
 	
 		// Add the new template to the database

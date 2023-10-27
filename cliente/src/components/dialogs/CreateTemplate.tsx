@@ -2,59 +2,98 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "src/@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "src/@/components/ui/select";
+
 import { Input } from "src/@/components/ui/input";
 import { PlusCircle } from "react-feather";
 import { Button } from "src/@/components/ui/button";
 import { databaseCreateTemplate } from "src/database/databaseTemplates";
 import { useAuth } from "src/context/AuthProvider";
 import { useState } from "react";
+import { useToast } from "src/@/components/ui/use-toast";
 
 export const CreateTemplate = ({
   ...rest
 }: React.ComponentPropsWithoutRef<typeof Dialog>) => {
-	const {user} = useAuth()!
-	const [name, setName] = useState('')
+  const { user } = useAuth()!;
+  const [name, setName] = useState("");
+  const [visibility, setVisibility] = useState<"public" | "private">("public");
+
+  const { toast } = useToast();
 
   return (
     <Dialog {...rest}>
-      <DialogTrigger  className="w-fit">
+      <DialogTrigger className="w-fit">
         <PlusCircle />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Crear Template</DialogTitle>
 
-          <DialogDescription>
-            <Input placeholder="Nombre" className="mb-2" onChange={(e)=>setName(e.currentTarget.value)}/>
-            {/* TODO CHANGE SELECT */}
-            <Input placeholder="Visibility" value={'public'}/>
-          </DialogDescription>
+          <Input
+            placeholder="Nombre"
+            className="mb-2"
+            onChange={(e) => setName(e.currentTarget.value)}
+          />
 
-		 <section className="w-full flex justify-end">
-			<DialogClose className="w-fit">
-				<Button onClick={()=>{
-					if(!name) return
-					databaseCreateTemplate({
-						template:{
-							_id: '',
-							name: name,
-							food: [],
-							users: [{
-								userId: user!._id,
-								role: 'owner'
-							}],
-							visibility: 'public',
-						},
-						userId: user!._id,
-					})
-				}}>Crear</Button>
-			</DialogClose>
-		</section> 
+          <div className="">
+            <p className="mt-5">Visible</p>
+            <Select onValueChange={(e) => setVisibility(e as any)}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Publico" defaultValue={"public"} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem defaultChecked value="public">
+                  Publico
+                </SelectItem>
+                <SelectItem value="private">Privado</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <DialogFooter className="w-full flex justify-end ">
+            <DialogClose className="w-fit">
+              <Button
+                className="mt-4"
+                onClick={() => {
+                  if (name === "") return;
+                  databaseCreateTemplate({
+                    template: {
+                      _id: "",
+                      name: name,
+                      food: [],
+                      users: [
+                        {
+                          userId: user!._id,
+                          role: "owner",
+                        },
+                      ],
+                      visibility: visibility,
+                    },
+                    userId: user!._id,
+                  }).then(() => {
+                    toast({
+                      title: "Template creado ✅",
+                      description: "El template se ha creado correctamente",
+                      duration: 5000,
+                    });
+                  });
+                }}>
+                Crear
+              </Button>
+            </DialogClose>
+          </DialogFooter>
         </DialogHeader>
       </DialogContent>
     </Dialog>

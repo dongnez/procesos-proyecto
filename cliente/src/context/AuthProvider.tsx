@@ -36,7 +36,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const saveUserCache = (user: UserInterface) => {
-    Cookies.set("user", JSON.stringify(user));
+    Cookies.set("user", JSON.stringify(user),{
+      expires: 7,
+    });
   }
 
   function register(user: UserInterface) {

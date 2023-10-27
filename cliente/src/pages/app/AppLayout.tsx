@@ -5,32 +5,32 @@ import { RightBar } from "src/pages/app/RightBar";
 
 import { LeftBar } from "src/pages/app/LeftBar";
 import { BottomNavBar } from "src/pages/app/BottomNavBar";
+import { Toaster } from "src/@/components/ui/toaster";
 
 export const AppLayout = () => {
-
   return (
     <div
       className="h-full bg-background"
-      style={{
-        // height: `calc(100dvh - ${componentMeasures.navbarHeight}px)`,
-        // minHeight: `calc(100dvh - ${componentMeasures.navbarHeight}px)`,
-      }}>
-
+      style={
+        {
+          // height: `calc(100dvh - ${componentMeasures.navbarHeight}px)`,
+          // minHeight: `calc(100dvh - ${componentMeasures.navbarHeight}px)`,
+        }
+      }>
       {/* <NavBar className="" /> */}
 
       <div className="h-full w-full py-4 flex flex-col  sm:flex-row">
-
         <LeftBar />
 
         <section className="h-full flex-1 px-5">
-      		<Outlet />
+          <Outlet />
         </section>
 
         <RightBar />
 
         <BottomNavBar />
       </div>
-
+      <Toaster />
     </div>
   );
 };

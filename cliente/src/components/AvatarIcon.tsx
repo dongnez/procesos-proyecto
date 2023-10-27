@@ -4,7 +4,7 @@ import {
   AvatarImage,
 } from "src/@/components/ui/avatar";
 
-export const UserIcon = ({
+export const AvatarIcon = ({
   image,
   fallback,
   size = 24,
