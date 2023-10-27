@@ -3,31 +3,50 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TemplateInterface } from "src/interfaces/TemplateInterfaces";
 import { useTemplateAtoms } from "src/context/templateAtoms";
-import { FoodInterface } from "src/interfaces/FoodInterfaces";
 import { Shaker } from "src/components/Shaker";
 import { Settings } from "react-feather";
 import { Button } from "src/@/components/ui/button";
 import { FoodDialog } from "src/components/dialogs/FoodDialog";
 import { useNavigate } from "src/hooks/useNavigate";
+import { Loader } from "src/components/Loader";
+import { databaseGetTemplateById } from "src/database/databaseTemplates";
+import { useToast } from "src/@/components/ui/use-toast";
 
 export const Template = () => {
   const { templateId } = useParams();
-  const [template, setTemplate] = useState<TemplateInterface | null>(null);
   const [templateAtom, _] = useTemplateAtoms(templateId || "");
+  const [template, setTemplate] = useState<TemplateInterface | null>(templateAtom);
   const navigate = useNavigate();
+  const {toast} = useToast();
 
   useEffect(() => {
-    //Si no esta en cache, lo pido al servidor
-    if (templateAtom) {
-      setTemplate(templateAtom);
-      return;
-    }
-
-    //Fetch from server
+    setTemplate(templateAtom);
   }, [templateAtom]);
 
+  useEffect(() => {
+    //get template
+    if(template || !templateId) return;
 
-  if (!template) return <div>Loading...</div>;
+    //Fetch from server
+    databaseGetTemplateById(templateId).then(({data,error}) => {
+      if(data){
+        setTemplate(data);
+        return
+      }
+
+      if(error){
+        toast({
+          title: "Error",
+          description: error,
+          variant:'destructive',
+          duration: 5000,
+        })
+      }
+    })  
+
+  }, [templateId]);
+
+  if (!template) return (<div className="h-full flex items-center justify-center"><Loader/></div>)
 
   return (
     <div className="w-full h-full bg-background">
@@ -49,7 +68,7 @@ export const Template = () => {
         <Shaker food={template.foods} />
       </section>
 
-      <FoodDialog />
+      <FoodDialog food={template.foods}/>
     </div>
   );
 };

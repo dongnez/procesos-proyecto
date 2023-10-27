@@ -18,17 +18,18 @@ import { ArrowLeft } from "react-feather";
 import { Button } from "src/@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Loader } from "src/components/Loader";
+import { databaseGetFoodById } from "src/database/databaseTemplates";
+import { useToast } from "src/@/components/ui/use-toast";
 
 export const FoodDialog = ({
-  foodParam,
+  food,
   ...rest
 }: React.ComponentPropsWithoutRef<typeof Dialog> & {
-  foodParam?: FoodInterface[];
+  food: FoodInterface[];
 }) => {
   const location = useLocation();
   const { templateId, foodId } = useParams();
   const [open, setOpen] = useState(false);
-  const [food, setFood] = useState<FoodInterface[]>(foodParam || []);
   const [selectedFood, setSelectedFood] = useState<FoodInterface | null>(null);
   const [createShow, setCreateShow] = useState(false);
 
@@ -45,24 +46,12 @@ export const FoodDialog = ({
     setOpen(false);
   }, [location]);
 
-  // SHOW FOOD
   useEffect(() => {
     if (!foodId) {
       setSelectedFood(null);
       return;
     }
-
-    // setSelectedFood();
   }, [foodId]);
-
-/*   const food: FoodInterface[] = [
-    {
-      _id: "1",
-      name: "food 1",
-      image:
-        "https://images.pexels.com/photos/18444579/pexels-photo-18444579/free-photo-of-slices-of-apple-and-golden-rings-lying-on-a-plate.jpeg",
-    },
-  ]; */
 
   return (
     <Dialog
@@ -156,7 +145,7 @@ const FoodSearch = ({
             <AvatarIcon image={food.image} fallback={food.name} size={22} />
             <HighlightedText
               text={food.name}
-              highlight={filter}
+              highlight={filter || ""}
               className="flex-1"
               color="bg-yellow-500"
             />
@@ -172,14 +161,36 @@ const FoodSelected = ({
   foodSelected?: FoodInterface | null;
 }) => {
   const navigate = useNavigate();
-  const { templateId } = useParams();
+  const { templateId, foodId } = useParams();
   const [food, setFood] = useState<FoodInterface | null | undefined>(
     foodSelected
   );
 
+  const { toast } = useToast();
+
   useEffect(() => {
     if (!foodSelected) {
-      //API GET FOOD
+      databaseGetFoodById(templateId || "", foodId || "").then(
+        ({ data, error }) => {
+          if (data) {
+            setFood(data);
+            return;
+          }
+
+          if (!data) {
+            toast({
+              title: "Error",
+              description: "No se ha encontrado esa comida",
+              variant: "destructive",
+              duration: 2500,
+            });
+          }
+
+          if (error) {
+            // console.log("",error);
+          }
+        }
+      );
     }
   }, [foodSelected]);
 
@@ -209,7 +220,8 @@ const FoodSelected = ({
 };
 
 const AddFood = ({ close }: { close: () => void }) => {
-  // const [food,setFood] = useState<FoodInterface | null>(null)
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
 
   return (
     <DialogHeader>
@@ -221,10 +233,18 @@ const AddFood = ({ close }: { close: () => void }) => {
         <ArrowLeft className="w-5" />
       </Button>
       <DialogTitle className="flex flex-col items-center">
-        {/* <AvatarIcon image={food.image} fallback={food.name} size={205} /> */}
         <p className="text-2xl">Crea una nueva Comida</p>
       </DialogTitle>
-      <DialogDescription></DialogDescription>
+      <Input
+      placeholder="Nombre de la comida"
+      value={name}
+      onChange={(e) => setName(e.currentTarget.value)}
+      />
+
+
+	    <p>Imagen</p>
+      {<AvatarIcon image={image} fallback={""} size={60} />}
+      {/* <DialogDescription></DialogDescription> */}
     </DialogHeader>
   );
 };

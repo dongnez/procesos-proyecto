@@ -1,5 +1,6 @@
 import axios from "axios";
 import { TemplateInterface } from "src/interfaces/TemplateInterfaces";
+import { FoodInterface } from "src/interfaces/FoodInterfaces";
 import { API_URL } from "src/constants/config";
 
 const TEMPLATES_URL = `${API_URL}templates/`;
@@ -27,4 +28,28 @@ export async function databaseCreateTemplate(payload: {template:TemplateInterfac
 	});
 
 	return {data:null,error}
+}
+
+export async function databaseGetFoodById(templateId:string,foodId:string):Promise<{data:FoodInterface|null,error:string|null}>{
+	let error = null;
+	const {data} = await axios.post(`${TEMPLATES_URL}getFoodById`, {templateId,foodId})
+	.catch((error_) => {
+		console.log("Error en databaseGetFoodById PENE",error_);
+		error = error_.response.data.message || "Error en databaseGetFoodById";
+		return {data:null}
+	})
+
+	return {data:data?.food || null,error}
+}
+
+export async function databaseGetTemplateById(templateId:string):Promise<{data:TemplateInterface|null,error:string|null}>{
+	let error = null;
+	const {data} = await axios.post(`${TEMPLATES_URL}getTemplateById`, {templateId})
+	.catch((error_) => {
+		console.log("Error en databaseGetTemplateById",error_);
+		error = error_.response.data.message || "Error en databaseGetTemplateById";
+		return {data:null}
+	})
+
+	return {data:data.template,error}
 }

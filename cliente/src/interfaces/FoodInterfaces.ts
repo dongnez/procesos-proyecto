@@ -4,6 +4,7 @@ export const FoodInterfaceSchema = z.object({
 	_id: z.string(),
 	name: z.string(),
 	image: z.string(),
+	description: z.string().optional(),
 	macros: z.object({
 		kcal: z.number(),
 		protein: z.number(),

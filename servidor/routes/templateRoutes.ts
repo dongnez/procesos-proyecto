@@ -82,6 +82,30 @@ router.post('/deleteTemplate', async (req, res) => {
 	}
 })
 
+//get Template by id
+router.post('/getTemplateById', async (req, res) => {
+	const {templateId} = req.body;
+
+	try {
+		
+		const template = await  TemplateModel.findById(templateId).exec();
+
+		if(!template) return res.status(400).json({message:"Template no encontrado"})
+
+		res.status(200).json({
+			message: 'Template obtenido correctamente',
+			template
+		});
+
+	}catch(error){
+		console.log("Error en getTemplateById",error);
+		return res.status(500).json({
+			message: 'Error en getTemplateById',
+		});
+	}
+})
+	
+
 router.post('/addFood', async (req, res) => {
 	const {templateId, food} = req.body;
 	
@@ -117,10 +141,8 @@ router.post('/addFood', async (req, res) => {
 	}
 })
 
-//get Food by Id
 
-
-router.post('/getFood', async (req, res) => {
+router.post('/getFoodById', async (req, res) => {
 	const {templateId, foodId} = req.body;
 
 	try {
@@ -145,7 +167,7 @@ router.post('/getFood', async (req, res) => {
 		});
 
 	} catch (error) {
-		res.status(500).json({
+		return res.status(500).json({
 			message: 'Error finding food in template',
 			error
 		});
