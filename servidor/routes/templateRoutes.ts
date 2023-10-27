@@ -141,6 +141,40 @@ router.post('/addFood', async (req, res) => {
 	}
 })
 
+router.post('/addFoodToTemplate', async (req, res) => {
+	const {templateId, food} = req.body;
+	
+	try {
+		//generate food id
+		food._id = new Date().getTime().toString();
+
+		//validte food
+		const foodParse = FoodInterfaceSchema.parse(food)
+
+		await TemplateModel.findByIdAndUpdate(
+			templateId,
+			{ $push: { foods: food } },
+			{ new: true }
+		);
+
+		return res.status(200).json({
+			message: 'Comida añadida correctamente',
+			food: foodParse
+		});
+
+	}catch(error){
+		if(error instanceof ZodError){
+			return res.status(400).json({
+				message: 'Error comida no válida',
+				errors:error.issues
+			});
+		}
+
+		res.status(500).json({
+			message: 'Error al añadir comida al template',
+		});	
+	}
+})
 
 router.post('/getFoodById', async (req, res) => {
 	const {templateId, foodId} = req.body;

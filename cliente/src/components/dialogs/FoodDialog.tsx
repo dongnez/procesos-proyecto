@@ -6,7 +6,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "src/@/components/ui/dialog";
@@ -18,8 +17,13 @@ import { ArrowLeft } from "react-feather";
 import { Button } from "src/@/components/ui/button";
 import { Plus } from "lucide-react";
 import { Loader } from "src/components/Loader";
-import { databaseGetFoodById } from "src/database/databaseTemplates";
+import {
+  databaseAddFoodToTemplate,
+  databaseGetFoodById,
+} from "src/database/databaseTemplates";
 import { useToast } from "src/@/components/ui/use-toast";
+import { useUploadThing } from "src/hooks/useFileUpload";
+import { ToastAction } from "src/@/components/ui/toast";
 
 export const FoodDialog = ({
   food,
@@ -138,8 +142,9 @@ const FoodSearch = ({
       </DialogTitle>
       {food
         .filter((f) => f.name.includes(filter))
-        .map((food) => (
+        .map((food, index) => (
           <div
+            key={index}
             className="bg-secondary hover:bg-secondary/50 duration-200 rounded-md p-2 flex gap-2"
             onClick={() => onFoodPick(food)}>
             <AvatarIcon image={food.image} fallback={food.name} size={22} />
@@ -221,30 +226,136 @@ const FoodSelected = ({
 
 const AddFood = ({ close }: { close: () => void }) => {
   const [name, setName] = useState("");
-  const [image, setImage] = useState("");
+  const [imageURL, setImage] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { templateId } = useParams();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const { startUpload } = useUploadThing("foodImage", {
+    onClientUploadComplete: async (res) => {
+      // Do something with the response
+
+      if (res && res.length > 0) {
+        const { data } = await databaseAddFoodToTemplate({
+          templateId: templateId || "",
+          food: {
+            _id: "",
+            name: name,
+            image: res[0].url,
+          },
+        });
+
+        setLoading(false);
+
+        if (!data) {
+          toast({
+            title: "Error",
+            description: "No se ha podido crear la comida",
+            variant: "destructive",
+            duration: 2500,
+          });
+          return;
+        }
+
+        toast({
+          title: "Comida creada",
+          description: "Se ha creado la comida correctamente",
+          className: "bg-green-500 text-white",
+          action: (
+            <ToastAction
+              className="group"
+              altText="Ver Comida"
+              onClick={() => {
+                close();
+                navigate("food/" + data._id);
+              }}>
+              <p className="group-hover:text-black">Ver Comida</p>
+            </ToastAction>
+          ),
+        });
+      }
+    },
+    onUploadError: (error: Error) => {
+      console.log("ERROR: ", error);
+      setLoading(false);
+      toast({
+        title: "Error",
+        description:
+          "Se ha producido un error al subir la imagen, intentelo de nuevo o mas tarde",
+        variant: "destructive",
+        duration: 2500,
+      });
+    },
+  });
 
   return (
     <DialogHeader>
-      <Button
-        variant={"ghost"}
-        size={"icon"}
-        className="w-6 h-6"
-        onClick={close}>
-        <ArrowLeft className="w-5" />
-      </Button>
       <DialogTitle className="flex flex-col items-center">
+        <div className="w-full">
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            className="w-6 h-6"
+            onClick={close}>
+            <ArrowLeft className="w-5" />
+          </Button>
+        </div>
         <p className="text-2xl">Crea una nueva Comida</p>
       </DialogTitle>
       <Input
-      placeholder="Nombre de la comida"
-      value={name}
-      onChange={(e) => setName(e.currentTarget.value)}
+        placeholder="Nombre de la comida"
+        value={name}
+        onChange={(e) => setName(e.currentTarget.value)}
       />
+      <div className="py-5 mx-auto">
+        <label
+          htmlFor="image-upload"
+          className="block w-60 h-60 bg-gray-200 hover:bg-gray-200/60 duration-300 rounded-lg cursor-pointer ">
+          {imageURL ? (
+            <img
+              src={imageURL}
+              alt="food"
+              className="w-full h-full object-cover rounded-lg"
+            />
+          ) : (
+            <div className="flex items-center justify-center w-full h-full">
+              <Plus size={48} />
+            </div>
+          )}
+        </label>
+        <input
+          type="file"
+          id="image-upload"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+              setImageFile(file);
+              setImage(URL.createObjectURL(file));
+            }
+          }}
+        />
+      </div>
 
-
-	    <p>Imagen</p>
-      {<AvatarIcon image={image} fallback={""} size={60} />}
-      {/* <DialogDescription></DialogDescription> */}
+      <DialogClose asChild>
+        <Button
+          disabled={!name || !imageFile}
+          onClick={() => {
+            if (!imageFile) return;
+            startUpload([imageFile]);
+            setLoading(true);
+            toast({
+              title: "Cargando comida",
+              open: loading,
+              action: <Loader />,
+              duration: 5500,
+            });
+          }}>
+          Crear
+        </Button>
+      </DialogClose>
     </DialogHeader>
   );
 };

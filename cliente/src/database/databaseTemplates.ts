@@ -30,6 +30,20 @@ export async function databaseCreateTemplate(payload: {template:TemplateInterfac
 	return {data:null,error}
 }
 
+export async function databaseAddFoodToTemplate(payload: {templateId:string,food:FoodInterface}){
+	let error = null;
+	const {data} = await axios.post(`${TEMPLATES_URL}addFoodToTemplate`, payload,)
+	.catch((error) => {
+		console.log("Error en databaseAddFoodToTemplate",error);
+		error = error.response.data.message || "Error en databaseAddFoodToTemplate";
+		return {data:null}
+	});
+
+	const food:FoodInterface | null = data?.food || null;
+
+	return {data:food,error}
+}
+
 export async function databaseGetFoodById(templateId:string,foodId:string):Promise<{data:FoodInterface|null,error:string|null}>{
 	let error = null;
 	const {data} = await axios.post(`${TEMPLATES_URL}getFoodById`, {templateId,foodId})

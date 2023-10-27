@@ -27,7 +27,7 @@ export function CAD(){
 	this.conectar = async function(callback){
 		// Conecta con el servidor
 		let cad = this;
-		let client = new MongoClient("mongodb+srv://gnez:gnez@cluster0.43kwtts.mongodb.net/?retryWrites=true&w=majority");
+		let client = new MongoClient(process.env.MONGODB_URI || "");
 		await client.connect();
 
 		
