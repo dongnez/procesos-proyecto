@@ -1,4 +1,4 @@
-import {Schema,model} from "mongoose";
+import {Schema,} from "mongoose";
 import { FoodInterface } from "cliente/src/interfaces/FoodInterfaces";
 
 const FoodScheme = new Schema<FoodInterface>({

@@ -43,6 +43,10 @@
     --ring: 269 61% 21%;
 
     --radius: 0.5rem;
+    --kcal: #ae2db7;
+    --proteins: #ff5590;
+    --fats: #ffee36;
+    --carbs: #6fc9fd;
   }
 
 
@@ -52,6 +56,11 @@
        URL: https://gradient.page */
 
     /* CSS: .bg-gradient { background: var(--gradient) } */
+    --kcal: #ae2db7;
+    --proteins: #ff5590;
+    --fats: #ffee36;
+    --carbs: #6fc9fd;
+
     --gradient: #acb6e5;
 
     --background: 244 33.800000000000004% 6.32%;

@@ -34,8 +34,10 @@ export const CreateTemplate = ({
 
   return (
     <Dialog {...rest}>
-      <DialogTrigger className="w-fit">
-        <PlusCircle />
+      <DialogTrigger className="w-fit h-fit" asChild>
+        <Button size={'icon'} className="rounded-full" variant={'ghost'}>
+          <PlusCircle />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -63,7 +65,7 @@ export const CreateTemplate = ({
           </div>
 
           <DialogFooter className="w-full flex justify-end ">
-            <DialogClose className="w-fit">
+            <DialogClose asChild className="w-fit">
               <Button
                 className="mt-4"
                 onClick={() => {

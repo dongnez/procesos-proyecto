@@ -6,10 +6,10 @@ export const FoodInterfaceSchema = z.object({
 	image: z.string(),
 	description: z.string().optional(),
 	macros: z.object({
-		kcal: z.number(),
-		protein: z.number(),
-		carbs: z.number(),
-		fats: z.number(),
+		kcal: z.number().min(0).max(10000),
+		proteins: z.number().min(0).max(999),
+		carbs: z.number().min(0).max(999),
+		fats: z.number().min(0).max(999),
 	}).optional(),
 });
 

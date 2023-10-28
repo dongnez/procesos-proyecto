@@ -6,6 +6,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "src/@/components/ui/dialog";
@@ -24,6 +25,15 @@ import {
 import { useToast } from "src/@/components/ui/use-toast";
 import { useUploadThing } from "src/hooks/useFileUpload";
 import { ToastAction } from "src/@/components/ui/toast";
+import { Textarea } from "src/@/components/ui/textarea";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "src/@/components/ui/accordion";
+import { calculateCalories } from "src/utils/caloriesUtils";
+import { CaloriesStats } from "src/components/CaloriesStats";
 
 export const FoodDialog = ({
   food,
@@ -126,7 +136,7 @@ const FoodSearch = ({
   return (
     <DialogHeader>
       <DialogClose asChild></DialogClose>
-      <DialogTitle className="flex gap-3 mt-3">
+      <DialogTitle className="flex gap-3 mt-3 mb-2">
         <Input
           placeholder="Search food"
           className="w-[80%]"
@@ -140,22 +150,22 @@ const FoodSearch = ({
           <Plus size={24} />
         </Button>
       </DialogTitle>
-      {food
-        .filter((f) => f.name.includes(filter))
-        .map((food, index) => (
-          <div
-            key={index}
-            className="bg-secondary hover:bg-secondary/50 duration-200 rounded-md p-2 flex gap-2"
-            onClick={() => onFoodPick(food)}>
-            <AvatarIcon image={food.image} fallback={food.name} size={22} />
-            <HighlightedText
-              text={food.name}
-              highlight={filter || ""}
-              className="flex-1"
-              color="bg-yellow-500"
-            />
-          </div>
-        ))}
+        {food
+          .filter((f) => f.name.includes(filter))
+          .map((food, index) => (
+            <div
+              key={index}
+              className="bg-secondary hover:bg-secondary/50 duration-200 rounded-md p-2 flex gap-2 cursor-pointer"
+              onClick={() => onFoodPick(food)}>
+              <AvatarIcon image={food.image} fallback={food.name} size={22} />
+              <HighlightedText
+                text={food.name}
+                highlight={filter || ""}
+                className="flex-1"
+                color="bg-yellow-500"
+              />
+            </div>
+          ))}
     </DialogHeader>
   );
 };
@@ -211,10 +221,27 @@ const FoodSelected = ({
         </Button>
       </DialogHeader>
       {food ? (
-        <DialogTitle className="flex flex-col items-center">
-          <AvatarIcon image={food.image} fallback={food.name} size={205} />
-          <p className="text-2xl">{food.name}</p>
-        </DialogTitle>
+        <>
+          <DialogTitle className="flex flex-col items-center">
+            <AvatarIcon image={food.image} fallback={food.name} size={205} />
+            <p className="text-2xl">{food.name}</p>
+          </DialogTitle>
+          <DialogDescription>
+            <Textarea
+              defaultValue={"No hay descripcion"}
+              value={food.description}
+              className="resize-none mt-2"
+              disabled
+              style={{ cursor: "default" }}
+            />
+            {food.macros && (
+              <CaloriesStats
+                className="w-fit mx-auto mt-4"
+                macros={food.macros}
+              />
+            )}
+          </DialogDescription>
+        </>
       ) : (
         <div className="h-full pb-10 flex items-center justify-center">
           <Loader />
@@ -226,6 +253,13 @@ const FoodSelected = ({
 
 const AddFood = ({ close }: { close: () => void }) => {
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [macros, setMacros] = useState({
+    proteins: 0,
+    carbs: 0,
+    fats: 0,
+  });
+
   const [imageURL, setImage] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
@@ -238,11 +272,21 @@ const AddFood = ({ close }: { close: () => void }) => {
       // Do something with the response
 
       if (res && res.length > 0) {
+        const kcal = calculateCalories(macros);
+
         const { data } = await databaseAddFoodToTemplate({
           templateId: templateId || "",
           food: {
             _id: "",
             name: name,
+            description: description === "" ? undefined : description,
+            macros:
+              kcal === 0
+                ? undefined
+                : {
+                    kcal: kcal,
+                    ...macros,
+                  },
             image: res[0].url,
           },
         });
@@ -303,16 +347,95 @@ const AddFood = ({ close }: { close: () => void }) => {
           </Button>
         </div>
         <p className="text-2xl">Crea una nueva Comida</p>
+        <p className="text-xs text-foreground/40 font-normal mb-1">
+          Los campos marcados con (*) son obligatorios
+        </p>
       </DialogTitle>
       <Input
-        placeholder="Nombre de la comida"
+        placeholder="Nombre de la comida (*)"
         value={name}
         onChange={(e) => setName(e.currentTarget.value)}
       />
-      <div className="py-5 mx-auto">
+      <Textarea
+        placeholder="Descripcion"
+        className="resize-none"
+        maxLength={185}
+        value={description}
+        onChange={(e) => setDescription(e.currentTarget.value)}
+      />
+
+      <Accordion
+        type="single"
+        collapsible
+        defaultValue="item-1"
+        className="w-full bg-white/40 rounded-lg py-0">
+        <AccordionItem value="item-1">
+          <AccordionTrigger className="cursor-default hover:no-underline py-2">
+            <p className="pt-1 font-medium text-foreground/60">Macros</p>
+          </AccordionTrigger>
+          <AccordionContent className="">
+            <div className="flex gap-2 p-1">
+              <Input
+                placeholder="Proteinas"
+                className="border-proteins"
+                type="number"
+                min={0}
+                max={999}
+                onChange={(e) => {
+                  let value = parseFloat(e.currentTarget.value);
+                  if (value >= 999) value = 999;
+                  setMacros({
+                    ...macros,
+                    proteins: value,
+                  });
+                }}
+              />
+              <Input
+                placeholder="Carbohidratos"
+                className="border-carbs"
+                type="number"
+                min={0}
+                max={999}
+                onChange={(e) => {
+                  let value = parseFloat(e.currentTarget.value);
+                  if (value >= 999) value = 999;
+                  setMacros({
+                    ...macros,
+                    carbs: value,
+                  });
+                }}
+              />
+              <Input
+                placeholder="Grasas"
+                className="border-fats"
+                type="number"
+                min={0}
+                max={999}
+                onChange={(e) => {
+                  let value = parseFloat(e.currentTarget.value);
+                  if (value >= 999) value = 999;
+                  setMacros({
+                    ...macros,
+                    fats: value,
+                  });
+                }}
+              />
+            </div>
+            <p className="text-end text-primary">
+              {calculateCalories(macros)} Kcal
+            </p>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+
+      <p className="font-medium text-foreground/60">
+        Subir imagen de comida (*)
+      </p>
+
+      <div className="pb-5 mx-auto flex flex-col items-center">
         <label
           htmlFor="image-upload"
-          className="block w-60 h-60 bg-gray-200 hover:bg-gray-200/60 duration-300 rounded-lg cursor-pointer ">
+          className="block w-32 h-32 bg-gray-200 hover:bg-gray-200/60 duration-300 rounded-lg cursor-pointer ">
           {imageURL ? (
             <img
               src={imageURL}
@@ -320,8 +443,8 @@ const AddFood = ({ close }: { close: () => void }) => {
               className="w-full h-full object-cover rounded-lg"
             />
           ) : (
-            <div className="flex items-center justify-center w-full h-full">
-              <Plus size={48} />
+            <div className="flex flex-col items-center justify-center w-full h-full">
+              <Plus size={28} />
             </div>
           )}
         </label>
