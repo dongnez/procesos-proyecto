@@ -1,3 +1,4 @@
+import { Skeleton } from "src/@/components/ui/skeleton";
 import {
   Avatar,
   AvatarFallback,
@@ -20,16 +21,22 @@ export const AvatarIcon = ({
 }) => {
   return (
     <Avatar
-	{...rest}
+      {...rest}
       style={{
         width: `${size}px`,
         height: `${size}px`,
       }}>
-      <AvatarImage
-        {...imageProps}
-        src={image}
-      />
-      <AvatarFallback {...fallbackProps}>{fallback}</AvatarFallback>
+      <AvatarImage {...imageProps} src={image} />
+
+      <AvatarFallback {...fallbackProps}>
+        <Skeleton
+          className="rounded-full"
+          style={{
+            width: `${size}px`,
+            height: `${size}px`,
+          }}
+        />
+      </AvatarFallback>
     </Avatar>
   );
 };
