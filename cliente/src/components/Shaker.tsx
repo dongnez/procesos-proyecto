@@ -1,11 +1,11 @@
-import { HTMLAttributes, useState } from "react";
+import { HTMLAttributes, useState, useEffect } from "react";
 import { FoodInterface } from "src/interfaces/FoodInterfaces";
 import { Button } from "src/@/components/ui/button";
 import { Heart, Repeat } from "react-feather";
-import { motion } from "framer-motion";
+import { HTMLMotionProps, motion, useAnimation } from "framer-motion";
 
 const zoomInAndShakeVariants = {
-  initial: { scale: 1, transition: { duration: 0.4 ,ease: "easeInOut"} },
+  initial: { scale: 1, transition: { duration: 0.4, ease: "easeInOut" } },
   animate: { scale: 1.2, transition: { duration: 1, ease: "easeInOut" } },
   exit: { scale: 1 },
 };
@@ -14,9 +14,15 @@ const shakeAndResetVariants = {
   initial: { scale: 1 },
   animate: {
     scale: 1.2,
-    x: [0,-2, 2, -5, 5, -6, 6,-12, 12,-13,13, -18,18, -10, 10, -8, 8, -5, 5, -2, 2, 1],
-    y: [0,-2, 2, -5, 5, -6, 6,-8, 8,-9,9, -9,9, -8, 8, -6, 6, -5, 5, -2, 2, 1],
-    transition: { duration: 2, ease: "easeInOut",  },
+    x: [
+      0, -2, 2, -5, 5, -6, 6, -12, 12, -13, 13, -18, 18, -10, 10, -8, 8, -5, 5,
+      -2, 2, 1,
+    ],
+    y: [
+      0, -2, 2, -5, 5, -6, 6, -8, 8, -9, 9, -9, 9, -8, 8, -6, 6, -5, 5, -2, 2,
+      1,
+    ],
+    transition: { duration: 2, ease: "easeInOut" },
   },
 };
 
@@ -29,15 +35,18 @@ export const Shaker = ({
   const selectedFood = food?.[0] || null;
 
   const [shake, setShake] = useState(false);
-
+  const [showParticles, setShowParticles] = useState(false);
 
   return (
-    <div {...rest} className="flex flex-col">
+    <div {...rest} className="flex flex-col relative ">
       <motion.div
         animate={shake ? "animate" : "initial"}
         variants={shake ? shakeAndResetVariants : zoomInAndShakeVariants}
         onAnimationComplete={() => {
-          setShake(false)
+          setShake(false);
+        }}
+        onUpdate={(latest) => {
+          if ((latest.scale as number) >= 1.18) setShowParticles(true);
         }}
         className="relative w-[300px] h-[300px] bg-card rounded-xl mx-auto">
         {selectedFood ? (
@@ -57,10 +66,17 @@ export const Shaker = ({
           </div>
         )}
       </motion.div>
+        <div className="absolute top-36 left-0 right-0 mx-auto z-20">
+        {showParticles &&
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((_, i) => (
+            <PuntoAnimado key={i} onAnimationComplete={()=>{setTimeout(()=>setShowParticles(false),500)}}/>
+          ))
+        }
+        </div>
 
       <Button
         onClick={() => {
-          setShake(!shake);
+          setShake(true);
         }}
         className=" z-10 rounded-full mx-auto w-fit text-2xl p-6 mt-[-5px]">
         <Repeat className="" size={18} />
@@ -70,3 +86,54 @@ export const Shaker = ({
     </div>
   );
 };
+
+function PuntoAnimado({...rest}: HTMLMotionProps<"div">) {
+  const controls = useAnimation();
+
+  useEffect(() => {
+    // Generar un ángulo aleatorio en radianes (0 a 2π)
+    const randomAngle = Math.random() * 2 * Math.PI;
+
+    // Calcular coordenadas polares a partir del ángulo
+    const radius = 200; // Radio máximo alrededor del punto central
+    const randomX = radius * Math.cos(randomAngle);
+    const randomY = radius * Math.sin(randomAngle);
+
+    // Realiza la animación para mover el punto al valor aleatorio y luego volver a 0 de forma lineal
+    const animatePoint = async () => {
+      await controls.start({
+        opacity: 1,
+        scale: Math.random() * 1.5 + 0.8,
+        boxShadow: "0px 0px 10px yellow",
+        x: randomX,
+        y: randomY,
+      });
+      await controls.start({
+        opacity: 0,
+        scale: 0.5,
+        boxShadow: "0px 0px 10px yellow",
+        x: 0,
+        y: 0,
+        transition: { duration: 0.5, ease: "easeOut" },
+      });
+    };
+
+    animatePoint();
+  }, [controls]);
+
+
+  return (
+    <motion.div
+      {...rest}
+      initial={{ scale: 1, opacity: 0.4, boxShadow: "0px 0px 0px transparent" }}
+      animate={controls}
+      transition={{ duration: 1, ease: "easeInOut" }}
+      className="z-10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+      style={{
+        width: 5,
+        height: 5,
+        background: '#f7ff05',
+        borderRadius: "100%",
+      }}></motion.div>
+  );
+}
