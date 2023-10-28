@@ -12,6 +12,11 @@ const UserSchema = new Schema<UserInterface>({
 		unique: true,
 		// select: false,
 	},
+	photoURL:{
+		type: String,
+		unique: false,
+		required: false,
+	},
 	name:{
 		type: String,
 		unique: false,

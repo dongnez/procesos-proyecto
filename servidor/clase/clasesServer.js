@@ -34,11 +34,21 @@ export function initClases(app) {
   );
 
   app.get("/good", function (request, response) {
-    let email = request.user.emails[0].value;
-    sistema.buscarOCrearUsuario(email, function (obj) {
-      console.log("Usuario creado...");
-      response.cookie("nick", obj.email);
-      response.redirect("/app");
+    console.log("Autenticado con exito");
+
+    const email = request.user.emails[0].value;
+    const name = request.user.displayName;
+    const photoURL = request.user.photos[0].value;
+
+    sistema.buscarOCrearUsuario({
+      email: email,
+      name: name,
+      photo: photoURL,
+      provider: "google",
+    }, function (user) {
+      console.log("Usuario GOOGLE AUTH...",user);
+      response.cookie("user", JSON.stringify(user));
+      response.redirect("/app",);
     });
   });
 

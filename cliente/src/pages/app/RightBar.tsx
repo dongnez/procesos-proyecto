@@ -18,7 +18,7 @@ export const RightBar = ({
 }: HTMLAttributes<HTMLDivElement>) => {
   // const [templates, setTemplates] = useTemplateAtoms()
   const [templates, setTemplates] = useState([]);
-  const { user } = useAuth();
+  const { user } = useAuth()
 
   useEffect(() => {
     databaseGetUserTemplates(user!._id).then(({ data, error }) => {
@@ -36,18 +36,18 @@ export const RightBar = ({
       <div className="flex items-center gap-2">
         <AvatarIcon
           className="hover:drop-shadow-lg duration-200"
-          image="https://github.com/shadcn.png"
-          fallback="userName"
+          image={user?.photoURL || ""}
+          fallback=""
           size={45}
         />
 
         {/* Name */}
-        <p className="font-medium flex-1">Dark Gollem</p>
+        <p className="font-medium flex-1">{user!.name}</p>
 
         {/* Notifications */}
       </div>
 
-      <div className="relative">
+      <div className="relative mt-4">
         <Accordion
           type="single"
           collapsible

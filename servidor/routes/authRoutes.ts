@@ -25,6 +25,7 @@ router.post('/login', async (req, res) => {
       _id:userFound._id,
       name:userFound.name,
       email:userFound.email,
+      photoURL:userFound.photoURL,
       templates:userFound.templates,
 		})
     
