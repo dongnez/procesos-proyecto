@@ -5,11 +5,12 @@ import { Login } from "src/pages/auth/Login";
 import { Register } from "src/pages/auth/Register";
 import { ErrorPage } from "src/pages/ErrorPage";
 import { ProtectedRoute } from "src/context/AuthProvider";
+import { Home } from "src/pages/home/Home";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <p>Hey :)</p>,
+    element: <Home />,
     errorElement: <ErrorPage />,
   },
   {
