@@ -1,3 +1,4 @@
+// @ts-ignore
 import { createUploadthing, type FileRouter } from "uploadthing/express";
 
 const f = createUploadthing();
