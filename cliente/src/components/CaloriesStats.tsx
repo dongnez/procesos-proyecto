@@ -44,11 +44,17 @@ export const MacroStat = ({
       : type === "fats"
       ? "Grasas"
       : "Calorias";
+    
+
+  function selectBarColor() {
+    return `bg-${type}`
+  }
 
   return (
     <div {...rest} className="flex gap-2">
 		<div className="h-full py-1">
-      		<div className={`w-[5px] rounded-full h-full bg-[var(--${type})]`} />
+      		<div className={`w-[5px] rounded-full h-full 
+          ${selectBarColor()}`} />
 		</div>
       <section>
         <p className="font-semibold text-lg">{number}</p>

@@ -22,7 +22,10 @@ const shakeAndResetVariants = {
       0, -2, 2, -5, 5, -6, 6, -8, 8, -9, 9, -9, 9, -8, 8, -6, 6, -5, 5, -2, 2,
       1,
     ],
-    transition: { duration: 2, ease: "easeInOut" },
+    transition: {
+      scale: { duration: 0.4, ease: "easeInOut" }, // Duración más corta para el 'scale'
+      default: { duration: 1.8, ease: "easeInOut" },
+    },
   },
 };
 
@@ -32,53 +35,104 @@ export const Shaker = ({
 }: HTMLAttributes<HTMLDivElement> & {
   food: FoodInterface[] | null;
 }) => {
-  const selectedFood = food?.[0] || null;
-
+  const [selectedFood, setSelectedFood] = useState(food?.[0] || null);
   const [shake, setShake] = useState(false);
   const [showParticles, setShowParticles] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  useEffect(() => {
+    if (!shake && showParticles)
+      setSelectedFood(food?.[Math.floor(Math.random() * food.length)] || null);
+  }, [showParticles]);
 
   return (
     <div {...rest} className="flex flex-col relative ">
-      <motion.div
-        animate={shake ? "animate" : "initial"}
-        variants={shake ? shakeAndResetVariants : zoomInAndShakeVariants}
-        onAnimationComplete={() => {
-          setShake(false);
-        }}
-        onUpdate={(latest) => {
-          if ((latest.scale as number) >= 1.18) setShowParticles(true);
-        }}
-        className="relative w-[300px] h-[300px] bg-card rounded-xl mx-auto">
-        {selectedFood ? (
-          <>
-            <h3 className="absolute top-1 right-0 left-0 text-center font-bold text-3xl text-white bg-black/20 w-fit mx-auto rounded-full py-1 px-4">
-              {selectedFood.name}
-            </h3>
-            <img
-              src={selectedFood.image}
-              alt={selectedFood.name}
-              className="w-full h-full object-cover rounded-xl "
-            />
-          </>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <p className="text-2xl">No hay comida</p>
-          </div>
-        )}
-      </motion.div>
-        <div className="absolute top-36 left-0 right-0 mx-auto z-20">
+      <div
+        className="group hover:scale-105 ease-in-out w-fit mx-auto group
+      transition-all duration-500
+      [transform-style:preserve-3d] "
+        onClick={() => setIsFlipped(!isFlipped)}>
+        <motion.div
+          animate={shake ? "animate" : "initial"}
+          variants={shake ? shakeAndResetVariants : zoomInAndShakeVariants}
+          onAnimationComplete={() => {
+            setShake(false);
+          }}
+          onUpdate={(latest) => {
+            if ((latest.scale as number) >= 1.2) {
+              // setSelectedFood(food?.[Math.floor(Math.random() * food.length)] || null);
+              setTimeout(() => setShowParticles(true), 1500);
+            }
+          }}
+          className="relative w-[300px] h-[300px] bg-card rounded-xl mx-auto">
+          {selectedFood ? (
+            <>
+              <div
+                className={`h-full w-full pointer-events-none select-none  duration-500  
+            `}>
+                <h3
+                  className={`absolute top-1 right-0 left-0 text-center font-bold text-3xl text-white bg-black/20 w-fit mx-auto rounded-full py-1 px-4 z-10 
+                ${
+                  isFlipped && "[transform:rotateY(180deg)]"
+                } [backface-visibility:hidden]  duration-500
+            ${
+              shake
+                ? "opacity-0 translate-y-[5px]"
+                : "opacity-100 translate-y-0"
+            } duration-500`}>
+                  {selectedFood.name}
+                </h3>
+                <motion.img
+                  key={selectedFood._id}
+                  src={selectedFood.image}
+                  alt={selectedFood.name}
+                  className={`w-full h-full object-cover rounded-xl z-20 
+                ${
+                  isFlipped && "[transform:rotateY(180deg)] blur-[5px]"
+                } opacity-80 duration-500 
+              ${shake ? "blur-[1px]" : ""}`}
+                  initial={{ opacity: 0.5 }}
+                  animate={{
+                    opacity: shake ? 0.5 : 1,
+                    transition: { duration: 0.6 },
+                  }}
+                />
+              </div>
+
+              <div
+                className={`absolute top-0 left-0 h-full w-full bg-black/60 rounded-xl
+                ${
+                  isFlipped && "[transform:rotateY(0deg)]"
+                } [backface-visibility:hidden] [transform:rotateY(180deg)] duration-500`}>
+                <p className=" [backface-visibility:hidden] text-white">
+                  {selectedFood.description || "No hay descripción"}
+                </p>
+              </div>
+            </>
+          ) : (
+            <div className={`w-full h-full flex items-center justify-center`}>
+              <p className="text-2xl">No hay comida</p>
+            </div>
+          )}
+        </motion.div>
+      </div>
+      <div className="absolute top-36 left-0 right-0 mx-auto z-20">
         {showParticles &&
           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map((_, i) => (
-            <PuntoAnimado key={i} onAnimationComplete={()=>{setTimeout(()=>setShowParticles(false),500)}}/>
-          ))
-        }
-        </div>
+            <PuntoAnimado
+              key={i}
+              onAnimationComplete={() => {
+                setTimeout(() => setShowParticles(false), 500);
+              }}
+            />
+          ))}
+      </div>
 
       <Button
         onClick={() => {
           setShake(true);
         }}
-        className=" z-10 rounded-full mx-auto w-fit text-2xl p-6 mt-[-5px]">
+        className=" z-10 rounded-full mx-auto w-fit text-2xl p-6 mt-[-5px] hover:bg-purple-900 duration-300">
         <Repeat className="" size={18} />
         <p className="px-10">Shake It</p>
         <Heart className="" size={18} />
@@ -87,7 +141,7 @@ export const Shaker = ({
   );
 };
 
-function PuntoAnimado({...rest}: HTMLMotionProps<"div">) {
+function PuntoAnimado({ ...rest }: HTMLMotionProps<"div">) {
   const controls = useAnimation();
 
   useEffect(() => {
@@ -95,7 +149,7 @@ function PuntoAnimado({...rest}: HTMLMotionProps<"div">) {
     const randomAngle = Math.random() * 2 * Math.PI;
 
     // Calcular coordenadas polares a partir del ángulo
-    const radius = 200; // Radio máximo alrededor del punto central
+    const radius = 200 + Math.random() * 30; // Radio máximo alrededor del punto central
     const randomX = radius * Math.cos(randomAngle);
     const randomY = radius * Math.sin(randomAngle);
 
@@ -112,15 +166,14 @@ function PuntoAnimado({...rest}: HTMLMotionProps<"div">) {
         opacity: 0,
         scale: 0.5,
         boxShadow: "0px 0px 10px yellow",
-        x: 0,
-        y: 0,
-        transition: { duration: 0.5, ease: "easeOut" },
+        x: randomX,
+        y: randomY - 10,
+        transition: { duration: 0.4, ease: "easeOut" },
       });
     };
 
     animatePoint();
   }, [controls]);
-
 
   return (
     <motion.div
@@ -132,7 +185,7 @@ function PuntoAnimado({...rest}: HTMLMotionProps<"div">) {
       style={{
         width: 5,
         height: 5,
-        background: '#f7ff05',
+        background: "#f7ff05",
         borderRadius: "100%",
       }}></motion.div>
   );
