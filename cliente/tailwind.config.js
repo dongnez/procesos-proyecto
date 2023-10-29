@@ -17,6 +17,10 @@ module.exports = {
     },
     extend: {
       colors: {
+        kcal: 'var(--kcal)',
+        proteins: 'var(--proteins)',
+        fats: 'var(--fats)',
+        carbs: 'var(--carbs)',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

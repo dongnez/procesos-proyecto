@@ -43,6 +43,10 @@
     --ring: 269 61% 21%;
 
     --radius: 0.5rem;
+    --kcal: #ae2db7;
+    --proteins: #ff5590;
+    --fats: #ffee36;
+    --carbs: #6fc9fd;
   }
 
 
@@ -52,18 +56,23 @@
        URL: https://gradient.page */
 
     /* CSS: .bg-gradient { background: var(--gradient) } */
+    --kcal: #ae2db7;
+    --proteins: #ff5590;
+    --fats: #ffee36;
+    --carbs: #6fc9fd;
+
     --gradient: #acb6e5;
 
     --background: 244 33.800000000000004% 6.32%;
     --foreground: 244 5.2% 98.95%;
 
-    --muted: 244 26% 23.700000000000003%;
+    --muted: 244 26% 35.700000000000003%;
     --muted-foreground: 244 5.2% 57.9%;
 
     --popover: 244 54.6% 10.27%;
     --popover-foreground: 244 5.2% 98.95%;
 
-    --card: 244 54.6% 10.27%;
+    --card: 244 30.6% 20.27%;
     --card-foreground: 244 5.2% 98.95%;
 
     --border: 244 26% 23.700000000000003%;
