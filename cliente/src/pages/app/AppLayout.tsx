@@ -19,7 +19,7 @@ export const AppLayout = () => {
       }>
       {/* <NavBar className="" /> */}
 
-      <div className="h-full w-full py-4 flex flex-col  sm:flex-row">
+      <div className="relative h-full w-full sm:py-4 flex flex-col  sm:flex-row overflow-hidden">
         <LeftBar />
 
         <section className="h-full flex-1 px-5">

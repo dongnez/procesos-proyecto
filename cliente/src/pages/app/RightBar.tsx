@@ -11,6 +11,9 @@ import { AvatarIcon } from "src/components/AvatarIcon";
 import { CreateTemplate } from "src/components/dialogs/CreateTemplate";
 import { databaseGetUserTemplates } from "src/database/databaseTemplates";
 import { useAuth } from "src/context/AuthProvider";
+import { useAtom } from "jotai";
+import { openRightSideBarAtom } from "src/context/openLayoutsAtoms";
+import { useDeviceSm } from "src/hooks/useDevice";
 
 export const RightBar = ({
   className,
@@ -26,13 +29,24 @@ export const RightBar = ({
     });
   }, []);
 
+  const [open,_] = useAtom(openRightSideBarAtom)
+
+  //Detect is sm
+  const isSm = useDeviceSm()
+
   return (
     <section
       {...rest}
       className={cn(
-        "hidden sm:block bg-card h-full w-[300px] py-3 px-4 rounded-l-3xl",
+        " bg-card h-full w-[300px] py-3 px-4 rounded-l-3xl duration-300 top-0 right-0   z-20",
+        " absolute sm:relative  ",
+        isSm && (open ? `opacity-100`:`opacity-0`),
         className
-      )}>
+      )}
+      style={{
+        // position: isSm ? "absolute" : "",
+        transform: `translateX(${isSm ? (open ? 0 : 300) : 0}px)`,
+      }}>
       <div className="flex items-center gap-2">
         <AvatarIcon
           className="hover:drop-shadow-lg duration-200"

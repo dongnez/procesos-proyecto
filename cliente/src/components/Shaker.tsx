@@ -85,6 +85,7 @@ export const Shaker = ({
                         src={selectedFood.image}
                         alt={selectedFood.name}
                         className={`w-full h-full object-cover rounded-xl z-20 
+                        pointer-events-none
                         ${shake ? "blur-[1px]" : ""}`}
                         initial={{ opacity: 0.5 }}
                         animate={{
