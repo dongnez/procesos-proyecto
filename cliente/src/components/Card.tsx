@@ -28,12 +28,13 @@ export const Card = ({
 
       <div className={` w-full h-full absolute top-0 right-0
 	  bg-black/60 rounded-xl
-	   ${
-		isFlipped && "[transform:rotateY(0.5deg)]"
-	  } 
     [backface-visibility:hidden] 
     [transform:rotateY(180deg)] duration-500
-	  `}>{back}</div>
+	  `}
+    style={{
+      transform: !isFlipped ? "rotateY(180deg)": "rotateY(0deg)",
+    }}
+    >{back}</div>
 
     </div>
   );

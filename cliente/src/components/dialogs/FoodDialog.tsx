@@ -368,7 +368,7 @@ const AddFood = ({ close }: { close: () => void }) => {
         type="single"
         collapsible
         defaultValue="item-1"
-        className="w-full bg-white/40 rounded-lg py-0">
+        className="w-full bg-muted p-1 rounded-lg py-0">
         <AccordionItem value="item-1">
           <AccordionTrigger className="cursor-default hover:no-underline py-2">
             <p className="pt-1 font-medium text-foreground/60">Macros</p>
@@ -377,7 +377,7 @@ const AddFood = ({ close }: { close: () => void }) => {
             <div className="flex gap-2 p-1">
               <Input
                 placeholder="Proteinas"
-                className="border-proteins"
+                className="border-proteins dark:border-proteins"
                 type="number"
                 min={0}
                 max={999}
@@ -392,7 +392,7 @@ const AddFood = ({ close }: { close: () => void }) => {
               />
               <Input
                 placeholder="Carbohidratos"
-                className="border-carbs"
+                className="border-carbs dark:border-carbs"
                 type="number"
                 min={0}
                 max={999}
@@ -407,7 +407,7 @@ const AddFood = ({ close }: { close: () => void }) => {
               />
               <Input
                 placeholder="Grasas"
-                className="border-fats"
+                className="border-fats dark:border-fats"
                 type="number"
                 min={0}
                 max={999}

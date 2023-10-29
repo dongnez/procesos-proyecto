@@ -51,7 +51,10 @@ export const MacroStat = ({
     
 
   function selectBarColor() {
-    return `bg-${type}`
+    if(type === "carbs") return "bg-carbs"
+    if(type === "proteins") return "bg-proteins"
+    if(type === "fats") return "bg-fats"
+    if(type === "kcal") return "bg-kcal"
   }
 
   return (

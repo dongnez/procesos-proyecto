@@ -51,7 +51,7 @@ export const Template = () => {
   return (
     <div className="w-full h-full bg-background overflow-visible">
       <section className="w-full h-full">
-        <section className="flex flex-col gap-1 sm:flex-row items-center mb-10">
+        <section className="flex flex-col gap-1 md:flex-row items-center mb-10">
           <h2 className="text-3xl font-semibold flex-1">{template?.name}</h2>
 
           <div className="flex gap-1">

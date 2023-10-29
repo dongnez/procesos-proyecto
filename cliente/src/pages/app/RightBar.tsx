@@ -52,7 +52,7 @@ export const RightBar = ({
           type="single"
           collapsible
           defaultValue="item-1"
-          className="w-full bg-white/40 rounded-lg p-1">
+          className="w-full bg-muted rounded-lg p-1">
           <AccordionItem value="item-1">
             <AccordionTrigger className="cursor-default hover:no-underline">
               <div onClick={(e) => e.stopPropagation()} className="flex">
@@ -61,9 +61,11 @@ export const RightBar = ({
               <p className="hover:underline">Mis Plantillas</p>
             </AccordionTrigger>
             <AccordionContent>
-              {templates.map((template, index) => (
-                <TemplateListItem key={index} template={template} />
-              ))}
+              <div className="flex flex-col gap-1">
+                {templates.map((template, index) => (
+                  <TemplateListItem key={index} template={template} />
+                ))}
+              </div>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
