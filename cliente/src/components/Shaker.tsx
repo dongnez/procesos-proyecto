@@ -3,11 +3,13 @@ import { FoodInterface } from "src/interfaces/FoodInterfaces";
 import { Button } from "src/@/components/ui/button";
 import { Heart, Repeat } from "react-feather";
 import { HTMLMotionProps, motion, useAnimation } from "framer-motion";
+import { Card } from "src/components/Card";
+import { CaloriesStats } from "src/components/CaloriesStats";
 
 const zoomInAndShakeVariants = {
   initial: { scale: 1, transition: { duration: 0.4, ease: "easeInOut" } },
   animate: { scale: 1.2, transition: { duration: 1, ease: "easeInOut" } },
-  exit: { scale: 1 },
+exit: { scale: 1 },
 };
 
 const shakeAndResetVariants = {
@@ -24,7 +26,7 @@ const shakeAndResetVariants = {
     ],
     transition: {
       scale: { duration: 0.4, ease: "easeInOut" }, // Duración más corta para el 'scale'
-      default: { duration: 1.8, ease: "easeInOut" },
+      default: { duration: 1.5, ease: "easeInOut" },
     },
   },
 };
@@ -48,9 +50,7 @@ export const Shaker = ({
   return (
     <div {...rest} className="flex flex-col relative ">
       <div
-        className="group hover:scale-105 ease-in-out w-fit mx-auto group
-      transition-all duration-500
-      [transform-style:preserve-3d] "
+        className="hover:scale-105 ease-in-out w-fit mx-auto duration-500"
         onClick={() => setIsFlipped(!isFlipped)}>
         <motion.div
           animate={shake ? "animate" : "initial"}
@@ -61,53 +61,49 @@ export const Shaker = ({
           onUpdate={(latest) => {
             if ((latest.scale as number) >= 1.2) {
               // setSelectedFood(food?.[Math.floor(Math.random() * food.length)] || null);
-              setTimeout(() => setShowParticles(true), 1500);
+              setTimeout(() => setShowParticles(true), 1200);
             }
           }}
           className="relative w-[300px] h-[300px] bg-card rounded-xl mx-auto">
           {selectedFood ? (
             <>
-              <div
-                className={`h-full w-full pointer-events-none select-none  duration-500  
-            `}>
-                <h3
-                  className={`absolute top-1 right-0 left-0 text-center font-bold text-3xl text-white bg-black/20 w-fit mx-auto rounded-full py-1 px-4 z-10 
-                ${
-                  isFlipped && "[transform:rotateY(180deg)]"
-                } [backface-visibility:hidden]  duration-500
-            ${
-              shake
-                ? "opacity-0 translate-y-[5px]"
-                : "opacity-100 translate-y-0"
-            } duration-500`}>
-                  {selectedFood.name}
-                </h3>
-                <motion.img
-                  key={selectedFood._id}
-                  src={selectedFood.image}
-                  alt={selectedFood.name}
-                  className={`w-full h-full object-cover rounded-xl z-20 
-                ${
-                  isFlipped && "[transform:rotateY(180deg)] blur-[5px]"
-                } opacity-80 duration-500 
-              ${shake ? "blur-[1px]" : ""}`}
-                  initial={{ opacity: 0.5 }}
-                  animate={{
-                    opacity: shake ? 0.5 : 1,
-                    transition: { duration: 0.6 },
-                  }}
+                <Card
+                  className="w-full h-full rounded-xl cursor-default "
+                  front={
+                    <>
+                      <h3
+                        className={`absolute top-1 right-0 left-0 text-center font-bold text-3xl text-white bg-black/20 w-fit mx-auto rounded-full py-1 px-4 z-10 
+                        ${
+                          shake
+                            ? "opacity-0 translate-y-[5px]"
+                            : "opacity-100 translate-y-0"
+                        } duration-500`}>
+                        {selectedFood.name}
+                      </h3>
+                      <motion.img
+                        key={selectedFood._id}
+                        src={selectedFood.image}
+                        alt={selectedFood.name}
+                        className={`w-full h-full object-cover rounded-xl z-20 
+                        ${shake ? "blur-[1px]" : ""}`}
+                        initial={{ opacity: 0.5 }}
+                        animate={{
+                          opacity: shake ? 0.5 : 1,
+                          transition: { duration: 0.6 },
+                        }}
+                      />
+                    </>
+                  }
+                  back={
+                    <div className="p-2 bg-card/70 h-full text-card-foreground rounded-xl flex flex-col">
+                      <p className="text-lg -foreground/80 font-semibold "> Descripcion</p>
+                      <p className=" [backface-visibility:hidden]  text-justify flex-1">
+                        {selectedFood.description || "No hay descripción"}
+                      </p>
+                      {selectedFood.macros && (<CaloriesStats isCompact macros={selectedFood.macros}  className="mx-auto w-fit my-3"/>)}
+                    </div>
+                  }
                 />
-              </div>
-
-              <div
-                className={`absolute top-0 left-0 h-full w-full bg-black/60 rounded-xl
-                ${
-                  isFlipped && "[transform:rotateY(0deg)]"
-                } [backface-visibility:hidden] [transform:rotateY(180deg)] duration-500`}>
-                <p className=" [backface-visibility:hidden] text-white">
-                  {selectedFood.description || "No hay descripción"}
-                </p>
-              </div>
             </>
           ) : (
             <div className={`w-full h-full flex items-center justify-center`}>

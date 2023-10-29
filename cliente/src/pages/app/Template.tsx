@@ -49,20 +49,22 @@ export const Template = () => {
   if (!template) return (<div className="h-full flex items-center justify-center"><Loader/></div>)
 
   return (
-    <div className="w-full h-full bg-background">
+    <div className="w-full h-full bg-background overflow-visible">
       <section className="w-full h-full">
-        <section className="flex items-center mb-4 sm:mb-10">
+        <section className="flex flex-col gap-1 sm:flex-row items-center mb-10">
           <h2 className="text-3xl font-semibold flex-1">{template?.name}</h2>
 
-          <button
-            onClick={() => navigate("food")}
-            className="px-4 py-2 border-2 border-card rounded-full mr-2 flex gap-2">
-              <Drumstick className="" /> Comida
-          </button>
+          <div className="flex gap-1">
+            <button
+              onClick={() => navigate("food")}
+              className="px-4 py-2 border-2 border-card rounded-full mr-2 flex gap-2">
+                <Drumstick className="" /> Comida
+            </button>
 
-          <Button variant={"outline"} size={"icon"} className="rounded-full">
-            <Settings className="" size={24} />
-          </Button>
+            <Button variant={"outline"} size={"icon"} className="rounded-full">
+              <Settings className="" size={24} />
+            </Button>
+          </div>
         </section>
 
         <Shaker food={template.foods} />
