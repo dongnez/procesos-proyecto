@@ -19,8 +19,8 @@ export function databaseObtenerUsuarios() {
       .then(data => data);
 }
 
-export function databaseEnviarJWT(jwt:any) {
-  return axios.post(`${API_URL}enviarJwt`, jwt, {
+export function databaseEnviarJWT(user:{email:string,name:string,photoURL:string,provider:string}) {
+  return axios.post(`${API_URL}auth/google`, user, {
   headers: {
     'Content-Type': 'application/json' // Configura la cabecera para indicar que estás enviando JSON
   }

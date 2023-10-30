@@ -7,7 +7,7 @@ import {
 import { TemplateListItem } from "src/components/TemplateListItem";
 import { HTMLAttributes, useEffect, useState } from "react";
 import { cn } from "src/@/lib/utils";
-import { AvatarIcon } from "src/components/AvatarIcon";
+import { UserIcon } from "src/components/UserIcon";
 import { CreateTemplate } from "src/components/dialogs/CreateTemplate";
 import { databaseGetUserTemplates } from "src/database/databaseTemplates";
 import { useAuth } from "src/context/AuthProvider";
@@ -48,10 +48,9 @@ export const RightBar = ({
         transform: `translateX(${isSm ? (open ? 0 : 300) : 0}px)`,
       }}>
       <div className="flex items-center gap-2">
-        <AvatarIcon
+        <UserIcon
           className="hover:drop-shadow-lg duration-200"
           image={user?.photoURL || ""}
-          fallback=""
           size={45}
         />
 

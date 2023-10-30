@@ -5,12 +5,13 @@
   "esModuleInterop": true,
   "scripts": {
     "dev-c": "cd cliente && yarn && yarn dev",
-    "dev": "NODE_ENV=development  tsx watch index.ts",
+    "dev": "tsx watch index.ts",
     "start": "tsx index.ts",
     "build": "cd cliente/ && yarn install && yarn build"
   },
   "license": "MIT",
   "dependencies": {
+    "axios": "^1.6.0",
     "bcrypt": "^5.1.1",
     "cookie-session": "^2.0.0",
     "cors": "^2.8.5",

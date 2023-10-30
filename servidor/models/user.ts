@@ -9,8 +9,13 @@ const UserSchema = new Schema<UserInterface>({
 	},
 	password:{
 		type: String,
-		unique: true,
+		// unique: true,
 		// select: false,
+	},
+	provider:{
+		type: String,
+		unique: false,
+		required: false,
 	},
 	photoURL:{
 		type: String,

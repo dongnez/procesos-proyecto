@@ -8,6 +8,7 @@ type AuthContextType = {
   register: (user: UserInterface) => void;
   login: (user:{email:string,password:string}) => any;
   logout: () => void;
+  saveUser: (user:UserInterface) => void;
   loading: boolean;
 };
 
@@ -16,6 +17,7 @@ const AuthContext = createContext<AuthContextType>({
   register: () => {},
   login: () => {},
   logout: () => {},
+  saveUser: ()=>{},
   loading: true,
 });
 
@@ -35,7 +37,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading(false);
   }, []);
 
-  const saveUserCache = (user: UserInterface) => {
+  const saveUser = (user: UserInterface) => {
+    setUser(user);
     Cookies.set("user", JSON.stringify(user),{
       expires: 7,
     });
@@ -43,8 +46,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   function register(user: UserInterface) {
     databaseAuthRegister(user).then(() => {
-      setUser(user);
-      saveUserCache(user);
+      // setUser(user);
+      saveUser(user);
       window.location.href = "/app";
     })
   }
@@ -53,8 +56,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const {data,error} = await databaseAuthLogin(user);
 
       if(data){
-        setUser(data);
-        saveUserCache(data);
+        // setUser(data);
+        saveUser(data);
         window.location.href = "/app";
         return
       }
@@ -62,12 +65,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return error;
   }
 
+  // async function loginWithGoogle() {
+  //   const { data, error } = await databaseAuthLogin({email:"",password:""});
+  // }
+
   function logout() {
 
   }
 
   return (
-    <AuthContext.Provider value={{ user, register, login, logout, loading}}>
+    <AuthContext.Provider value={{ saveUser,user, register, login, logout, loading}}>
       {children}
     </AuthContext.Provider>
   );

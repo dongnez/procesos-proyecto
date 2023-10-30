@@ -1,6 +1,7 @@
 import passport from "passport";
 import session from "express-session";
 import { Sistema } from "./modelo.js";
+import axios from "axios";
 
 export function initClases(app) {
   //PASSPORT SETUP
@@ -28,28 +29,61 @@ export function initClases(app) {
   app.get(
     "/google/callback",
     passport.authenticate("google", { failureRedirect: "/fallo" }),
-    function (req, res) {
-      res.redirect("/good");
+    async function (req, res) {
+      console.log("Autenticado con exito", req.user);
+      const email = req.user.emails[0].value;
+      const name = req.user.displayName;
+      const photoURL = req.user.photos[0].value;
+
+      // POST /auth/google
+      // res.redirect("/auth/google",{email:email,name:name,photoURL:photoURL,provider:"google"})
+
+      const response = await axios.post('/auth/google', {
+        email,
+        name,
+        photoURL,
+        provider: 'google',
+      });
+
+      if (response.ok) {
+
+        const user = await response.json();
+        console.log("Google USR",user)
+        res.cookie("user", JSON.stringify(user));
+        res.redirect("/app");
+        // res.json(user);
+      } else {
+        // Manejar errores de la solicitud POST
+        console.error(
+          "Error en la solicitud POST a /auth/google:",
+          // response.status
+        );
+        res.status(500).json({ error: "Error in Google authentication" });
+      }
+
     }
   );
 
   app.get("/good", function (request, response) {
-    console.log("Autenticado con exito");
+    console.log("Autenticado con exito", request.user);
 
     const email = request.user.emails[0].value;
     const name = request.user.displayName;
     const photoURL = request.user.photos[0].value;
 
-    sistema.buscarOCrearUsuario({
-      email: email,
-      name: name,
-      photo: photoURL,
-      provider: "google",
-    }, function (user) {
-      console.log("Usuario GOOGLE AUTH...",user);
-      response.cookie("user", JSON.stringify(user));
-      response.redirect("/app",);
-    });
+    sistema.buscarOCrearUsuario(
+      {
+        email: email,
+        name: name,
+        photo: photoURL,
+        provider: "google",
+      },
+      function (user) {
+        console.log("Usuario GOOGLE AUTH...", user);
+        response.cookie("user", JSON.stringify(user));
+        response.redirect("/app");
+      }
+    );
   });
 
   app.get("/fallo", function (request, response) {
@@ -96,14 +130,27 @@ export function initClases(app) {
   });
 
   app.post("/enviarJwt", function (request, response) {
-    
     let jwt = request.body.jwt;
     let user = JSON.parse(atob(jwt.split(".")[1]));
-    let email = user.email;
-    sistema.buscarOCrearUsuario(email, function (obj) {
-      response.cookie("nick", obj.email);
-      response.send({ nick: obj.email });
-    });
-  });
 
+    console.log("Usuario JWT...", user);
+
+    const email = user.email;
+    const name = user.name;
+    const photoURL = user.picture;
+
+    sistema.buscarOCrearUsuario(
+      {
+        email: email,
+        name: name,
+        photo: photoURL,
+        provider: "google",
+      },
+      function (user) {
+        console.log("Usuario GOOGLE AUTH...", user);
+        response.cookie("user", JSON.stringify(user));
+        response.redirect("/app");
+      }
+    );
+  });
 }

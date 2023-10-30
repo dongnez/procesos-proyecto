@@ -1,7 +1,12 @@
+// import axios from 'axios';
 import {useEffect} from 'react';
-import {  databaseEnviarJWT } from 'src/database/databaseClaseFunctions';
+import { useAuth } from 'src/context/AuthProvider';
+import {  databaseAuthGoogle } from 'src/database/databaseAuth';
+// import { API_URL } from 'src/constants/config';
 
 export const useOneTap = () => {
+	const {saveUser} = useAuth();
+
 	useEffect(() => {
 
 	  const script = document.createElement("script");
@@ -16,13 +21,17 @@ export const useOneTap = () => {
 			"81496513072-viqtt5v8o82n8070vfknm9jqlq542nrg.apps.googleusercontent.com", //prod
 		  auto_select: false,
 		  callback: (info:any) => {
-			let jwt=info.credential;
- 			// let user=JSON.parse(atob(jwt.split(".")[1]));
+			const jwt=info.credential;
+ 			const user=JSON.parse(atob(jwt.split(".")[1]));
 
-			databaseEnviarJWT({"jwt":jwt}).then((res:any) => {
+			const email = user.email;
+			const name = user.name;
+			const photoURL = user.picture;
+
+			databaseAuthGoogle({email,name,photoURL,provider:'google'}).then(async (res:any) => {
 				//Call Register
-				console.log("useOneTap CALLBACK", res);
-
+				console.log("useOneTap CALLBACK", res.data.user);
+				saveUser(res.data.user);
 				window.location.href = "/app";
 			})
 			
