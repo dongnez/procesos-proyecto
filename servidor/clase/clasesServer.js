@@ -22,7 +22,7 @@ export function initClases(app) {
   const sistema = new Sistema();
 
   app.get(
-    "/auth/google",
+    "/googleStartAuth",
     passport.authenticate("google", { scope: ["profile", "email"] })
   );
 
@@ -30,37 +30,30 @@ export function initClases(app) {
     "/google/callback",
     passport.authenticate("google", { failureRedirect: "/fallo" }),
     async function (req, res) {
-      console.log("Autenticado con exito", req.user);
+      
       const email = req.user.emails[0].value;
       const name = req.user.displayName;
       const photoURL = req.user.photos[0].value;
 
-      // POST /auth/google
-      // res.redirect("/auth/google",{email:email,name:name,photoURL:photoURL,provider:"google"})
-
-      const response = await axios.post('/auth/google', {
+      const response = await axios.post(process.env.APP_URL+'/auth/google', {
         email,
         name,
         photoURL,
         provider: 'google',
-      });
+      },{headers: {
+        'Content-Type': 'application/json'
+      }});
 
-      if (response.ok) {
-
-        const user = await response.json();
-        console.log("Google USR",user)
-        res.cookie("user", JSON.stringify(user));
-        res.redirect("/app");
-        // res.json(user);
-      } else {
-        // Manejar errores de la solicitud POST
-        console.error(
-          "Error en la solicitud POST a /auth/google:",
-          // response.status
-        );
+      // console.log("RESPONSE",response)
+      if(response.data.error){
         res.status(500).json({ error: "Error in Google authentication" });
       }
 
+      if(response.data.user){
+        console.log("Google USR",response.data.user)
+        res.cookie("user", JSON.stringify(response.data.user));
+        res.redirect("/app");
+      }
     }
   );
 
