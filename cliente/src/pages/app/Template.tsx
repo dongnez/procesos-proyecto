@@ -49,7 +49,7 @@ export const Template = () => {
   if (!template) return (<div className="h-full flex items-center justify-center"><Loader/></div>)
 
   return (
-    <div className="w-full h-full bg-background overflow-visible">
+    <div className="w-full h-full bg-background">
       <section className="w-full h-full">
         <section className="flex flex-col gap-1 md:flex-row items-center mb-10">
           <h2 className="text-3xl font-semibold flex-1">{template?.name}</h2>

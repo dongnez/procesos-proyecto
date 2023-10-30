@@ -64,7 +64,7 @@ export const Shaker = ({
               setTimeout(() => setShowParticles(true), 1200);
             }
           }}
-          className="relative w-[300px] h-[300px] bg-card rounded-xl mx-auto">
+          className="relative h-[220px] w-[220px] sm:w-[300px] sm:h-[300px] bg-card rounded-xl mx-auto">
           {selectedFood ? (
             <>
                 <Card
@@ -129,7 +129,7 @@ export const Shaker = ({
         onClick={() => {
           setShake(true);
         }}
-        className=" z-10 rounded-full mx-auto w-fit text-2xl p-6 mt-[-5px] hover:bg-purple-900 duration-300">
+        className=" z-10 rounded-full mx-auto w-fit text-lg sm:text-2xl p-6 mt-[-5px] hover:bg-purple-900 duration-300">
         <Repeat className="" size={18} />
         <p className="px-10">Shake It</p>
         <Heart className="" size={18} />

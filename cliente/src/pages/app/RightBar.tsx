@@ -33,7 +33,7 @@ export const RightBar = ({
 
   //Detect is sm
   const isSm = useDeviceSm()
-
+  
   return (
     <section
       {...rest}

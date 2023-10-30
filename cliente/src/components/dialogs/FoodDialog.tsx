@@ -337,7 +337,7 @@ const AddFood = ({ close }: { close: () => void }) => {
   return (
     <DialogHeader>
       <DialogTitle className="flex flex-col items-center">
-        <div className="w-full">
+        <div className="w-full flex justify-start">
           <Button
             variant={"ghost"}
             size={"icon"}
