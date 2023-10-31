@@ -35,7 +35,7 @@ export function initClases(app) {
       const name = req.user.displayName;
       const photoURL = req.user.photos[0].value;
 
-      const response = await axios.post(process.env.APP_URL+'/auth/google', {
+      const response = await axios.post(process.env.APP_URL+'auth/google', {
         email,
         name,
         photoURL,
