@@ -12,6 +12,11 @@ const UserSchema = new Schema<UserInterface>({
 		// unique: true,
 		// select: false,
 	},
+	emailVerificated:{
+		type: Boolean,
+		unique: false,
+		required: false,
+	},
 	provider:{
 		type: String,
 		unique: false,
