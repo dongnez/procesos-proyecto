@@ -60,13 +60,6 @@ export const Register = () => {
               size={"sm"}
               onClick={async () => {
                   register(user);
-                /*                 if (nick === "")
-                  return alert("No se puede agregar un usuario sin nick");
-
-                setNick(""); */
-                /*                 databaseAgregarUsuario(nick).then(() => {
-                  setUser({ nick });
-                }); */
               }}
               type="submit">
               Registrarse

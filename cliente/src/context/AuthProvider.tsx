@@ -45,10 +45,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   function register(user: UserInterface) {
-    databaseAuthRegister(user).then(() => {
+    return databaseAuthRegister(user).then(() => {
       // setUser(user);
-      saveUser(user);
-      window.location.href = "/app";
+      window.location.href = "/login";
     })
   }
 

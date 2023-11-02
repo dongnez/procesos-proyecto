@@ -3,7 +3,7 @@ import { UserModel } from "../../servidor/models/user";
 import { Router } from "express";
 const router = Router();
 import { createAccesstoken } from "../libs/createAccessToken";
-// import { enviarEmail } from "servidor/clase/email";
+import { enviarEmail } from "servidor/clase/email";
 
 // Define rutas y controladores para la autenticación
 router.post("/login", async (req, res) => {
@@ -14,6 +14,10 @@ router.post("/login", async (req, res) => {
 
     if (!userFound)
       return res.status(400).json({ message: "Usuario no encontrado" });
+
+    if( userFound.emailVerificated || userFound.emailVerificated === false){
+      return res.status(401).json({ message: "Email no verificado" });
+    }
 
     // Check password is the same
     const isPasswordMatch = await bycrypt.compare(password, userFound.password);
@@ -50,6 +54,14 @@ router.post("/register", async (req, res) => {
 
     const userSaved = await newUser.save();
 
+    await enviarEmail(
+       userSaved.email,
+       userSaved._id,
+      "Verifica tu correo",
+    ).then(()=>{
+      console.log("Email enviado");
+    })
+
     const token = await createAccesstoken({ id: userSaved._id });
 
     res.cookie("jwt", token);
@@ -61,6 +73,10 @@ router.post("/register", async (req, res) => {
     res.send(error);
   }
 });
+
+router.get("/confirmarUsuario/:email/:key",()=>{
+  //TODO
+})
 
 router.post("/logout", (req, res) => {
   // Tu lógica de logout
