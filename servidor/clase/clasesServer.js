@@ -108,19 +108,6 @@ export function initClases(app) {
     response.send(res);
   });
 
-  app.get("/eliminarUsuario/:nick", function (request, response) {
-    let nick = request.params.nick;
-    let res = sistema.deleteUsuario(nick);
-    console.log("Eliminando usuario", nick, res);
-    response.send(res);
-  });
-
-  app.get("/usuarioActivo/:nick", function (request, response) {
-    let nick = request.params.nick;
-    let res = sistema.usuarioActivo(nick);
-    console.log("Usuario activo", nick, res);
-    response.send(res);
-  });
 
   app.post("/enviarJwt", function (request, response) {
     let jwt = request.body.jwt;

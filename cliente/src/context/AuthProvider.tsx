@@ -5,7 +5,7 @@ import { UserInterface } from "src/interfaces/UserInterfaces";
 
 type AuthContextType = {
   user: UserInterface | null;
-  register: (user: UserInterface) => void;
+  register: (user: UserInterface) => any;
   login: (user:{email:string,password:string}) => any;
   logout: () => void;
   saveUser: (user:UserInterface) => void;
@@ -44,9 +44,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
   }
 
-  function register(user: UserInterface) {
-    return databaseAuthRegister(user).then(() => {
-      // setUser(user);
+  async function register(user: UserInterface) {
+    return await databaseAuthRegister(user).then(()=>{
       window.location.href = "/login";
     })
   }
@@ -64,12 +63,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       return error;
   }
 
-  // async function loginWithGoogle() {
-  //   const { data, error } = await databaseAuthLogin({email:"",password:""});
-  // }
-
   function logout() {
-
+    Cookies.remove("user");
+    setUser(null);
+    window.location.href = "/login";
   }
 
   return (

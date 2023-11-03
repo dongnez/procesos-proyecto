@@ -5,7 +5,6 @@ import { RightBar } from "src/pages/app/RightBar";
 
 import { LeftBar } from "src/pages/app/LeftBar";
 import { BottomNavBar } from "src/pages/app/BottomNavBar";
-import { Toaster } from "src/@/components/ui/toaster";
 import { useCloseAll } from "src/hooks/useCloseAll";
 import { useDeviceSm } from "src/hooks/useDevice";
 
@@ -40,7 +39,7 @@ export const AppLayout = () => {
 
         <BottomNavBar />
       </div>
-      <Toaster />
+      
     </div>
   );
 };

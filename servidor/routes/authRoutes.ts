@@ -4,6 +4,7 @@ import { Router } from "express";
 const router = Router();
 import { createAccesstoken } from "../libs/createAccessToken";
 import { enviarEmail } from "servidor/clase/email";
+import { MongoServerError } from "mongodb";
 
 // Define rutas y controladores para la autenticación
 router.post("/login", async (req, res) => {
@@ -15,8 +16,8 @@ router.post("/login", async (req, res) => {
     if (!userFound)
       return res.status(400).json({ message: "Usuario no encontrado" });
 
-    if( userFound.emailVerificated || userFound.emailVerificated === false){
-      return res.status(401).json({ message: "Email no verificado" });
+    if( userFound.emailVerificated === undefined || userFound.emailVerificated === false){
+      return res.status(401).json({ message: "Email no verificado", errorCode: 2 });
     }
 
     // Check password is the same
@@ -40,6 +41,8 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// router.post("/")
+
 router.post("/register", async (req, res) => {
   const { email, password, name } = req.body;
 
@@ -53,6 +56,10 @@ router.post("/register", async (req, res) => {
     });
 
     const userSaved = await newUser.save();
+
+    if(!userSaved){
+      return res.status(400).json({message: "Error al crear el usuario"})
+    }
 
     await enviarEmail(
        userSaved.email,
@@ -68,14 +75,47 @@ router.post("/register", async (req, res) => {
     res.json({
       message: "User created successfully",
     });
-  } catch (error) {
-    console.log("Register", error);
-    res.send(error);
+  } catch (error:any) {
+    
+    if(error.code === 11000){
+      res.status(401).json({ message: "Ese correo ya esta registrado." });
+      return
+    }
+
+
+    console.log("Register", error?.code);
+    res.status(4001).json({ message: "Error al crear el usuario" });
   }
 });
 
-router.get("/confirmarUsuario/:email/:key",()=>{
-  //TODO
+router.post("/enviarEmail/", async (req,res)=>{
+ const {email} = req.body;
+
+ if(!email){
+   return res.status(400).json({message: "Faltan datos"})
+ }
+
+
+})
+    
+
+router.get("/confirmarUsuario/:email/:key", async (req,res)=>{
+  console.log("llamada verificado");
+  //Get email and key
+  const {email,key} = req.params;
+  try {
+    
+  const user = await UserModel.findByIdAndUpdate(key,{emailVerificated:true});
+
+  console.log("Email verificado");
+    res.cookie("user", JSON.stringify(user));
+    res.redirect('/app')
+
+  } catch (error) {
+    console.log("Confirmar usuario", error); 
+    res.send(error);
+    res.redirect('/login')
+  }
 })
 
 router.post("/logout", (req, res) => {

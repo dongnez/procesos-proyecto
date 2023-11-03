@@ -14,6 +14,7 @@ import { useAuth } from "src/context/AuthProvider";
 import { useAtom } from "jotai";
 import { openRightSideBarAtom } from "src/context/openLayoutsAtoms";
 import { useDeviceSm } from "src/hooks/useDevice";
+import { LogOut } from "lucide-react";
 
 export const RightBar = ({
   className,
@@ -21,7 +22,7 @@ export const RightBar = ({
 }: HTMLAttributes<HTMLDivElement>) => {
   // const [templates, setTemplates] = useTemplateAtoms()
   const [templates, setTemplates] = useState([]);
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
 
   useEffect(() => {
     databaseGetUserTemplates(user!._id).then(({ data, error }) => {
@@ -38,7 +39,7 @@ export const RightBar = ({
     <section
       {...rest}
       className={cn(
-        " bg-card h-full w-[300px] py-3 px-4 rounded-l-3xl duration-300 top-0 right-0   z-20",
+        " bg-card h-full w-[300px] py-3 px-4 rounded-l-3xl duration-300 top-0 right-0 z-20 flex flex-col",
         " absolute sm:relative  ",
         isSm && (open ? `opacity-100`:`opacity-0`),
         className
@@ -60,7 +61,7 @@ export const RightBar = ({
         {/* Notifications */}
       </div>
 
-      <div className="relative mt-4">
+      <div className="relative mt-4 flex-1 flex flex-col">
         <Accordion
           type="single"
           collapsible
@@ -82,6 +83,16 @@ export const RightBar = ({
             </AccordionContent>
           </AccordionItem>
         </Accordion>
+
+        <div className="flex-1 "></div>
+      
+        <div className="flex justify-end">
+          <LogOut className=" text-end cursor-pointer hover:bg-muted/80 p-2 rounded-full duration-200" size={35} 
+          onClick={()=>{
+            logout()
+          }}/>
+        </div>
+
       </div>
     </section>
   );

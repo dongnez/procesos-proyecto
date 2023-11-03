@@ -7,6 +7,7 @@ import { useAuth } from "src/context/AuthProvider";
 import { GoogleAuthButton } from "src/pages/auth/GoogleAuthButton";
 
 export const Register = () => {
+  const [error, setError] = useState("");
   const [user, setUser] = useState<UserInterface>({
     _id: "",
     email: "",
@@ -14,7 +15,7 @@ export const Register = () => {
     password: "",
   });
 
-  const {register} = useAuth();
+  const { register } = useAuth();
   useOneTap();
 
   return (
@@ -39,7 +40,7 @@ export const Register = () => {
               }}
             />
             <Input
-              type="text"
+              type="email"
               className="text-lg"
               placeholder="Email"
               value={user.email}
@@ -59,11 +60,19 @@ export const Register = () => {
             <Button
               size={"sm"}
               onClick={async () => {
-                  register(user);
+                setError("");
+                await register(user).catch((error) => {
+                  console.log(error);
+                  error.message && setError(error.message || "");
+                });
               }}
               type="submit">
               Registrarse
             </Button>
+
+            {error && (
+              <p className="text-center text-red-500 text-sm">{error}</p>
+            )}
 
             <div className="relative w-full h-[1px] bg-foreground/40 my-4">
               <p className="absolute bg-card w-fit top-[-13px] mx-auto px-2 right-0 left-0 text-center text-card-foreground/40">
@@ -72,7 +81,7 @@ export const Register = () => {
             </div>
 
             <div className="px-6 sm:px-0 max-w-sm">
-                <GoogleAuthButton/>
+              <GoogleAuthButton />
               <p className="text-center w-full mt-5">
                 <a href="/login" className="hover:underline text-primary ">
                   ¿Ya tienes una cuenta?

@@ -22,7 +22,7 @@ export const enviarEmail = async function (direccion, key, subject) {
 	<br/>
 
 	<p>Para confirmar tu cuenta pulsa en el siguiente enlace</p>
-	<a href="${url}confirmarUsuario/${direccion}/${key}">Pulsa aquí para confirmar cuenta</a>
+	<a href="${url}/auth/confirmarUsuario/${direccion}/${key}">Pulsa aquí para confirmar cuenta</a>
 	<br/>
 
 	<p>Si no has sido tu, ignora este mensaje</p>
