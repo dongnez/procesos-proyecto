@@ -13,7 +13,7 @@
 
     /* CSS: .bg-gradient { background: var(--gradient) } */
     --gradient: #231557;
-    --background: 269 98.05% 98.42%;
+    --background: 269 41.2% 92.1%;
     --foreground: 269 6.1% 0.84%;
 
     --muted: 269 6.1% 92.1%;
@@ -22,7 +22,7 @@
     --popover: 269 41.2% 92.1%;
     --popover-foreground: 269 6.1% 1.05%;
 
-    --card: 269 41.2% 92.1%;
+    --card: 269 98.05% 98.42%; 
     --card-foreground: 269 6.1% 1.05%;
 
     --border: 269 11.1% 89.84%;

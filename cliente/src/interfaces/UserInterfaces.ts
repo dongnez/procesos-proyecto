@@ -7,5 +7,7 @@ export const UserInterfaceSchema = z.object({
 	password: z.string().min(6),
 	photoURL: z.string().optional(),
 	templates: z.array(z.string()).optional(),
+	provider: z.enum(["google", "github"]).optional(),
+	emailVerificated: z.boolean().optional(),
 })
 export type UserInterface = z.infer<typeof UserInterfaceSchema>
