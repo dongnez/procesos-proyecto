@@ -126,12 +126,13 @@ export const Shaker = ({
       </div>
 
       <Button
+        disabled={!food || food.length === 0}
         onClick={() => {
           setShake(true);
         }}
         className=" z-10 rounded-full mx-auto w-fit text-lg sm:text-2xl p-6 mt-[-5px] hover:bg-purple-900 duration-300">
         <Repeat className="" size={18} />
-        <p className="px-10">Shake It</p>
+        <p className="px-6 sm:px-10">Shake It</p>
         <Heart className="" size={18} />
       </Button>
     </div>

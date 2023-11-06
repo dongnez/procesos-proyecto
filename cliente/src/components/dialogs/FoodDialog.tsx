@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from "src/@/components/ui/dialog";
 import { Input } from "src/@/components/ui/input";
-import { FoodInterface } from "src/interfaces/FoodInterfaces";
+import { FoodInterface, FoodTimeType } from "src/interfaces/FoodInterfaces";
 import { HighlightedText } from "src/components/HighlightedText";
 import { AvatarIcon } from "src/components/AvatarIcon";
 import { ArrowLeft } from "react-feather";
@@ -34,6 +34,7 @@ import {
 } from "src/@/components/ui/accordion";
 import { calculateCalories } from "src/utils/caloriesUtils";
 import { CaloriesStats } from "src/components/CaloriesStats";
+import { SelectFoodTime } from "src/components/SelectFoodTime";
 
 export const FoodDialog = ({
   food,
@@ -254,6 +255,7 @@ const FoodSelected = ({
 const AddFood = ({ close }: { close: () => void }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [timeType,setTimeType] = useState<FoodTimeType>("all");
   const [macros, setMacros] = useState({
     proteins: 0,
     carbs: 0,
@@ -269,7 +271,7 @@ const AddFood = ({ close }: { close: () => void }) => {
 
   const { startUpload } = useUploadThing("foodImage", {
     onClientUploadComplete: async (res) => {
-      // Do something with the response
+      // Add food to template
 
       if (res && res.length > 0) {
         const kcal = calculateCalories(macros);
@@ -288,6 +290,7 @@ const AddFood = ({ close }: { close: () => void }) => {
                     ...macros,
                   },
             image: res[0].url,
+            timeType: timeType
           },
         });
 
@@ -351,11 +354,16 @@ const AddFood = ({ close }: { close: () => void }) => {
           Los campos marcados con (*) son obligatorios
         </p>
       </DialogTitle>
-      <Input
-        placeholder="Nombre de la comida (*)"
-        value={name}
-        onChange={(e) => setName(e.currentTarget.value)}
-      />
+      <section className="flex gap-2 items-center pb-1">
+        <Input
+          placeholder="Nombre de la comida (*)"
+          maxLength={50}
+          value={name}
+          className="flex-1"
+          onChange={(e) => setName(e.currentTarget.value)}
+        />
+        <SelectFoodTime onSelect={(foodTime)=>setTimeType(foodTime)} />
+      </section>
       <Textarea
         placeholder="Descripcion"
         className="resize-none"

@@ -11,6 +11,7 @@ import { useNavigate } from "src/hooks/useNavigate";
 import { Loader } from "src/components/Loader";
 import { databaseGetTemplateById } from "src/database/databaseTemplates";
 import { useToast } from "src/@/components/ui/use-toast";
+import { ShakerFilters } from "src/components/ShakerFilters";
 
 export const Template = () => {
   const { templateId } = useParams();
@@ -51,7 +52,7 @@ export const Template = () => {
   return (
     <div className="w-full h-full bg-background">
       <section className="w-full h-full">
-        <section className="flex flex-col gap-1 md:flex-row items-center mb-10">
+        <section className="flex flex-col gap-2 md:flex-row items-center mb-10">
           <h2 className="text-3xl font-semibold flex-1">{template?.name}</h2>
 
           <div className="flex gap-1">
@@ -68,6 +69,8 @@ export const Template = () => {
         </section>
 
         <Shaker food={template.foods} />
+        <ShakerFilters />
+
       </section>
 
       <FoodDialog food={template.foods}/>
