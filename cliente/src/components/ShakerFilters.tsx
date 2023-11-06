@@ -22,9 +22,14 @@ export const ShakerFilters = () => {
 
 
   return (
-	<div className="border border-primary p-1 flex items-center">
+	<div className="border-2 border-primary p-1 flex items-center max-w-[400px] mx-auto mt-4 rounded-sm">
 
+		<section className="flex-1">
 			
+		</section>
+
+		<div className="w-[1px] h-[50px] bg-primary/20 mx-2"/>	
+
 		<SelectFoodTime primaryColor onSelect={(value) => console.log(value)} />	
 
 	</div>
