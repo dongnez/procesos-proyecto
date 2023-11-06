@@ -75,7 +75,11 @@ export const Login = () => {
                     });
 
 
-                const error = await login({email, password});
+                const error = await login({email, password}).catch((e)=>{
+                  console.log("L Error",e);
+                  return e
+                })
+
                 if(error.errorCode === 2){
                   setShowEmailSend(true);
                   return

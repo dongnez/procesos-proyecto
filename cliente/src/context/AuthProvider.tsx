@@ -6,7 +6,7 @@ import { UserInterface } from "src/interfaces/UserInterfaces";
 type AuthContextType = {
   user: UserInterface | null;
   register: (user: UserInterface) => any;
-  login: (user:{email:string,password:string}) => any;
+  login: (user:{email:string,password:string}) => Promise<any>;
   logout: () => void;
   saveUser: (user:UserInterface) => void;
   loading: boolean;
@@ -15,7 +15,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType>({
   user: null,
   register: () => {},
-  login: () => {},
+  login: async () => {},
   logout: () => {},
   saveUser: ()=>{},
   loading: true,
