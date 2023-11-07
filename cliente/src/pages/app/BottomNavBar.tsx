@@ -15,8 +15,12 @@ export const BottomNavBar = () => {
     <section className="sm:hidden flex z-30 bg-card p-2">
       {/* Show LeftBar */}
       <Button
-		size={'icon'}
-		className="rounded-full"
+        size={"icon"}
+        className={`bg-transparent   rounded-full ${
+          openLeft
+            ? "bg-primary focus:bg-primary"
+            : "focus:bg-transparent text-foreground"
+        }`}
         onClick={() => {
           setOpenLeft(!openLeft);
           setOpenRight(false);
@@ -26,8 +30,12 @@ export const BottomNavBar = () => {
       <section className="flex-1"></section>
       {/* Show RightBar */}
       <Button
-		size={'icon'}
-		className="rounded-full"
+        size={"icon"}
+        className={`bg-transparent  rounded-full ${
+          openRight
+            ? "bg-primary focus:bg-primary"
+            : "focus:bg-transparent text-foreground"
+        }`}
         onClick={() => {
           setOpenRight(!openRight);
           setOpenLeft(false);

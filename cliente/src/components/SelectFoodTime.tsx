@@ -9,6 +9,8 @@ import {
   SelectValue,
 } from "src/@/components/ui/select";
 import { Asterisk, EggFried, Moon, Sandwich, Sun } from "lucide-react";
+import { HTMLAttributes } from "react";
+import { cn } from "src/@/lib/utils";
 
 type FoodTimeSelect = {
   type: FoodTimeType;
@@ -19,7 +21,9 @@ type FoodTimeSelect = {
 export function SelectFoodTime({
   onSelect,
   primaryColor = false,
-}: {
+  className,
+  ...res
+}: HTMLAttributes<HTMLButtonElement> &{
   onSelect: (foodTime: FoodTimeType) => void;
   primaryColor?: boolean;
 }) {
@@ -52,10 +56,12 @@ export function SelectFoodTime({
   ];
   return (
     <Select
-      onValueChange={(value) => onSelect(value as any)}
+      onValueChange={(value:FoodTimeType) => onSelect(value)}
       defaultValue="all">
       <SelectTrigger 
-	   className={`outline-none focus:ring-[-1px]  w-fit  ${ primaryColor && 'bg-primary text-primary-foreground'}`}>
+      {...res}
+	      className={cn(`outline-none focus:ring-[-1px]  w-fit  ${ primaryColor && 'bg-primary text-primary-foreground'}`,
+        className)}>
         <SelectValue placeholder="Select a fruit"/>
       </SelectTrigger>
       <SelectContent className={`${ primaryColor && 'bg-primary text-primary-foreground'}`}>

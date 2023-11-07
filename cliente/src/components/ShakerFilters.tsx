@@ -1,6 +1,11 @@
+import { HTMLAttributes } from "react"
+import { FoodTimeType } from "src/interfaces/FoodInterfaces"
 import { SelectFoodTime } from "src/components/SelectFoodTime"
 
-export const ShakerFilters = () => {
+export const ShakerFilters = ({onFilterSelect,...res}:HTMLAttributes<HTMLDivElement> & {
+	onFilterSelect: (filter: FoodTimeType) => void
+}) => {
+
 	 //Filtrar comidas por 
 	 // - Calorías
 	 // - Proteínas
@@ -22,7 +27,7 @@ export const ShakerFilters = () => {
 
 
   return (
-	<div className="border-2 border-primary p-1 flex items-center max-w-[400px] mx-auto mt-4 rounded-sm">
+	<div {...res} className="border-2 border-primary p-1 flex items-center max-w-[400px] mx-auto mt-4 rounded-sm">
 
 		<section className="flex-1">
 			
@@ -30,7 +35,7 @@ export const ShakerFilters = () => {
 
 		<div className="w-[1px] h-[50px] bg-primary/20 mx-2"/>	
 
-		<SelectFoodTime primaryColor onSelect={(value) => console.log(value)} />	
+		<SelectFoodTime className="w-[130px]" primaryColor onSelect={(value) => onFilterSelect(value)} />	
 
 	</div>
   )

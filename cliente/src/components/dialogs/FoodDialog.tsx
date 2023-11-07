@@ -224,7 +224,10 @@ const FoodSelected = ({
       {food ? (
         <>
           <DialogTitle className="flex flex-col items-center">
+
+            
             <AvatarIcon image={food.image} fallback={food.name} size={205} />
+
             <p className="text-2xl">{food.name}</p>
           </DialogTitle>
           <DialogDescription>

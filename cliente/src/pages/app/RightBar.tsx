@@ -79,6 +79,11 @@ export const RightBar = ({
                 {templates.map((template, index) => (
                   <TemplateListItem key={index} template={template} />
                 ))}
+
+                {templates.length === 0 && (
+                  <p className="text-center">No hay plantillas</p>
+                )}
+
               </div>
             </AccordionContent>
           </AccordionItem>

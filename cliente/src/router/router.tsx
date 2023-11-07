@@ -29,6 +29,7 @@ export const router = createBrowserRouter([
     <ProtectedRoute>
       <AppLayout />
     </ProtectedRoute>,
+    
     children: [
       {
         path: "",
@@ -52,9 +53,14 @@ export const router = createBrowserRouter([
         element: <p>Template Settings</p>,
       },
       {
-        path: "test",
-        element: <h1>TEST</h1>,
+        path: "calendar",
+        element: <p>Calendar</p>,
       },
+      {
+        path: "settings",
+        element: <p>Configuracion</p>,
+      },
+      
     ],
   },
 ]);
