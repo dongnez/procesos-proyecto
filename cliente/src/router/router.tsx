@@ -7,6 +7,7 @@ import { ErrorPage } from "src/pages/ErrorPage";
 import { ProtectedRoute } from "src/context/AuthProvider";
 import { Home } from "src/pages/home/Home";
 import {Home as HomeApp} from 'src/pages/app/home/Home'
+import { TemplateSettings } from "src/pages/app/TemplateSettings";
 
 export const router = createBrowserRouter([
   {
@@ -50,7 +51,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "template/:templateId/settings",
-        element: <p>Template Settings</p>,
+        element: <TemplateSettings />,
       },
       {
         path: "calendar",

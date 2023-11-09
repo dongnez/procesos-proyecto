@@ -72,13 +72,15 @@ export const Template = () => {
           <h2 className="text-3xl font-semibold flex-1">{template?.name}</h2>
 
           <div className="flex gap-1">
-            <button
+            <Button 
+              variant={'outline'}
               onClick={() => navigate("food")}
               className="px-4 py-2 border-2 border-card rounded-full mr-2 flex gap-2">
               <Drumstick className="" /> Comida
-            </button>
+            </Button>
 
-            <Button variant={"outline"} size={"icon"} className="rounded-full">
+            <Button variant={"outline"} size={"icon"} className="rounded-full border-2 border-card"
+            onClick={()=>{navigate("settings")}}>
               <Settings className="" size={24} />
             </Button>
           </div>
