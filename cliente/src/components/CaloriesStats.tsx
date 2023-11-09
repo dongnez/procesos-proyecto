@@ -58,15 +58,15 @@ export const MacroStat = ({
   }
 
   return (
-    <div {...rest} className={`flex gap-2 ${isCompact && 'flex-col gap-0 '}`}>
+    <div {...rest} className={`flex  ${isCompact ? 'flex-col gap-1':'gap-2'}`}>
 		<div className={`h-full ${!isCompact && "py-1"}`}>
-      		<div className={` rounded-full
-          ${isCompact ?"w-full h-[5px]" : "w-[5px] h-full"}
+      		<div className={` rounded-full mx-auto
+          ${isCompact ?" w-[40px] h-[5px]" : "w-[5px] h-full"}
           ${selectBarColor()}`} />
 		</div>
       <section>
-        <p className={`font-semibold ${isCompact ? 'text-sm':'text-lg'}`}>{number}</p>
-        <p className="text-xs">{name}</p>
+        <p className={`font-semibold ${isCompact ? 'text-sm text-center':'text-lg'}`}>{number}</p>
+        <p className={`text-xs ${isCompact && "text-center"}`}>{name}</p>
       </section>
     </div>
   );

@@ -446,7 +446,7 @@ const AddFood = ({ close }: { close: () => void }) => {
       <div className="pb-5 mx-auto flex flex-col items-center">
         <label
           htmlFor="image-upload"
-          className="block w-32 h-32 bg-gray-200 hover:bg-gray-200/60 duration-300 rounded-lg cursor-pointer ">
+          className="block w-32 h-32 bg-muted hover:bg-secondary duration-300 rounded-lg cursor-pointer ">
           {imageURL ? (
             <img
               src={imageURL}
