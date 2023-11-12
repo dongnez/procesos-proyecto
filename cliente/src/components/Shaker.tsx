@@ -6,6 +6,7 @@ import { HTMLMotionProps, motion, useAnimation } from "framer-motion";
 import { Card } from "src/components/Card";
 import { CaloriesStats } from "src/components/CaloriesStats";
 
+
 const zoomInAndShakeVariants = {
   initial: { scale: 1, transition: { duration: 0.4, ease: "easeInOut" } },
   animate: { scale: 1.2, transition: { duration: 1, ease: "easeInOut" } },
@@ -64,10 +65,11 @@ export const Shaker = ({
               setTimeout(() => setShowParticles(true), 1200);
             }
           }}
-          className="relative h-[220px] w-[220px] sm:w-[300px] sm:h-[300px] bg-card rounded-xl mx-auto">
+          className="relative h-[220px] w-[220px] sm:w-[300px] sm:h-[300px] bg-transparent rounded-xl mx-auto">
           {selectedFood ? (
             <>
                 <Card
+                  color="bg-food"
                   className="w-full h-full rounded-xl cursor-default "
                   front={
                     <>
@@ -96,7 +98,7 @@ export const Shaker = ({
                     </>
                   }
                   back={
-                    <div className="p-2 bg-card/70 h-full text-card-foreground rounded-xl flex flex-col">
+                    <div className="p-2 h-full  rounded-xl flex flex-col bg-muted border border-primary">
                       <p className="text-lg -foreground/80 font-semibold "> Descripcion</p>
                       <p className=" [backface-visibility:hidden]  text-justify flex-1">
                         {selectedFood.description || "No hay descripción"}
@@ -107,8 +109,9 @@ export const Shaker = ({
                 />
             </>
           ) : (
-            <div className={`w-full h-full flex items-center justify-center`}>
-              <p className="text-2xl">No hay comida</p>
+            <div className={`w-full h-full flex flex-col gap-1  text-center items-center justify-center`}>
+              <p className="text-lg sm:text-xl">Ninguna comida seleccionada</p>
+              <p className="text-xs sm:text-sm">¡Pulsa el botón para seleccionar una!</p>
             </div>
           )}
         </motion.div>
@@ -126,12 +129,13 @@ export const Shaker = ({
       </div>
 
       <Button
+        disabled={!food || food.length === 0}
         onClick={() => {
           setShake(true);
         }}
         className=" z-10 rounded-full mx-auto w-fit text-lg sm:text-2xl p-6 mt-[-5px] hover:bg-purple-900 duration-300">
         <Repeat className="" size={18} />
-        <p className="px-10">Shake It</p>
+        <p className="px-6 sm:px-10">Shake It</p>
         <Heart className="" size={18} />
       </Button>
     </div>

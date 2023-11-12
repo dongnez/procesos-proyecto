@@ -4,11 +4,13 @@ import { cn } from "src/@/lib/utils";
 export const Card = ({
   front,
   back,
+  color="bg-black/80",
   className,
   ...rest
 }: HTMLAttributes<HTMLDivElement> & {
   front: React.ReactNode;
   back: React.ReactNode;
+  color?: string;
 }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   return (
@@ -27,7 +29,8 @@ export const Card = ({
       </div>
 
       <div className={` w-full h-full absolute top-0 right-0
-	  bg-black/60 rounded-xl
+	   rounded-xl
+     ${color}
     [backface-visibility:hidden] 
     [transform:rotateY(180deg)] duration-500
 	  `}

@@ -1,5 +1,5 @@
 import { Drumstick } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { TemplateInterface } from "src/interfaces/TemplateInterfaces";
 import { useTemplateAtoms } from "src/context/templateAtoms";
@@ -11,13 +11,26 @@ import { useNavigate } from "src/hooks/useNavigate";
 import { Loader } from "src/components/Loader";
 import { databaseGetTemplateById } from "src/database/databaseTemplates";
 import { useToast } from "src/@/components/ui/use-toast";
+import { ShakerFilters } from "src/components/ShakerFilters";
+import { FoodTimeType } from "src/interfaces/FoodInterfaces";
 
 export const Template = () => {
   const { templateId } = useParams();
   const [templateAtom, _] = useTemplateAtoms(templateId || "");
-  const [template, setTemplate] = useState<TemplateInterface | null>(templateAtom);
+  const [template, setTemplate] = useState<TemplateInterface | null>(
+    templateAtom
+  );
+  const [filter, setFilter] = useState<FoodTimeType>("all");
+
+  const filteredFoods = useMemo(() => (
+    template?.foods.filter((food) => {
+      if (filter === "all") return true;
+      return food.timeType === filter || food.timeType === "all";
+    }) || []
+  ), [template, filter]);
+
   const navigate = useNavigate();
-  const {toast} = useToast();
+  const { toast } = useToast();
 
   useEffect(() => {
     setTemplate(templateAtom);
@@ -25,52 +38,63 @@ export const Template = () => {
 
   useEffect(() => {
     //get template
-    if(template || !templateId) return;
+    if (template || !templateId) return;
 
     //Fetch from server
-    databaseGetTemplateById(templateId).then(({data,error}) => {
-      if(data){
+    databaseGetTemplateById(templateId).then(({ data, error }) => {
+      if (data) {
         setTemplate(data);
-        return
+        return;
       }
 
-      if(error){
+      if (error) {
         toast({
           title: "Error",
           description: error,
-          variant:'destructive',
+          variant: "destructive",
           duration: 5000,
-        })
+        });
       }
-    })  
-
+    });
   }, [templateId]);
 
-  if (!template) return (<div className="h-full flex items-center justify-center"><Loader/></div>)
+  if (!template)
+    return (
+      <div className="h-full flex items-center justify-center">
+        <Loader />
+      </div>
+    );
 
   return (
     <div className="w-full h-full bg-background">
       <section className="w-full h-full">
-        <section className="flex flex-col gap-1 md:flex-row items-center mb-10">
+        <section className="flex flex-col gap-2 md:flex-row items-center mb-10">
           <h2 className="text-3xl font-semibold flex-1">{template?.name}</h2>
 
           <div className="flex gap-1">
-            <button
+            <Button 
+              variant={'outline'}
               onClick={() => navigate("food")}
               className="px-4 py-2 border-2 border-card rounded-full mr-2 flex gap-2">
-                <Drumstick className="" /> Comida
-            </button>
+              <Drumstick className="" /> Comida
+            </Button>
 
-            <Button variant={"outline"} size={"icon"} className="rounded-full">
+            <Button variant={"outline"} size={"icon"} className="rounded-full border-2 border-card"
+            onClick={()=>{navigate("settings")}}>
               <Settings className="" size={24} />
             </Button>
           </div>
         </section>
 
-        <Shaker food={template.foods} />
+        <Shaker food={filteredFoods} />
+        <ShakerFilters
+          onFilterSelect={(filterTime) => {
+            setFilter(filterTime);
+          }}
+        />
       </section>
 
-      <FoodDialog food={template.foods}/>
+      <FoodDialog food={template.foods} />
     </div>
   );
 };

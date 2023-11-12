@@ -6,8 +6,10 @@
   "scripts": {
     "dev-c": "cd cliente && yarn && yarn dev",
     "dev": "tsx watch index.ts",
-    "start": "tsx index.ts",
-    "build": "cd cliente/ && yarn install && yarn build"
+    "start": "yarn build && tsx index.ts",
+    "build": "cd cliente/ && yarn install && yarn build",
+    "docker-build": "docker build -t procesos-proyecto .",
+    "docker-run": "docker run -p 8080:8080 -d procesos-proyecto"
   },
   "license": "MIT",
   "dependencies": {

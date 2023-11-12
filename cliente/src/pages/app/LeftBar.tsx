@@ -4,7 +4,7 @@ import { openLeftSideBarAtom } from "src/context/openLayoutsAtoms";
 import { useDeviceSm } from "src/hooks/useDevice";
 import { cn } from "src/@/lib/utils";
 import { NavLink } from "react-router-dom";
-import { Home, User2, Settings } from "lucide-react";
+import { Home, Settings, Calendar } from "lucide-react";
 
 export const LeftBar = ({
   className,
@@ -12,8 +12,9 @@ export const LeftBar = ({
 }: HTMLAttributes<HTMLDivElement>) => {
   const navLinks = [
     { name: "Home", icon: <Home />, path: "/app/" },
-    { name: "Perfil", icon: <User2 />, path: "/app/profile" },
+    { name: 'Calendario', icon: <Calendar />, path: "/app/calendar" },
     { name: "Configuración", icon: <Settings />, path: "/app/settings" },
+    // { name: "Perfil", icon: <User2 />, path: "/app/profile" },
   ];
 
   const [open, _] = useAtom(openLeftSideBarAtom);
@@ -40,7 +41,7 @@ export const LeftBar = ({
           key={index}
           className={({ isActive, isPending }) => {
             return cn(
-              "flex items-center space-x-2 py-3 pl-3 rounded-l-lg hover:bg-background/80 duration-200",
+              "flex items-center gap-5 py-3 pl-3 rounded-l-lg hover:bg-background/80 duration-200 font-medium",
               isPending ? "pending" : isActive ? "bg-background" : ""
             );
           }}>
