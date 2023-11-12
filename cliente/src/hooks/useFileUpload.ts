@@ -1,4 +1,4 @@
 import { generateReactHelpers } from "@uploadthing/react/hooks";
-import { OurFileRouter } from "../../../servidor/routes/uploadFiles";
+// import { OurFileRouter } from "../../../servidor/routes/uploadFiles";
 
-export const { useUploadThing } = generateReactHelpers<OurFileRouter>();
+export const { useUploadThing } = generateReactHelpers<any>();
