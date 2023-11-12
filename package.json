@@ -4,10 +4,10 @@
   "main": "index.js",
   "esModuleInterop": true,
   "scripts": {
-    "dev-c": "cd cliente && yarn && yarn dev",
+    "dev-c": "cd cliente && npm && npm dev",
     "dev": "tsx watch index.ts",
-    "start": "yarn build && tsx index.ts",
-    "build": "cd cliente/ && yarn install && yarn build",
+    "start": "npm run build && tsx index.ts",
+    "build": "cd cliente/ && npm install && npm run build",
     "docker-build": "docker build -t procesos-proyecto .",
     "docker-run": "docker run -p 8080:8080 -d procesos-proyecto"
   },
