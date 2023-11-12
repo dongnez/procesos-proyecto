@@ -10,12 +10,19 @@ import { connectMongoDB } from "./servidor/db.js";
 import { createUploadthingExpressHandler } from "uploadthing/express";
 import { uploadRouter } from "./servidor/routes/uploadFiles.js";
 import cors from "cors";
-const PORT = process.env.PORT || 3000;
+// const PORT =  parseInt(process.env.PORT as any) || 8080;
 
-const URL = process.env.URL || "http://localhost:";
-const __filename = fileURLToPath(import.meta.url);
+const port = process.env.PORT || 8080;
 
 const app = express();
+
+/* const URL = process.env.URL || "http://localhost:";
+const __filename = fileURLToPath(import.meta.url);
+
+*/
+
+/*const __dirname = path.dirname(__filename);
+console.log("Ruta raiz", __dirname); */
 
 app.use(
   cors({
@@ -23,38 +30,29 @@ app.use(
   })
 );
 
-//Obtenemos path raiz del proyecto
-const __dirname = path.dirname(__filename);
-
-console.log("Ruta raiz", __dirname);
-
-//ROOT
 app.use(express.static(__dirname + "/cliente/dist/"));
 app.use(express.json());
 
-//MONGO
-connectMongoDB();
 
-//Clase
 initClases(app);
 
-//RUTAS
 app.use("/auth", authRoutes);
 app.use("/templates", templateRoutes);
-
 app.use( //Upload files
   '/api/uploadthing',
   createUploadthingExpressHandler({
     router: uploadRouter,
   })
-); 
+);
 
-app.listen(PORT, () => {
-  console.log(`App está escuchando en el puerto ${URL}${PORT}`);
-  console.log("Ctrl+C para salir");
-});
+connectMongoDB();
 
 //Ruta para cualquier otro GET que no sea las rutas definidas (APP)
-app.get("*", function (request, response) {
+app.use(function (request, response) {
   response.sendFile(path.join(__dirname, "/cliente/dist/index.html"));
+});
+
+app.listen(port, () => {
+  console.log(`App está escuchando en el puerto ${port}`);
+  console.log("Ctrl+C para salir");
 });

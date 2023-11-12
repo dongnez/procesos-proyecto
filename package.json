@@ -1,17 +1,17 @@
 {
   "name": "servidor",
+  "description": "servidor working",
   "version": "1.0.0",
-  "main": "index.js",
-  "esModuleInterop": true,
+  "private": true,
+  "main": "index.ts",
   "scripts": {
-    "dev-c": "cd cliente && npm && npm dev",
-    "dev": "tsx watch index.ts",
-    "start": "npm install && npm run build && tsx index.ts",
-    "build": "cd cliente/ && npm install && npm run build",
-    "docker-build": "docker build -t procesos-proyecto .",
-    "docker-run": "docker run -p 3000:3000 -d procesos-proyecto"
+    "start": "tsx index.ts"
   },
-  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "author": "Google LLC",
+  "license": "Apache-2.0",
   "dependencies": {
     "axios": "^1.6.0",
     "bcrypt": "^5.1.1",
