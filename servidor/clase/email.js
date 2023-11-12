@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 const email = "gnez.developer@gmail.com";
-const url = process.env.APP_URL || "http://localhost:3000/";
+const url = process.env.APP_URL || "http://localhost:8080/";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",

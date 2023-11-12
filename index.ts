@@ -10,7 +10,7 @@ import { connectMongoDB } from "./servidor/db.js";
 import { createUploadthingExpressHandler } from "uploadthing/express";
 import { uploadRouter } from "./servidor/routes/uploadFiles.js";
 import cors from "cors";
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 
 const URL = process.env.URL || "http://localhost:";
 const __filename = fileURLToPath(import.meta.url);
