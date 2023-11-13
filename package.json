@@ -5,7 +5,11 @@
   "private": true,
   "main": "index.ts",
   "scripts": {
-    "start": "tsx index.ts"
+    "start": "tsx index.ts",
+    "build": "cd cliente && npm install && npm run build",
+    "dev": "tsx watch index.ts",
+    "dev-c": "cd cliente && npm run dev"
+
   },
   "engines": {
     "node": ">=16.0.0"
