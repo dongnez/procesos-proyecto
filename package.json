@@ -8,7 +8,7 @@
     "start": "npm install && npm run build && tsx index.ts",
     "dev": "tsx watch index.ts",
     "dev-c": "cd cliente && npm run dev",
-    "build": "npm install && cd cliente && npm run build"
+    "build": "cd cliente && npm install && npm run build"
 
   },
   "engines": {
