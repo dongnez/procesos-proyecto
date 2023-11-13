@@ -23,6 +23,14 @@ PORT=8080
 APP_URL=http://localhost:8080
 ```
 
+## Desplegar en GCLOUD
+
+```
+gcloud run deploy
+```
+
+(Elegir 14 para desplegar en madrid)
+(Elegir 15 para desplegar en la otra rama)
 
 
 
