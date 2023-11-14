@@ -10,7 +10,13 @@ export const TemplateInterfaceSchema = z.object({
   users: z.array(
     z.object({
       userRef: z.string(),
-      role: z.string(),
+      role: z.enum(["owner","admin","editor","viewer"]) 
+      /**
+       * Owner all permisions
+       * Admin most of permisions
+       * Editor add/remove food
+       * Viewer 
+       */
     })
   ),
   foods: z.array(FoodInterfaceSchema),
@@ -19,5 +25,5 @@ export const TemplateInterfaceSchema = z.object({
 export type TemplateInterface = z.infer<typeof TemplateInterfaceSchema>;
 
 export type TemplateInterfaceClient = Omit<TemplateInterface, "users"> & {
-  users: Array< {userRef:UserInterface, role: string }>;
+  users: Array< {userRef:UserInterface, role: "owner"|"admin"|"editor"|"viewer" }>;
 };
