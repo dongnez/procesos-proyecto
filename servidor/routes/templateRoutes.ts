@@ -1,216 +1,217 @@
-import { TemplateModel } from 'servidor/models/template';
-import { UserModel } from 'servidor/models/user';
-import { FoodInterfaceSchema, FoodInterface } from 'cliente/src/interfaces/FoodInterfaces';
+import { TemplateModel } from "servidor/models/template";
+import { UserModel } from "servidor/models/user";
+import {
+  FoodInterfaceSchema,
+  FoodInterface,
+} from "cliente/src/interfaces/FoodInterfaces";
 
-import {Router} from 'express'
+import { Router } from "express";
 
-import { ZodError } from 'zod';
+import { ZodError } from "zod";
 const router = Router();
 
-router.post('/createTemplate', async (req, res) => {
-	const {template, userId} = req.body;
+router.post("/createTemplate", async (req, res) => {
+  const { template, userId } = req.body;
 
-	try {
-		delete template._id;
-		const newTemplate = new TemplateModel(template);
-	
-		// Add the new template to the database
-		await newTemplate.save();
-	
-		// Add the new template ID to the user's templates array
-		const userFound = await UserModel.findByIdAndUpdate(
-			userId,
-			{ $push: { templates: newTemplate._id } },
-			{ new: true }
-		);
+  try {
+    delete template._id;
+    const newTemplate = new TemplateModel(template);
 
-		if(!userFound) return res.status(400).json({message:"Usuario no encontrado"})
-	
-		res.status(200).json({
-			message: 'Template creado correctamente',
-		});
-		
-	} catch (error) {
-		console.log("Error en createTemplate",error);	
-		res.status(500).json({
-			message: 'Error en createTemplate',
-		});
-	}
+    // Add the new template to the database
+    await newTemplate.save();
+
+    // Add the new template ID to the user's templates array
+    const userFound = await UserModel.findByIdAndUpdate(
+      userId,
+      { $push: { templates: newTemplate._id } },
+      { new: true }
+    );
+
+    if (!userFound)
+      return res.status(400).json({ message: "Usuario no encontrado" });
+
+    res.status(200).json({
+      message: "Template creado correctamente",
+    });
+  } catch (error) {
+    console.log("Error en createTemplate", error);
+    res.status(500).json({
+      message: "Error en createTemplate",
+    });
+  }
 });
 
-router.post('/getTemplates', async (req, res) => {
-	const {userId} = req.body;
+router.post("/getTemplates", async (req, res) => {
+  const { userId } = req.body;
 
-	console.log("getTemplates",userId);
+  try {
+    const userFound = await UserModel.findById(userId).populate({
+      path: "templates",
+      populate: {
+        path: "users.userRef", // Poblamos la referencia al modelo Usuario dentro de cada template
+      },
+    });
 
-	try {
-		const userFound = await UserModel.findById(userId).populate('templates');
+    if (!userFound)
+      return res.status(400).json({ message: "Usuario no encontrado" });
 
-		if(!userFound) return res.status(400).json({message:"Usuario no encontrado"})
-
-		res.status(200).json({
-			message: 'Templates obtenidos correctamente',
-			templates: userFound.templates
-		});
-		
-	} catch (error) {
-		console.log("Error en getTemplates",error);	
-		res.status(500).json({
-			message: 'Error en getTemplates',
-		});
-	}
-
+    res.status(200).json({
+      message: "Templates obtenidos correctamente",
+      templates: userFound.templates,
+    });
+  } catch (error) {
+    console.log("Error en getTemplates", error);
+    res.status(500).json({
+      message: "Error en getTemplates",
+    });
+  }
 });
 
-router.post('/deleteTemplate', async (req, res) => {
-	const {templateId} = req.body;
+router.post("/deleteTemplate", async (req, res) => {
+  const { templateId } = req.body;
 
-	try {
-		const templateFound = await TemplateModel.findByIdAndDelete(templateId);
+  try {
+    const templateFound = await TemplateModel.findByIdAndDelete(templateId);
 
-		if(!templateFound) return res.status(400).json({message:"Template no encontrado"})
+    if (!templateFound)
+      return res.status(400).json({ message: "Template no encontrado" });
 
-		res.status(200).json({
-			message: 'Template eliminado correctamente',
-		});
-		
-	} catch (error) {
-		console.log("Error en deleteTemplate",error);	
-		res.status(500).json({
-			message: 'Error en deleteTemplate',
-		});
-	}
-})
+    res.status(200).json({
+      message: "Template eliminado correctamente",
+    });
+  } catch (error) {
+    console.log("Error en deleteTemplate", error);
+    res.status(500).json({
+      message: "Error en deleteTemplate",
+    });
+  }
+});
 
 //get Template by id
-router.post('/getTemplateById', async (req, res) => {
-	const {templateId} = req.body;
+router.post("/getTemplateById", async (req, res) => {
+  const { templateId } = req.body;
 
-	try {
-		
-		const template = await  TemplateModel.findById(templateId)
- 		.populate({
-			path: 'users.userId', // Poblamos la referencia al modelo Usuario
-			// select: 'name role',  // Especificamos las propiedades que queremos incluir
-  		}) 
-		.exec();
+  try {
+    const template = await TemplateModel.findById(templateId)
+      .populate({
+        path: "users.userRef", // Poblamos la referencia al modelo Usuario
+      })
+      .exec();
 
-		if(!template) return res.status(400).json({message:"Template no encontrado"})
+    if (!template)
+      return res.status(400).json({ message: "Template no encontrado" });
 
-		res.status(200).json({
-			message: 'Template obtenido correctamente',
-			template
-		});
+    res.status(200).json({
+      message: "Template obtenido correctamente",
+      template,
+    });
+  } catch (error) {
+    console.log("Error en getTemplateById", error);
+    return res.status(500).json({
+      message: "Error en getTemplateById",
+    });
+  }
+});
 
-	}catch(error){
-		console.log("Error en getTemplateById",error);
-		return res.status(500).json({
-			message: 'Error en getTemplateById',
-		});
-	}
-})
-	
+router.post("/addFood", async (req, res) => {
+  const { templateId, food } = req.body;
 
-router.post('/addFood', async (req, res) => {
-	const {templateId, food} = req.body;
-	
-	//validte food
-	
-	try {
-		//generate food id
-		food._id = new Date().getTime().toString();
-		const foodParse = FoodInterfaceSchema.parse(food)
+  //validte food
 
-		await TemplateModel.findByIdAndUpdate(
-			templateId,
-			{ $push: { foods: food } },
-			{ new: true }
-		);
+  try {
+    //generate food id
+    food._id = new Date().getTime().toString();
+    const foodParse = FoodInterfaceSchema.parse(food);
 
-		return res.status(200).json({
-			message: 'Comida añadida correctamente',
-			food: foodParse
-		});
+    await TemplateModel.findByIdAndUpdate(
+      templateId,
+      { $push: { foods: food } },
+      { new: true }
+    );
 
-	}catch(error){
-		if(error instanceof ZodError){
-			return res.status(400).json({
-				message: 'Error comida no válida',
-				errors:error.issues
-			});
-		}
+    return res.status(200).json({
+      message: "Comida añadida correctamente",
+      food: foodParse,
+    });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        message: "Error comida no válida",
+        errors: error.issues,
+      });
+    }
 
-		res.status(500).json({
-			message: 'Error al añadir comida al template',
-		});	
-	}
-})
+    res.status(500).json({
+      message: "Error al añadir comida al template",
+    });
+  }
+});
 
-router.post('/addFoodToTemplate', async (req, res) => {
-	const {templateId, food} = req.body;
-	
-	try {
-		//generate food id
-		food._id = new Date().getTime().toString();
+router.post("/addFoodToTemplate", async (req, res) => {
+  const { templateId, food } = req.body;
 
-		//validte food
-		const foodParse = FoodInterfaceSchema.parse(food)
+  try {
+    //generate food id
+    food._id = new Date().getTime().toString();
 
-		await TemplateModel.findByIdAndUpdate(
-			templateId,
-			{ $push: { foods: food } },
-			{ new: true }
-		);
+    //validte food
+    const foodParse = FoodInterfaceSchema.parse(food);
 
-		return res.status(200).json({
-			message: 'Comida añadida correctamente',
-			food: foodParse
-		});
+    await TemplateModel.findByIdAndUpdate(
+      templateId,
+      { $push: { foods: food } },
+      { new: true }
+    );
 
-	}catch(error){
-		if(error instanceof ZodError){
-			return res.status(400).json({
-				message: 'Error comida no válida',
-				errors:error.issues
-			});
-		}
+    return res.status(200).json({
+      message: "Comida añadida correctamente",
+      food: foodParse,
+    });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return res.status(400).json({
+        message: "Error comida no válida",
+        errors: error.issues,
+      });
+    }
 
-		res.status(500).json({
-			message: 'Error al añadir comida al template',
-		});	
-	}
-})
+    res.status(500).json({
+      message: "Error al añadir comida al template",
+    });
+  }
+});
 
-router.post('/getFoodById', async (req, res) => {
-	const {templateId, foodId} = req.body;
+router.post("/getFoodById", async (req, res) => {
+  const { templateId, foodId } = req.body;
 
-	try {
-		const template = await TemplateModel.findById(templateId);
-		if (!template) {
-			return res.status(404).json({
-				message: 'Template not found'
-			});
-		}
+  try {
+    const template = await TemplateModel.findById(templateId);
+    if (!template) {
+      return res.status(404).json({
+        message: "Template not found",
+      });
+    }
 
-		const food: FoodInterface | undefined = template.foods.find((f: FoodInterface) => f._id === foodId);
+    const food: FoodInterface | undefined = template.foods.find(
+      (f: FoodInterface) => f._id === foodId
+    );
 
-		if (!food) {
-			return res.status(404).json({
-				message: 'Food not found in template'
-			});
-		}
+    if (!food) {
+      return res.status(404).json({
+        message: "Food not found in template",
+      });
+    }
 
-		return res.status(200).json({
-			message: 'Food found in template',
-			food
-		});
+    return res.status(200).json({
+      message: "Food found in template",
+      food,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error finding food in template",
+      error,
+    });
+  }
+});
 
-	} catch (error) {
-		return res.status(500).json({
-			message: 'Error finding food in template',
-			error
-		});
-	}
-})
-
-export {router as templateRoutes}
+export { router as templateRoutes };

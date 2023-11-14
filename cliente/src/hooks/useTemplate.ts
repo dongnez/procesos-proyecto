@@ -15,27 +15,27 @@ export const useTemplate = (id?:string) => {
 
   const templateIdSelected = templateId || id
 
-  const [templateAtom, _] = useTemplateAtoms(templateIdSelected || "");
+  const [templateAtom, setTemplateAtom] = useTemplateAtoms(templateIdSelected || "");
   
   const [template, setTemplate] = useState<TemplateInterfaceClient | null>(templateAtom);
   
 
   const { toast } = useToast();
 
-  useEffect(() => {
+/*   useEffect(() => {
     setTemplate(templateAtom);
-  }, [templateAtom]);
+  }, [templateAtom]); */
 
   useEffect(() => {
     //get template
-    if (template || !templateId) return;
+    if (templateAtom || template || !templateId) return;
 
     //Fetch from server
     databaseGetTemplateById(templateId).then(({ data, error }) => {
       if (data) {
 
+        setTemplateAtom(templateAtom) 
         setTemplate(data);
-        console.log("T",data)
 
         return;
       }

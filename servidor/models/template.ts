@@ -19,7 +19,7 @@ const TemplateSchema = new Schema<TemplateInterface>(
     },
     users: {
       type: [
-        { userId: { type: Schema.Types.ObjectId, ref: "User" }, role: String },
+        { userRef: { type: Schema.Types.ObjectId, ref: "User" }, role: String },
       ],
       required: true,
     },

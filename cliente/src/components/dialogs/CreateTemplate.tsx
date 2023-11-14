@@ -77,7 +77,7 @@ export const CreateTemplate = ({
                       foods: [],
                       users: [
                         {
-                          userId: user!._id,
+                          userRef: user!._id,
                           role: "owner",
                         },
                       ],

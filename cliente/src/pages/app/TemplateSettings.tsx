@@ -14,25 +14,26 @@ export const TemplateSettings = () => {
   const { template } = useTemplate();
 
   if (!template) {
+    return(
     <div className="h-full flex items-center justify-center">
       <Loader />
-    </div>;
+    </div>
+    )
   }
 
   return (
     <div className="h-full">
       <div className="p-3 rounded-md bg-card/90 h-fit max-w-[500px] mx-auto">
-        <h1 className="text-xl">{template?.name}</h1>
+        <h1 className="text-xl">{template.name}</h1>
 
-        <h3 className="text-lg">{template?.users.length} Usuarios</h3>
+        <h3 className="text-lg">{template.users.length} Usuarios</h3>
         <hr/>
 
-        {template?.users.map((user,index)=>{
-
+        {template.users.map((user,index)=>{
           return (
             <div key={index} className="flex gap-2">
-              <AvatarIcon image={user.photoURL} fallback={user.name} />
-              <p>{user.name}</p>
+              <AvatarIcon image={user.userRef?.photoURL} fallback={user.userRef?.name} />
+              <p>{user.userRef?.name}</p>
             </div>
           )
         })}

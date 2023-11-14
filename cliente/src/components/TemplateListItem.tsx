@@ -1,4 +1,4 @@
-import { TemplateInterface } from "src/interfaces/TemplateInterfaces";
+import { TemplateInterfaceClient } from "src/interfaces/TemplateInterfaces";
 import { useTemplateAtoms } from "src/context/templateAtoms";
 import { useNavigate } from "src/hooks/useNavigate";
 import { useParams } from "react-router-dom";
@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 export const TemplateListItem = ({
   template,
 }: {
-  template: TemplateInterface;
+  template: TemplateInterfaceClient;
 }) => {
   const [_, setTemplateAtom] = useTemplateAtoms(template._id);
   const navigate = useNavigate();

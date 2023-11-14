@@ -9,7 +9,7 @@ export const TemplateInterfaceSchema = z.object({
   description: z.string().max(40).optional(),
   users: z.array(
     z.object({
-      userId: z.string(),
+      userRef: z.string(),
       role: z.string(),
     })
   ),
@@ -19,5 +19,5 @@ export const TemplateInterfaceSchema = z.object({
 export type TemplateInterface = z.infer<typeof TemplateInterfaceSchema>;
 
 export type TemplateInterfaceClient = Omit<TemplateInterface, "users"> & {
-  users: Array<UserInterface & { role: string }>;
+  users: Array< {userRef:UserInterface, role: string }>;
 };
