@@ -13,7 +13,7 @@ export const AvatarIcon = ({
   imageProps,
   ...rest
 }: React.ComponentPropsWithoutRef<typeof Avatar> & {
-  image: string;
+  image: string|undefined;
   fallback: string;
   size?: number;
   imageProps?: React.ComponentPropsWithoutRef<typeof AvatarImage>;
@@ -35,7 +35,7 @@ export const AvatarIcon = ({
             width: `${size}px`,
             height: `${size}px`,
           }}
-        />
+        >{fallback}</Skeleton>
       </AvatarFallback>
     </Avatar>
   );

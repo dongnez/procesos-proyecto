@@ -88,7 +88,12 @@ router.post('/getTemplateById', async (req, res) => {
 
 	try {
 		
-		const template = await  TemplateModel.findById(templateId).exec();
+		const template = await  TemplateModel.findById(templateId)
+ 		.populate({
+			path: 'users.userId', // Poblamos la referencia al modelo Usuario
+			// select: 'name role',  // Especificamos las propiedades que queremos incluir
+  		}) 
+		.exec();
 
 		if(!template) return res.status(400).json({message:"Template no encontrado"})
 

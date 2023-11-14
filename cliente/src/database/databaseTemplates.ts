@@ -1,5 +1,5 @@
 import axios from "axios";
-import { TemplateInterface } from "src/interfaces/TemplateInterfaces";
+import { TemplateInterface, TemplateInterfaceClient } from "src/interfaces/TemplateInterfaces";
 import { FoodInterface } from "src/interfaces/FoodInterfaces";
 import { API_URL } from "src/constants/config";
 
@@ -56,7 +56,7 @@ export async function databaseGetFoodById(templateId:string,foodId:string):Promi
 	return {data:data?.food || null,error}
 }
 
-export async function databaseGetTemplateById(templateId:string):Promise<{data:TemplateInterface|null,error:string|null}>{
+export async function databaseGetTemplateById(templateId:string):Promise<{data:TemplateInterfaceClient|null,error:string|null}>{
 	let error = null;
 	const {data} = await axios.post(`${TEMPLATES_URL}getTemplateById`, {templateId})
 	.catch((error_) => {

@@ -1,27 +1,20 @@
 import { Drumstick } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
-import { TemplateInterface } from "src/interfaces/TemplateInterfaces";
-import { useTemplateAtoms } from "src/context/templateAtoms";
+import { useMemo, useState } from "react";
 import { Shaker } from "src/components/Shaker";
 import { Settings } from "react-feather";
 import { Button } from "src/@/components/ui/button";
 import { FoodDialog } from "src/components/dialogs/FoodDialog";
 import { useNavigate } from "src/hooks/useNavigate";
 import { Loader } from "src/components/Loader";
-import { databaseGetTemplateById } from "src/database/databaseTemplates";
-import { useToast } from "src/@/components/ui/use-toast";
 import { ShakerFilters } from "src/components/ShakerFilters";
 import { FoodTimeType } from "src/interfaces/FoodInterfaces";
+import { useTemplate } from "src/hooks/useTemplate";
 
 export const Template = () => {
-  const { templateId } = useParams();
-  const [templateAtom, _] = useTemplateAtoms(templateId || "");
-  const [template, setTemplate] = useState<TemplateInterface | null>(
-    templateAtom
-  );
-  const [filter, setFilter] = useState<FoodTimeType>("all");
 
+  const {template} = useTemplate()
+
+  const [filter, setFilter] = useState<FoodTimeType>("all");
   const filteredFoods = useMemo(() => (
     template?.foods.filter((food) => {
       if (filter === "all") return true;
@@ -30,33 +23,7 @@ export const Template = () => {
   ), [template, filter]);
 
   const navigate = useNavigate();
-  const { toast } = useToast();
 
-  useEffect(() => {
-    setTemplate(templateAtom);
-  }, [templateAtom]);
-
-  useEffect(() => {
-    //get template
-    if (template || !templateId) return;
-
-    //Fetch from server
-    databaseGetTemplateById(templateId).then(({ data, error }) => {
-      if (data) {
-        setTemplate(data);
-        return;
-      }
-
-      if (error) {
-        toast({
-          title: "Error",
-          description: error,
-          variant: "destructive",
-          duration: 5000,
-        });
-      }
-    });
-  }, [templateId]);
 
   if (!template)
     return (

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { FoodInterfaceSchema } from "src/interfaces/FoodInterfaces";
+import { UserInterface } from "src/interfaces/UserInterfaces";
 
 export const TemplateInterfaceSchema = z.object({
   _id: z.string(),
@@ -16,3 +17,7 @@ export const TemplateInterfaceSchema = z.object({
 });
 
 export type TemplateInterface = z.infer<typeof TemplateInterfaceSchema>;
+
+export type TemplateInterfaceClient = Omit<TemplateInterface, "users"> & {
+  users: Array<UserInterface & { role: string }>;
+};
