@@ -2,6 +2,7 @@ import axios from "axios";
 import { TemplateInterface, TemplateInterfaceClient } from "src/interfaces/TemplateInterfaces";
 import { FoodInterface } from "src/interfaces/FoodInterfaces";
 import { WEB_URL } from "src/constants/config";
+import { socket } from "src/utils/socket";
 
 const TEMPLATES_URL = `${WEB_URL}templates/`;
 
@@ -40,6 +41,11 @@ export async function databaseAddFoodToTemplate(payload: {templateId:string,food
 	});
 
 	const food:FoodInterface | null = data?.food || null;
+
+	if(food){
+		socket.emit("addFood", {food:food});
+	}
+
 
 	return {data:food,error}
 }

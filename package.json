@@ -9,7 +9,6 @@
     "build": "cd cliente && npm install && npm run build",
     "dev": "tsx watch index.ts",
     "dev-c": "cd cliente && npm run dev"
-
   },
   "engines": {
     "node": ">=16.0.0"
@@ -30,6 +29,7 @@
     "nodemailer": "^6.9.7",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
+    "socket.io": "^4.7.2",
     "tsx": "^3.14.0",
     "uploadthing": "^5.7.2",
     "zod": "^3.22.4"

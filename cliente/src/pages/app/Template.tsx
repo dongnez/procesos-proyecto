@@ -1,5 +1,5 @@
 import { Drumstick } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Shaker } from "src/components/Shaker";
 import { Settings } from "react-feather";
 import { Button } from "src/@/components/ui/button";
@@ -9,10 +9,26 @@ import { Loader } from "src/components/Loader";
 import { ShakerFilters } from "src/components/ShakerFilters";
 import { FoodTimeType } from "src/interfaces/FoodInterfaces";
 import { useTemplate } from "src/hooks/useTemplate";
+import { socket } from "src/utils/socket";
+
+const useRealtimeTemplate = (setTemplate:(template:any)=>void) => {
+  useEffect(() => {
+    
+    socket.on("foodAdded", (template) => {
+      const {food} = template
+
+      setTemplate((t)=>{
+        return {...t,foods:[...t.foods,food]}
+      }); 
+    });
+
+  }, []);
+}
 
 export const Template = () => {
 
-  const {template} = useTemplate()
+  const {template,setTemplate} = useTemplate()
+  useRealtimeTemplate(setTemplate)
 
   const [filter, setFilter] = useState<FoodTimeType>("all");
   const filteredFoods = useMemo(() => (

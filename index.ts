@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import path from "path";
-import { fileURLToPath } from "url";
+
 import "./servidor/clase/passport-setup.js";
 import { initClases } from "./servidor/clase/clasesServer.js";
 import { authRoutes } from "./servidor/routes/authRoutes.js";
@@ -11,6 +11,9 @@ import { createUploadthingExpressHandler } from "uploadthing/express";
 import { uploadRouter } from "./servidor/routes/uploadFiles.js";
 import cors from "cors";
 // const PORT =  parseInt(process.env.PORT as any) || 8080;
+
+import { createServer } from "http";
+import { connectSockets } from "servidor/sockets.js";
 
 const port = process.env.PORT || 8080;
 
@@ -26,6 +29,8 @@ console.log("Ruta raiz", __dirname); */
 
 app.use(
   cors({
+    // origin: "http://localhost:8080",,
+    methods: ["GET", "POST"],
     credentials: false,
   })
 );
@@ -52,7 +57,13 @@ app.use(function (request, response) {
   response.sendFile(path.join(__dirname, "/cliente/dist/index.html"));
 });
 
-app.listen(port, () => {
+
+const server = createServer(app); 
+
+//SOCKETS
+connectSockets(server);
+
+server.listen(port, () => {
   console.log(`App está escuchando en el puerto ${port}`);
   console.log("Ctrl+C para salir");
 });
