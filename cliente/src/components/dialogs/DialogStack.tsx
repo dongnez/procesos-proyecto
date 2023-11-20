@@ -1,8 +1,10 @@
 import { Dialog } from "@radix-ui/react-dialog";
 import { atom, useAtom } from "jotai";
 import { ProfileDialogParams,ProfileDialog } from "src/components/dialogs/ProfileDialog";
+import { ShareLinkDialog, ShareLinkDialogParams } from "src/components/dialogs/ShareLinkDialog";
 
-export type DialogParams = { id: "profile"; params: ProfileDialogParams };
+export type DialogParams = { id: "profile"; params: ProfileDialogParams }
+| {id: "sharelink"; params: ShareLinkDialogParams};
 
 export type ROUTE_DIALOG_ID = DialogParams["id"];
 
@@ -12,6 +14,7 @@ export const DialogComponentById: Record<
   React.FC<any> | React.LazyExoticComponent<any>
 > = {
   profile: ProfileDialog,
+  sharelink: ShareLinkDialog,
 };
 
 export const dialogsAtom = atom<
@@ -45,7 +48,7 @@ export const DialogStack = () => {
                 setDialogStack((stack) =>
                   stack.filter((item) => item.key !== dialog.key)
                 );
-              }, 1000);
+              }, 200);
             }}
           />
         );

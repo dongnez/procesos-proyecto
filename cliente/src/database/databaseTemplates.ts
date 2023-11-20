@@ -1,9 +1,9 @@
 import axios from "axios";
 import { TemplateInterface, TemplateInterfaceClient } from "src/interfaces/TemplateInterfaces";
 import { FoodInterface } from "src/interfaces/FoodInterfaces";
-import { API_URL } from "src/constants/config";
+import { WEB_URL } from "src/constants/config";
 
-const TEMPLATES_URL = `${API_URL}templates/`;
+const TEMPLATES_URL = `${WEB_URL}templates/`;
 
 export async function databaseGetUserTemplates(userId:string){
 	let error = null;

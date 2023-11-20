@@ -214,4 +214,14 @@ router.post("/getFoodById", async (req, res) => {
   }
 });
 
+router.get("/invite/:inviteCode", async (req, res) => {
+  const { inviteCode } = req.params;
+
+  res.status(200).json({
+    message: "Invite code found",
+    inviteCode,
+  });
+
+});
+
 export { router as templateRoutes };

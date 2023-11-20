@@ -4,6 +4,8 @@ import { Loader } from "src/components/Loader";
 import { UserIcon } from "src/components/UserIcon";
 import { Eye, UserPlus } from "lucide-react";
 import { Button } from "src/@/components/ui/button";
+import { useOpenDialog } from "src/hooks/useOpenDialog";
+import { WEB_URL } from "src/constants/config";
 
 export const TemplateSettings = () => {
   // Limitar el acceso a esta ruta solo a los usuarios que tengan el rol de admin
@@ -14,6 +16,10 @@ export const TemplateSettings = () => {
   //Remove template foods
 
   const { template } = useTemplate();
+  const {openDialog} = useOpenDialog();
+
+  const friendsLink = `${WEB_URL}/invite/${template?._id}`
+
 
   if (!template) {
     return (
@@ -45,7 +51,9 @@ export const TemplateSettings = () => {
 
         <div className="flex items-center mt-4 mb-1">
           <h3 className="text-lg font-medium  flex-1">{template.users.length} Miembros  </h3>
-          <Button className="rounded-full w-7 h-7" size={"icon"} >
+          <Button className="rounded-full w-7 h-7" size={"icon"} 
+            onClick={()=> openDialog({id:"sharelink",params:{title:'Comparte este link para dar acceso a los usuarios',link:friendsLink}})}>
+
             <UserPlus size={16} className="pl-[1px]" />
           </Button>
         </div>
