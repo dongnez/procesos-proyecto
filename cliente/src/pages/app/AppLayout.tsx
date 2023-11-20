@@ -7,6 +7,7 @@ import { LeftBar } from "src/pages/app/LeftBar";
 import { BottomNavBar } from "src/pages/app/BottomNavBar";
 import { useCloseAll } from "src/hooks/useCloseAll";
 import { useDeviceSm } from "src/hooks/useDevice";
+import { DialogStack } from "src/components/dialogs/DialogStack";
 
 export const AppLayout = () => {
   const { close } = useCloseAll();
@@ -40,6 +41,7 @@ export const AppLayout = () => {
         <BottomNavBar />
       </div>
       
+      <DialogStack />
     </div>
   );
 };

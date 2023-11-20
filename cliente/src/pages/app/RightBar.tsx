@@ -15,6 +15,7 @@ import { useAtom } from "jotai";
 import { openRightSideBarAtom } from "src/context/openLayoutsAtoms";
 import { useDeviceSm } from "src/hooks/useDevice";
 import { LogOut } from "lucide-react";
+import { useOpenDialog } from "src/hooks/useOpenDialog";
 
 export const RightBar = ({
   className,
@@ -23,6 +24,7 @@ export const RightBar = ({
   // const [templates, setTemplates] = useTemplateAtoms()
   const [templates, setTemplates] = useState([]);
   const { user, logout } = useAuth()
+  const {openDialog} = useOpenDialog()
 
   useEffect(() => {
     databaseGetUserTemplates(user!._id).then(({ data, error }) => {
@@ -50,6 +52,7 @@ export const RightBar = ({
       }}>
       <div className="flex items-center gap-2">
         <UserIcon
+          onClick={()=>{openDialog({id:"profile",params:{}})}}
           className="hover:drop-shadow-lg duration-200"
           image={user?.photoURL || ""}
           size={45}
