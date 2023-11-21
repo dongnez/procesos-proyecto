@@ -74,6 +74,7 @@ router.post("/register", async (req, res) => {
     res.cookie("jwt", token);
     res.json({
       message: "User created successfully",
+      
     });
   } catch (error:any) {
     
