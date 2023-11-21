@@ -56,6 +56,7 @@ router.post("/register", async (req, res) => {
     });
 
     const userSaved = await newUser.save();
+    
 
     if(!userSaved){
       return res.status(400).json({message: "Error al crear el usuario"})
@@ -74,7 +75,7 @@ router.post("/register", async (req, res) => {
     res.cookie("jwt", token);
     res.json({
       message: "User created successfully",
-      
+      userId: userSaved._id,
     });
   } catch (error:any) {
     
@@ -108,7 +109,6 @@ router.get("/confirmarUsuario/:email/:key", async (req,res)=>{
     
   const user = await UserModel.findByIdAndUpdate(key,{emailVerificated:true});
 
-  console.log("Email verificado");
     res.cookie("user", JSON.stringify(user));
     res.redirect('/app')
 
@@ -151,6 +151,28 @@ router.post("/google", async (req, res) => {
     });
   } catch (error) {
     console.log("Google", error);
+    res.send(error);
+  }
+});
+
+// Remove user account
+router.post("/removeAccount", async (req:any, res) => {
+  const { id } = req.body;
+
+  console.log("REMOVE ACCOUNT HERE",id)
+
+  if(!id){
+    return res.status(400).json({message: "Faltan datos"})
+  }
+
+  try {
+    const userFound = await UserModel.findByIdAndDelete(id);
+
+    if (!userFound) return res.status(400).json({ message: "User not found" });
+
+    res.json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.log("Delete", error);
     res.send(error);
   }
 });
