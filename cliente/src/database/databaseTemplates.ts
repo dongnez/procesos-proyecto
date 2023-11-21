@@ -4,7 +4,7 @@ import { FoodInterface } from "src/interfaces/FoodInterfaces";
 import { WEB_URL } from "src/constants/config";
 import { socket } from "src/utils/socket";
 
-const TEMPLATES_URL = `${WEB_URL}templates/`;
+const TEMPLATES_URL = `${WEB_URL}/templates/`;
 
 export async function databaseGetUserTemplates(userId:string){
 	let error = null;
