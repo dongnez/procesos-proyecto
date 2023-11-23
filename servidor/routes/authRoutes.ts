@@ -102,15 +102,16 @@ router.post("/enviarEmail/", async (req,res)=>{
     
 
 router.get("/confirmarUsuario/:email/:key", async (req,res)=>{
-  console.log("llamada verificado");
+  
   //Get email and key
   const {email,key} = req.params;
   try {
     
   const user = await UserModel.findByIdAndUpdate(key,{emailVerificated:true});
 
-    res.cookie("user", JSON.stringify(user));
-    res.redirect('/app')
+  // res.cookie("user", JSON.stringify(user));
+  // res.redirect('/app')
+  res.status(200).json({message: "Usuario verificado correctamente"});
 
   } catch (error) {
     console.log("Confirmar usuario", error); 
