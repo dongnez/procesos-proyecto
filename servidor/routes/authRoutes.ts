@@ -4,7 +4,7 @@ import { Router } from "express";
 const router = Router();
 import { createAccesstoken } from "../libs/createAccessToken";
 import { enviarEmail } from "servidor/clase/email";
-import { MongoServerError } from "mongodb";
+
 
 // Define rutas y controladores para la autenticación
 router.post("/login", async (req, res) => {
@@ -27,7 +27,7 @@ router.post("/login", async (req, res) => {
 
     const token = await createAccesstoken({ id: userFound._id });
 
-    res.cookie("jwt", token);
+    res.cookie("token", token);
     res.json({
       _id: userFound._id,
       name: userFound.name,
@@ -72,7 +72,7 @@ router.post("/register", async (req, res) => {
 
     const token = await createAccesstoken({ id: userSaved._id });
 
-    res.cookie("jwt", token);
+    res.cookie("token", token);
     res.json({
       message: "User created successfully",
       userId: userSaved._id,
@@ -122,8 +122,8 @@ router.get("/confirmarUsuario/:email/:key", async (req,res)=>{
 
 router.post("/logout", (req, res) => {
   // Tu lógica de logout
-  res.cookie("jwt", "", { expires: new Date(0) });
-  res.send("LOGOUT");
+  res.cookie("token", "", { expires: new Date(0) });
+ return res.status(200).json({message: "Logout successfully"})
 });
 
 router.post("/google", async (req, res) => {

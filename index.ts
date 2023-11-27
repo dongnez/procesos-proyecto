@@ -10,26 +10,21 @@ import { connectMongoDB } from "./servidor/db.js";
 import { createUploadthingExpressHandler } from "uploadthing/express";
 import { uploadRouter } from "./servidor/routes/uploadFiles.js";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 // const PORT =  parseInt(process.env.PORT as any) || 8080;
 
 import { createServer } from "http";
 import { connectSockets } from "servidor/sockets.js";
+import { useRouter } from "servidor/routes/index.js";
+import { APP_URL, PORT } from "servidor/config.js";
 
-const port = process.env.PORT || 8080;
+const port = PORT
 
 const app = express();
 
-/* const URL = process.env.URL || "http://localhost:";
-const __filename = fileURLToPath(import.meta.url);
-
-*/
-
-/*const __dirname = path.dirname(__filename);
-console.log("Ruta raiz", __dirname); */
-
 app.use(
   cors({
-    origin: [process.env.APP_URL || "","http://localhost:8080","http://localhost:5173"], // or specify your frontend URL
+    origin: [APP_URL || "","http://localhost:8080","http://localhost:5173"], // or specify your frontend URL
     methods: ["GET", "POST"],
     credentials: false,
   })
@@ -37,19 +32,16 @@ app.use(
 
 app.use(express.static(__dirname + "/cliente/dist/"));
 app.use(express.json());
+app.use(cookieParser())
 
 
+// Inicia codigo de clase
 initClases(app);
 
-app.use("/auth", authRoutes);
-app.use("/templates", templateRoutes);
-app.use( //Upload files
-  '/api/uploadthing',
-  createUploadthingExpressHandler({
-    router: uploadRouter,
-  })
-);
+// Define rutas y controladores para la autenticación
+useRouter(app);
 
+// Conecta con la base de datos
 connectMongoDB();
 
 //Ruta para cualquier otro GET que no sea las rutas definidas (APP)

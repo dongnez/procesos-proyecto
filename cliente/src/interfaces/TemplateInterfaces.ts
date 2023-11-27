@@ -20,6 +20,7 @@ export const TemplateInterfaceSchema = z.object({
     })
   ),
   foods: z.array(FoodInterfaceSchema),
+  inviteCode: z.string().optional(),
 });
 
 export type TemplateInterface = z.infer<typeof TemplateInterfaceSchema>;

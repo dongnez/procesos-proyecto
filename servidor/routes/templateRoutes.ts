@@ -8,6 +8,7 @@ import {
 import { Router } from "express";
 
 import { ZodError } from "zod";
+import { authRequired } from "servidor/middleware/validateToken";
 const router = Router();
 
 router.post("/createTemplate", async (req, res) => {
@@ -41,7 +42,7 @@ router.post("/createTemplate", async (req, res) => {
   }
 });
 
-router.post("/getTemplates", async (req, res) => {
+router.post("/getTemplates",authRequired, async (req, res) => {
   const { userId } = req.body;
 
   try {
@@ -67,13 +68,29 @@ router.post("/getTemplates", async (req, res) => {
   }
 });
 
-router.get("/invite/:keycode", async (req, res) => {
-    const { keycode } = req.params;
+router.get("/invite/:groupId/:inviteCode", async (req, res) => {
+    const { groupId ,inviteCode } = req.params;
+    
+    
+    //get user id from user
+/*     if(req.headers?.cookie)
+      req.headers.cookie.split(";").forEach((cookie) => {
+          const [key, value] = cookie.split("=");
+          if (key.trim() === "user") {
+              const user = JSON.parse(decodeURIComponent(value));
+              console.log("User",user)
+          }
+      }); */
+
+
+    return res.status(200).json({
+        message: "Invite code found",
+        inviteCode,
+    });
 
     try {
-        const template = await TemplateModel.findOne({ keycode }).populate({
-            path: "users.userRef", // Poblamos la referencia al modelo Usuario dentro de cada template
-        });
+        
+        const template = await TemplateModel.findByIdAndUpdate(groupId, { inviteCode }, { new: true }); // TemplateModel
 
         if (!template) {
             return res.status(404).json({
