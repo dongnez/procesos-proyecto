@@ -8,6 +8,7 @@ import { ProtectedRoute } from "src/context/AuthProvider";
 import { Home } from "src/pages/home/Home";
 import {Home as HomeApp} from 'src/pages/app/home/Home'
 import { TemplateSettings } from "src/pages/app/TemplateSettings";
+import { Calendar } from "src/pages/calendar/Calendar";
 
 export const router = createBrowserRouter([
   {
@@ -55,7 +56,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "calendar",
-        element: <p>Calendar</p>,
+        element: <Calendar />,
       },
       {
         path: "settings",

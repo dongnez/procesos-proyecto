@@ -67,6 +67,34 @@ router.post("/getTemplates", async (req, res) => {
   }
 });
 
+router.get("/invite/:keycode", async (req, res) => {
+    const { keycode } = req.params;
+
+    try {
+        const template = await TemplateModel.findOne({ keycode }).populate({
+            path: "users.userRef", // Poblamos la referencia al modelo Usuario dentro de cada template
+        });
+
+        if (!template) {
+            return res.status(404).json({
+                message: "Template not found",
+            });
+        }
+
+        return res.status(200).json({
+            message: "Template found",
+            template,
+        });
+
+    } catch (error) {
+        console.log("Error en getTemplates", error);
+        res.status(500).json({
+            message: "Error en getTemplates",
+        });
+    }
+
+});
+
 router.post("/deleteTemplate", async (req, res) => {
   const { templateId } = req.body;
 

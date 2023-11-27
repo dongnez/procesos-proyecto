@@ -25,6 +25,7 @@
     "axios": "^1.5.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
+    "dayjs": "^1.11.10",
     "framer-motion": "^10.16.4",
     "jotai": "^2.4.3",
     "jquery": "^3.7.1",
