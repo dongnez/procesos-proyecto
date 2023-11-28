@@ -4,7 +4,10 @@ import { JWT_SECRET } from "servidor/config";
 export const authRequired = (req, res, next) => {
 	
   try {
-    const { token } = req.headers.cookies;
+    
+    const { token } = req.cookies;
+
+    
 
     if (!token)
       return res

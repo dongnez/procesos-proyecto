@@ -2,9 +2,9 @@ import dayjs from "dayjs";
 
 export const Day = ({ day,isOtherMonth }: { day: dayjs.Dayjs, isOtherMonth:boolean }) => {
 
-  function getCurrentDayStyle() {
+  // function getCurrentDayStyle() {
      // 
-  }
+  // }
 
   return (
     <div className={`

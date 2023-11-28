@@ -27,6 +27,7 @@ router.post("/login", async (req, res) => {
 
     const token = await createAccesstoken({ id: userFound._id });
 
+    //Auto save token in cookie
     res.cookie("token", token);
     res.json({
       _id: userFound._id,

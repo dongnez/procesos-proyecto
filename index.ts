@@ -4,18 +4,14 @@ import path from "path";
 
 import "./servidor/clase/passport-setup.js";
 import { initClases } from "./servidor/clase/clasesServer.js";
-import { authRoutes } from "./servidor/routes/authRoutes.js";
-import { templateRoutes } from "./servidor/routes/templateRoutes.js";
 import { connectMongoDB } from "./servidor/db.js";
-import { createUploadthingExpressHandler } from "uploadthing/express";
-import { uploadRouter } from "./servidor/routes/uploadFiles.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 // const PORT =  parseInt(process.env.PORT as any) || 8080;
 
 import { createServer } from "http";
 import { connectSockets } from "servidor/sockets.js";
-import { useRouter } from "servidor/routes/index.js";
+import { useRouter } from "servidor/routes/routes.ts";
 import { APP_URL, PORT } from "servidor/config.js";
 
 const port = PORT
@@ -24,7 +20,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: [APP_URL || "","http://localhost:8080","http://localhost:5173"], // or specify your frontend URL
+    origin: "*",//[APP_URL || "","http://localhost:8080","http://localhost:5173"], // or specify your frontend URL
     methods: ["GET", "POST"],
     credentials: false,
   })

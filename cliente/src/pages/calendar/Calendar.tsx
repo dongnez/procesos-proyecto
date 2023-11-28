@@ -5,7 +5,7 @@ import { getCurrentMonthNumber } from "src/utils/calendarUtils";
 export const Calendar = () => {
 
   
-  const [selectedMonth, setSelectedMonth] = useState(getCurrentMonthNumber());
+  const [selectedMonth, _] = useState(getCurrentMonthNumber());
   
   return (
 	  <div className="h-full py-2 overflow-auto">

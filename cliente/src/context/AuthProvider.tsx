@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import { createContext, useContext, useEffect, useState } from "react";
-import { databaseAuthLogin, databaseAuthRegister } from "src/database/databaseAuth";
+import { databaseAuthLogOut, databaseAuthLogin, databaseAuthRegister } from "src/database/databaseAuth";
 import { UserInterface } from "src/interfaces/UserInterfaces";
 
 type AuthContextType = {
@@ -64,9 +64,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   function logout() {
-    Cookies.remove("user");
-    setUser(null);
-    window.location.href = "/login";
+
+    databaseAuthLogOut()
+    // Cookies.remove("user");
+    // setUser(null);
+    // window.location.href = "/login";
   }
 
   return (

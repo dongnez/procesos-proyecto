@@ -35,12 +35,13 @@ export async function databaseSendEmailVerification(payload: {
 export async function databaseAuthLogin(payload: {
   email: string;
   password: string;
-}): Promise<{data:null | UserInterface,error:any }> {
+}): Promise<{data:null | UserInterface ,error:any }> {
   let error = null;
   
   const result = await axios.post(`${WEB_URL}/auth/login`, payload, {
     headers: {
       "Content-Type": "application/json", // Configura la cabecera para indicar que estás enviando JSON
+      withCredentials: true
     },
   }).catch((error_) => {
     throw error_.response.data;
@@ -50,12 +51,8 @@ export async function databaseAuthLogin(payload: {
   return {data:result?.data,error};
 }
 
-export async function databaseAuthLogOut(payload: {
-  name: string;
-  email: string;
-  password: string;
-}) {
-  const result = await axios.post(`${WEB_URL}/auth/logout`, payload, {
+export async function databaseAuthLogOut() {
+  const result = await axios.post(`${WEB_URL}/auth/logout`, {}, {
     headers: {
       "Content-Type": "application/json", // Configura la cabecera para indicar que estás enviando JSON
     },
