@@ -4,11 +4,9 @@ import {
   FoodInterfaceSchema,
   FoodInterface,
 } from "cliente/src/interfaces/FoodInterfaces";
-
 import { Router } from "express";
-
 import { ZodError } from "zod";
-import { authRequired } from "servidor/middleware/validateToken";
+import { FoodModel } from "servidor/models/food";
 const router = Router();
 
 router.post("/createTemplate", async (req, res) => {
@@ -42,15 +40,17 @@ router.post("/createTemplate", async (req, res) => {
   }
 });
 
-router.post("/getTemplates",authRequired, async (req, res) => {
+router.post("/getTemplates", async (req, res) => {
   const { userId } = req.body;
 
   try {
     const userFound = await UserModel.findById(userId).populate({
       path: "templates",
-      populate: {
-        path: "users.userRef", // Poblamos la referencia al modelo Usuario dentro de cada template
-      },
+      populate: [
+        {
+          path: "users.userRef", // Poblamos la referencia al modelo Usuario dentro de cada template
+        },
+      ],
     });
 
     if (!userFound)
@@ -69,11 +69,10 @@ router.post("/getTemplates",authRequired, async (req, res) => {
 });
 
 router.get("/invite/:groupId/:inviteCode", async (req, res) => {
-    const { groupId ,inviteCode } = req.params;
-    
-    
-    //get user id from user
-/*     if(req.headers?.cookie)
+  const { groupId, inviteCode } = req.params;
+
+  //get user id from user
+  /*     if(req.headers?.cookie)
       req.headers.cookie.split(";").forEach((cookie) => {
           const [key, value] = cookie.split("=");
           if (key.trim() === "user") {
@@ -82,34 +81,34 @@ router.get("/invite/:groupId/:inviteCode", async (req, res) => {
           }
       }); */
 
+  return res.status(200).json({
+    message: "Invite code found",
+    inviteCode,
+  });
 
-    return res.status(200).json({
-        message: "Invite code found",
-        inviteCode,
-    });
+  try {
+    const template = await TemplateModel.findByIdAndUpdate(
+      groupId,
+      { inviteCode },
+      { new: true }
+    ); // TemplateModel
 
-    try {
-        
-        const template = await TemplateModel.findByIdAndUpdate(groupId, { inviteCode }, { new: true }); // TemplateModel
-
-        if (!template) {
-            return res.status(404).json({
-                message: "Template not found",
-            });
-        }
-
-        return res.status(200).json({
-            message: "Template found",
-            template,
-        });
-
-    } catch (error) {
-        console.log("Error en getTemplates", error);
-        res.status(500).json({
-            message: "Error en getTemplates",
-        });
+    if (!template) {
+      return res.status(404).json({
+        message: "Template not found",
+      });
     }
 
+    return res.status(200).json({
+      message: "Template found",
+      template,
+    });
+  } catch (error) {
+    console.log("Error en getTemplates", error);
+    res.status(500).json({
+      message: "Error en getTemplates",
+    });
+  }
 });
 
 router.post("/deleteTemplate", async (req, res) => {
@@ -138,9 +137,11 @@ router.post("/getTemplateById", async (req, res) => {
 
   try {
     const template = await TemplateModel.findById(templateId)
-      .populate({
-        path: "users.userRef", // Poblamos la referencia al modelo Usuario
-      })
+      .populate([
+        {
+          path: "users.userRef", // Poblamos la referencia al modelo Usuario
+        },
+      ])
       .exec();
 
     if (!template)
@@ -159,24 +160,24 @@ router.post("/getTemplateById", async (req, res) => {
 });
 
 router.post("/addFood", async (req, res) => {
-  const { templateId, food } = req.body;
-
-  //validte food
+  const { food } = req.body;
 
   try {
-    //generate food id
-    food._id = new Date().getTime().toString();
-    const foodParse = FoodInterfaceSchema.parse(food);
+    //Add food to Foods collection
+    const newFood = new FoodModel(food);
+    await newFood.save();
 
     await TemplateModel.findByIdAndUpdate(
-      templateId,
-      { $push: { foods: food } },
+      food.templateId,
+      { $push: { foods: newFood._id } },
       { new: true }
-    );
+    ).catch((error) => {
+      console.log("Error en TEMPLATE", error);
+    });
 
     return res.status(200).json({
       message: "Comida añadida correctamente",
-      food: foodParse,
+      food: newFood,
     });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -192,36 +193,23 @@ router.post("/addFood", async (req, res) => {
   }
 });
 
-router.post("/addFoodToTemplate", async (req, res) => {
-  const { templateId, food } = req.body;
+router.get("getFoods/:templateId", async (req, res) => {
+  const { templateId } = req.params;
 
   try {
-    //generate food id
-    food._id = new Date().getTime().toString();
+    const foods = await FoodModel.find({ templateId: templateId });
 
-    //validte food
-    const foodParse = FoodInterfaceSchema.parse(food);
+    if (!foods)
+      return res.status(400).json({ message: "Alimentos no encontrados" });
 
-    await TemplateModel.findByIdAndUpdate(
-      templateId,
-      { $push: { foods: food } },
-      { new: true }
-    );
-
-    return res.status(200).json({
-      message: "Comida añadida correctamente",
-      food: foodParse,
+    res.status(200).json({
+      message: "Alimentos obtenidos correctamente",
+      foods: foods,
     });
   } catch (error) {
-    if (error instanceof ZodError) {
-      return res.status(400).json({
-        message: "Error comida no válida",
-        errors: error.issues,
-      });
-    }
-
+    console.log("Error en getFoods", error);
     res.status(500).json({
-      message: "Error al añadir comida al template",
+      message: "Error en getFoods",
     });
   }
 });
@@ -266,7 +254,6 @@ router.get("/invite/:inviteCode", async (req, res) => {
     message: "Invite code found",
     inviteCode,
   });
-
 });
 
 export { router as templateRoutes };

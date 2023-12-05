@@ -13,10 +13,6 @@ const TemplateSchema = new Schema<TemplateInterface>(
       type: String,
       required: true,
     },
-    foods: {
-      type: [],
-      required: true,
-    },
     users: {
       type: [
         { userRef: { type: Schema.Types.ObjectId, ref: "User" }, role: String },

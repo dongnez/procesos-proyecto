@@ -4,6 +4,7 @@ export const FoodTimeSchema = z.enum(['all','breakfast', 'lunch', 'dinner', 'sna
 
 export const FoodInterfaceSchema = z.object({
 	_id: z.string(),
+	templateId: z.string(),
 	name: z.string(),
 	image: z.string(),
 	timeType: FoodTimeSchema,

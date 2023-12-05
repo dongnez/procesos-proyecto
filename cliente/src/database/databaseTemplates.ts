@@ -33,10 +33,10 @@ export async function databaseCreateTemplate(payload: {template:TemplateInterfac
 
 export async function databaseAddFoodToTemplate(payload: {templateId:string,food:FoodInterface}){
 	let error = null;
-	const {data} = await axios.post(`${TEMPLATES_URL}addFoodToTemplate`, payload,)
+	const {data} = await axios.post(`${TEMPLATES_URL}addFood`, payload,)
 	.catch((error) => {
-		console.log("Error en databaseAddFoodToTemplate",error);
-		error = error.response.data.message || "Error en databaseAddFoodToTemplate";
+		console.log("Error en databaseAddFood",error);
+		error = error.response.data.message || "Error en databaseAddFood";
 		return {data:null}
 	});
 
