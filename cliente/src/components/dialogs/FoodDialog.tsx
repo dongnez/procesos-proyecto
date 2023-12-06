@@ -124,7 +124,7 @@ export const FoodDialog = ({
 };
 
 const FoodSearch = ({
-  food,
+  food = [],
   onFoodPick,
   onFoodCreate,
 }: {
@@ -152,7 +152,7 @@ const FoodSearch = ({
         </Button>
       </DialogTitle>
         {food
-          .filter((f) => f.name.includes(filter))
+          .filter((f) => f?.name.includes(filter))
           .map((food, index) => (
             <div
               key={index}
@@ -283,6 +283,7 @@ const AddFood = ({ close }: { close: () => void }) => {
           templateId: templateId || "",
           food: {
             _id: "",
+            templateId: templateId || "",
             name: name,
             description: description === "" ? undefined : description,
             macros:

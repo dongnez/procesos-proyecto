@@ -32,7 +32,7 @@ export const Template = () => {
 
   const [filter, setFilter] = useState<FoodTimeType>("all");
   const filteredFoods = useMemo(() => (
-    template?.foods.filter((food) => {
+    template?.foods?.filter((food) => {
       if (filter === "all") return true;
       return food.timeType === filter || food.timeType === "all";
     }) || []
