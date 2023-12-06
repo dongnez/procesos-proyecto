@@ -55,7 +55,9 @@ const FoodScheme = new Schema<FoodInterface>({
 				min:0,
 				max:999
 			},
+
 		},
+		_id:false,
 		required:true
 	}
 

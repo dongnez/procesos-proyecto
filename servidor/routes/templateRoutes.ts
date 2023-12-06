@@ -193,7 +193,7 @@ router.post("/addFood", async (req, res) => {
   }
 });
 
-router.get("getFoods/:templateId", async (req, res) => {
+router.get("/getFoods/:templateId", async (req, res) => {
   const { templateId } = req.params;
 
   try {

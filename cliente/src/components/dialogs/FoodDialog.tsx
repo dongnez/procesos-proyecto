@@ -124,7 +124,7 @@ export const FoodDialog = ({
 };
 
 const FoodSearch = ({
-  food,
+  food = [],
   onFoodPick,
   onFoodCreate,
 }: {

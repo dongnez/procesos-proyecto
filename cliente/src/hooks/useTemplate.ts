@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {  TemplateInterfaceClient } from "src/interfaces/TemplateInterfaces";
 import { useTemplateAtoms,} from "src/context/templateAtoms";
-import { databaseGetTemplateById } from "src/database/databaseTemplates";
+import { databaseGetFoodsFromTemplate, databaseGetTemplateById } from "src/database/databaseTemplates";
 import { useToast } from "src/@/components/ui/use-toast";
 
 /**
@@ -31,10 +31,16 @@ export const useTemplate = (id?:string) => {
     if (templateAtom || template || !templateId) return;
 
     //Fetch from server
-    databaseGetTemplateById(templateId).then(({ data, error }) => {
+    databaseGetTemplateById(templateId).then(async ({ data, error }) => {
       if (data) {
 
-        setTemplateAtom(templateAtom) 
+        setTemplateAtom(templateAtom) // ? Data
+
+        //Get foods from template
+        const {data:foods} = await databaseGetFoodsFromTemplate(templateId);
+
+        data.foods = foods || [];
+
         setTemplate(data);
 
         return;
