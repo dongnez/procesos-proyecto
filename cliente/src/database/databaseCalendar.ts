@@ -10,14 +10,11 @@ export const databaseAddFood = async (payload: {
 	date: { year: number; month: number; day: number };
 }) => {
 
-	const { food, userId, date } = payload;
+	const { data } = await axios.post(`${CALENDAR_URL}addFood`, payload).catch((error) => {
+		console.log("Error en databaseAddFood", error);
+		return { data: null, error};
+	})
 
-	const { data } = await axios.post(`${CALENDAR_URL}addFood`, {
-		userId,
-		food,
-		date
-	});
-
-  return { data };
+  return { data , error:null};
 
 };

@@ -5,6 +5,8 @@ import { Heart, Repeat } from "react-feather";
 import { HTMLMotionProps, motion, useAnimation } from "framer-motion";
 import { Card } from "src/components/Card";
 import { CaloriesStats } from "src/components/CaloriesStats";
+import { CalendarPlus } from "lucide-react";
+import { cn } from "src/@/lib/utils";
 
 
 const zoomInAndShakeVariants = {
@@ -73,15 +75,28 @@ export const Shaker = ({
                   className="w-full h-full rounded-xl cursor-default "
                   front={
                     <>
-                      <h3
-                        className={`absolute top-1 right-0 left-0 text-center font-bold text-3xl text-white bg-black/20 w-fit mx-auto rounded-full py-1 px-4 z-10 
-                        ${
-                          shake
-                            ? "opacity-0 translate-y-[5px]"
-                            : "opacity-100 translate-y-0"
-                        } duration-500`}>
-                        {selectedFood.name}
-                      </h3>
+                      <div className={cn("absolute top-1 right-0 left-0 flex items-center px-1 duration-500",
+                            shake
+                              ? "opacity-0 translate-y-[5px]"
+                              : "opacity-100 translate-y-0"
+                          )}>
+                        <h3
+                          className={`text-center font-bold text-xl text-secondary-foreground
+                            bg-secondary
+                           w-fit mx-auto rounded-full py-1 px-4 z-10 
+                          `}>
+                          {selectedFood.name}
+                        </h3>
+
+                        <Button variant={'secondary'} size={'icon'} className={"rounded-full"}
+                        onClick={(e)=>{
+                          e.stopPropagation();
+                          
+                        }}>
+                          <CalendarPlus />
+                        </Button>
+                      </div>
+
                       <motion.img
                         key={selectedFood._id}
                         src={selectedFood.image}

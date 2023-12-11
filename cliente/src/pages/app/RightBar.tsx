@@ -29,8 +29,6 @@ export const RightBar = ({
   useEffect(() => {
     databaseGetUserTemplates(user!._id).then(({ data, error }) => {
       if (!error && data) setTemplates(data);
-
-      console.log("Templates", data)
     });
   }, []);
 

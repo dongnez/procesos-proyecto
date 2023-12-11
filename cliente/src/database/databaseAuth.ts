@@ -44,6 +44,9 @@ export async function databaseAuthLogin(payload: {
       withCredentials: true
     },
   }).catch((error_) => {
+    if(!error_){
+      throw "Se ha producido un error intentelo más tarde"
+    }
     throw error_.response.data;
   });
 

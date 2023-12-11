@@ -74,7 +74,7 @@ export async function databaseGetTemplateById(templateId:string):Promise<{data:T
 	return {data:data.template,error}
 }
 
-export async function databaseGetFoodsFromTemplate(templateId:string):Promise<{data:FoodInterface[]|null,error:string|null}>{
+export async function databaseGetFoodsFromTemplate(templateId:string):Promise<{data:Array<FoodInterface>,error:string|null}>{
 	let error = null;
 	const {data} = await axios.get(`${TEMPLATES_URL}getFoods/${templateId}`) 
 	.catch((error_) => {
@@ -82,8 +82,6 @@ export async function databaseGetFoodsFromTemplate(templateId:string):Promise<{d
 		error = error_.response.data.message || "Error en databaseGetFoodsFromTemplate";
 		return {data: []}
 	})
-
-	console.log("Data",data?.foods)
 
 	return {data: data?.foods || [], error}
 }

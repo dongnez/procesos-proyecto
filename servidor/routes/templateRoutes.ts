@@ -215,19 +215,10 @@ router.get("/getFoods/:templateId", async (req, res) => {
 });
 
 router.post("/getFoodById", async (req, res) => {
-  const { templateId, foodId } = req.body;
+  const { foodId } = req.body;
 
   try {
-    const template = await TemplateModel.findById(templateId);
-    if (!template) {
-      return res.status(404).json({
-        message: "Template not found",
-      });
-    }
-
-    const food: FoodInterface | undefined = template.foods.find(
-      (f: FoodInterface) => f._id === foodId
-    );
+    const food = await FoodModel.findById(foodId)
 
     if (!food) {
       return res.status(404).json({

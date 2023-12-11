@@ -22,13 +22,10 @@ export const useTemplate = (id?:string) => {
 
   const { toast } = useToast();
 
-/*   useEffect(() => {
-    setTemplate(templateAtom);
-  }, [templateAtom]); */
 
   useEffect(() => {
-    //get template
-    if (templateAtom || template || !templateId) return;
+    //Si ya hay template
+    if ( (template && template.foods) || !templateId) return;
 
     //Fetch from server
     databaseGetTemplateById(templateId).then(async ({ data, error }) => {
@@ -38,10 +35,13 @@ export const useTemplate = (id?:string) => {
 
         //Get foods from template
         const {data:foods} = await databaseGetFoodsFromTemplate(templateId);
-
-        data.foods = foods || [];
-
-        setTemplate(data);
+        
+        setTemplate({...data,foods:foods});
+        //Save Template in jotai 
+        setTemplateAtom((t)=>{
+          if(!t) return null
+          return({...t,foods:foods})
+        })
 
         return;
       }
