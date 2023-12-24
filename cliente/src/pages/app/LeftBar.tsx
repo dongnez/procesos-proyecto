@@ -11,7 +11,7 @@ export const LeftBar = ({
   ...rest
 }: HTMLAttributes<HTMLDivElement>) => {
   const navLinks = [
-    { name: "Home", icon: <Home />, path: "/app/" },
+    { name: "Home", icon: <Home />, path: "/app/home" },
     { name: 'Calendario', icon: <Calendar />, path: "/app/calendar" },
     { name: "Configuración", icon: <Settings />, path: "/app/settings" },
     // { name: "Perfil", icon: <User2 />, path: "/app/profile" },

@@ -6,26 +6,24 @@ const router = Router();
 router.post("/addFood", async (req, res) => {
   const { foodId, date, userId } = req.body;
 
-  const {year, month, day} = date
+  const { year, month, day } = date;
 
   try {
     await CalendarModel.findOneAndUpdate(
       {
         userId: userId,
-        "years.year": year,
-        "years.months.month": month,
-        "years.months.days.day": day,
+        date: new Date(year, month, day),
       },
       {
         $push: {
-           [`years.${year}.months.${month}.days.${day}.foods`]: {
+          foods: {
             food: foodId,
             quantity: 1,
           },
         },
       },
-      { upsert: true } // Add this option to find or create the document
-    )
+      { upsert: true }
+    );
 
     res.json({
       message: "Comida añadida al calendario",

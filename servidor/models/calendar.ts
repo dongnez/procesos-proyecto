@@ -1,4 +1,3 @@
-import { FoodInterface } from "cliente/src/interfaces/FoodInterfaces";
 import { Schema, model } from "mongoose";
 
 const CalendarSchema = new Schema<any>(
@@ -9,52 +8,26 @@ const CalendarSchema = new Schema<any>(
       minlength: 3,
       maxlength: 40,
     },
-    years: [
+    date:{
+      type: Date,
+      required: true,
+    },
+    foods: [
       {
-        year: {
+        _id: false,
+        food: {
+          type: Schema.Types.ObjectId,
+          ref: "Food",
+        },
+        quantity: {
           type: Number,
           required: true,
-          minlength: 3,
-          maxlength: 40,
+          _id: false,
         },
-        months: [
-          {
-            month: {
-              type: Number,
-              required: true,
-              minlength: 3,
-              maxlength: 40,
-            },
-            days: [
-              {
-                day: {
-                  type: Number,
-                  required: true,
-                  minlength: 3,
-                  maxlength: 40,
-                },
-                foods: [
-                  {
-                    food: {
-                      type: Schema.Types.ObjectId,
-                      ref: "Food",
-                    },
-                    quantity: {
-                      type: Number,
-                      required: true,
-                      minlength: 1,
-                      maxlength: 40,
-                    },
-                  },
-                ],
-              },
-            ],
-          },
-        ],
       },
     ],
   },
-  { collection: "calendar" }
+  { collection: "calendar", }
 );
 
 export const CalendarModel = model("Calendar", CalendarSchema);
