@@ -1,12 +1,12 @@
 import { Dialog } from "@radix-ui/react-dialog";
 import { atom, useAtom } from "jotai";
-import { CalendarDialog, CalendarDialogProps } from "src/components/dialogs/CalendarDialog";
+import { CalendarDayDialog, CalendarDayDialogProps } from "src/components/dialogs/CalendarDialog";
 import { ProfileDialogParams,ProfileDialog } from "src/components/dialogs/ProfileDialog";
 import { ShareLinkDialog, ShareLinkDialogParams } from "src/components/dialogs/ShareLinkDialog";
 
 export type DialogParams = { id: "profile"; params: ProfileDialogParams }
 | {id: "sharelink"; params: ShareLinkDialogParams}
-| {id: "calendar", params: CalendarDialogProps}
+| {id: "calendar_day", params: CalendarDayDialogProps}
 
 export type ROUTE_DIALOG_ID = DialogParams["id"];
 
@@ -17,7 +17,7 @@ export const DialogComponentById: Record<
 > = {
   profile: ProfileDialog,
   sharelink: ShareLinkDialog,
-  calendar: CalendarDialog
+  calendar_day: CalendarDayDialog
 };
 
 export const dialogsAtom = atom<

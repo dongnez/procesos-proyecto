@@ -16,7 +16,7 @@ export const Day = ({ day,isOtherMonth }: { day: dayjs.Dayjs, isOtherMonth:boole
   hover:bg-card/80 hover:drop-shadow-md duration-300
 	${isOtherMonth ? 'bg-card/60':'bg-card'}
   `}
-    onClick={()=>openDialog({id:"calendar", params:{day:day.date(),month:day.month(),year:day.year()}})}
+    onClick={()=>openDialog({id:"calendar_day", params:{day:day.date(),month:day.month(),year:day.year()}})}
   >
       <p className={cn("border w-7 h-7 sm:w-8 sm:h-8 p-1 rounded-full flex items-center justify-center text-sm sm:text-base",
       isCurrentDay && "bg-primary text-primary-foreground")}>

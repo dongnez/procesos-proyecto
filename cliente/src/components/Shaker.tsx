@@ -108,7 +108,7 @@ export const Shaker = ({
                           await databaseAddFood({
                             date: {
                               day: today.getDate(),
-                              month: today.getMonth() + 1,
+                              month: today.getMonth(),
                               year: today.getFullYear(),
                             },
                             foodId: selectedFood._id,
