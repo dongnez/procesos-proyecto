@@ -11,6 +11,16 @@ export const getCurrentDayNumber = () => {
 	return day
 }
 
+const dayNamesES = [
+    'Lunes',
+    'Martes',
+    'Miércoles',
+    'Jueves',
+    'Viernes',
+    'Sábado',
+    'Domingo',
+]
+
 const monthNamesES = [
     'Enero',
     'Febrero',
@@ -30,6 +40,18 @@ export const getMonthName = (monthNumber: number) => {
     return monthNamesES[monthNumber]
 }
 
+export const getFullDateName = (date:{
+    year:number
+    month:number
+    day:number
+}) => {
+    const { year, month, day } = date
+    const dateObject = new Date(year, month, day)
+    const dayName = dayNamesES[dateObject.getDay()]
+    const monthName = monthNamesES[month]
+    return `${dayName}, ${day} ${monthName}`
+}
+
 export const getCurrentYear = () => {
     return dayjs().year()
 }
@@ -40,7 +62,6 @@ export const nextMonth = (currentMonth: number,currentYear:number) => {
     let nextYear = currentYear
 
 
-    console.log("YEAR NEXT",nextMonthNumber,nextYear)
 
     // if next month is january, set next year to current year + 1 & next month to 0
     if (nextMonthNumber === 12) {

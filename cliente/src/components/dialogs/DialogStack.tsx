@@ -1,6 +1,6 @@
 import { Dialog } from "@radix-ui/react-dialog";
 import { atom, useAtom } from "jotai";
-import { CalendarDayDialog, CalendarDayDialogProps } from "src/components/dialogs/CalendarDialog";
+import { CalendarDayDialog, CalendarDayDialogProps } from "src/components/dialogs/CalendarDayDialog";
 import { ProfileDialogParams,ProfileDialog } from "src/components/dialogs/ProfileDialog";
 import { ShareLinkDialog, ShareLinkDialogParams } from "src/components/dialogs/ShareLinkDialog";
 
