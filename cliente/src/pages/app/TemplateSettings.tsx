@@ -2,10 +2,11 @@ import { SimpleSelect } from "src/components/SimpleSelect";
 import { useTemplate } from "src/hooks/useTemplate";
 import { Loader } from "src/components/Loader";
 import { UserIcon } from "src/components/UserIcon";
-import { Eye, UserPlus } from "lucide-react";
+import { ArrowBigLeft, Eye, UserPlus } from "lucide-react";
 import { Button } from "src/@/components/ui/button";
 import { useOpenDialog } from "src/hooks/useOpenDialog";
 import { WEB_URL } from "src/constants/config";
+import { useNavigate } from "src/hooks/useNavigate";
 
 export const TemplateSettings = () => {
   // Limitar el acceso a esta ruta solo a los usuarios que tengan el rol de admin
@@ -17,6 +18,7 @@ export const TemplateSettings = () => {
 
   const { template } = useTemplate();
   const {openDialog} = useOpenDialog();
+  const navigate  = useNavigate();
 
   const friendsLink = `${WEB_URL}/invite/${template?._id}`
 
@@ -30,8 +32,16 @@ export const TemplateSettings = () => {
   }
 
   return (
-    <div className="h-full">
-      <div className="p-3 rounded-md bg-card/90 h-fit max-w-[500px] mx-auto">
+    <div className="h-full flex w-full">
+      <Button variant={'secondary'} size={'icon'} 
+      onClick={()=>{
+        //Navigate to template page
+        navigate(`/app/template/${template._id}`)
+      }} >
+        <ArrowBigLeft size={24} />
+      </Button>
+
+      <div className="p-3 rounded-md bg-card/90 h-fit max-w-[500px] mx-auto w-full">
         <h1 className="text-xl">{template.name}</h1>
 
         <h3 className="text-lg">Ajustes</h3>

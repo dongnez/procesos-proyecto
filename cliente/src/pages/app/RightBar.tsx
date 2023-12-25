@@ -92,6 +92,12 @@ export const RightBar = ({
           </AccordionItem>
         </Accordion>
 
+        <div className="mt-5">
+          <p className="font-medium">Tu progreso de hoy</p>
+          
+            
+        </div>
+
         <div className="flex-1 "></div>
       
         <div className="flex justify-end">

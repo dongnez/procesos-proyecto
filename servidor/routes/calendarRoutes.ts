@@ -76,9 +76,6 @@ router.post("/getDayCalendar", async (req, res) => {
       .populate("foods.food")
       .exec();
 
-      console.log("Calendar Populated", calendar?.foods )
-
-
     res.json({
       message: "Calendario obtenido",
       dayCalendar: calendar,

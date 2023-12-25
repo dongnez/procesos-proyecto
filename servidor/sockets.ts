@@ -9,10 +9,6 @@ export function connectSockets(server){
 		}
 	});
 
-	
-	
-
-
 	io.on("connection", (socket) => {
 		console.log("Usuario conectado", socket.id);
 

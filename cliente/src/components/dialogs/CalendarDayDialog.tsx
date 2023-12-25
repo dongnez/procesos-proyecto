@@ -10,9 +10,9 @@ import { useAuthenticatedUser } from "src/hooks/useAuthenticatedUser";
 import { useQuery } from "react-query";
 import { Skeleton } from "src/@/components/ui/skeleton";
 import { DayInterface } from "src/interfaces/CalendarInterface";
-import { CaloriesStats, MacroStat } from "src/components/CaloriesStats";
+import { CaloriesStats } from "src/components/CaloriesStats";
 import { useMemo } from "react";
-import { getDayName, getFullDateName, getMonthName } from "src/utils/calendarUtils";
+import { getFullDateName } from "src/utils/calendarUtils";
 
 export type CalendarDayDialogProps = {
   day: number;
@@ -39,8 +39,6 @@ export const CalendarDayDialog = ({
   );
 
   const { data: dayCalendar } = dayCalendarRes;
-
-  const date = new Date(year, month - 1, day);
 
   const totalMacros = useMemo(() => {
     if (!dayCalendar || !dayCalendar.foods)
@@ -92,11 +90,13 @@ export const CalendarDayDialog = ({
               </>
             )}
 
-            {(!dayCalendar?.foods || dayCalendar?.foods.length === 0 ) && (
+            {(!dayCalendar?.foods || dayCalendar?.foods.length === 0 ) && dayCalendarRes.isFetched && (
               <p className="text-center text-foreground/60 mt-5">
                 No hay comidas registradas para este día
               </p>
             )}
+
+            
             
             {dayCalendar?.foods.map((item, index) => (
               <div
