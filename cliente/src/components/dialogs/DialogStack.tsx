@@ -45,6 +45,16 @@ export const DialogStack = () => {
           <DialogComponent
             key={dialog.key}
             {...dialog.params.params}
+            onOpenChange={(open) => {
+              if (!open) {
+                dialog.onClose();
+                setTimeout(() => {
+                  setDialogStack((stack) =>
+                    stack.filter((item) => item.key !== dialog.key)
+                  );
+                }, 200);
+              }
+            }}
             onClose={() => {
               dialog.onClose();
               setTimeout(() => {

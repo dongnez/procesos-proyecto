@@ -63,7 +63,8 @@ export const CalendarDayDialog = ({
   }, [dayCalendar]);
 
   return (
-    <Dialog defaultOpen {...rest} onOpenChange={() => {}}>
+    <Dialog defaultOpen {...rest} 
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
