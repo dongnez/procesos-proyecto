@@ -1,6 +1,9 @@
 import { atom, useAtom } from "jotai";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { Button } from "src/@/components/ui/button";
+import { useOpenDialog } from "src/hooks/useOpenDialog";
 import { Month } from "src/pages/calendar/Month";
 import {
   getCurrentMonthNumber,
@@ -17,12 +20,29 @@ export const Calendar = () => {
   const [selectedMonth, setSelectedMonth] = useAtom(selectedMonthAtom);
   const [selectedYear, setSelectedYear] = useAtom(selectedYearAtom);
 
+  const { dateId } = useParams();
+    const {openDialog} = useOpenDialog()
+
+  useEffect(() => {
+    //Detect path with cal
+    if(!dateId) return
+
+    const names = ["day","month","year"]
+    const { day, month, year } = dateId.split("-").reduce((acc, cur, i) => ({ ...acc, [names[i]]: cur }), {day:null,month:null,year:null})
+      
+    if(!day || !month || !year) return
+
+    openDialog({id:"calendar_day", params:{day:day,month,year}})
+  },[dateId]);
+
   return (
-    <div className="h-full py-2 overflow-auto">
-      <section className="max-w-[750px] max-h-[350px] sm:max-h-[600px] h-full mx-auto">
+    <div className="h-full overflow-auto">
+      <div className="h-[350px] sm:min-h-[600px] sm:max-h-[700px]">
+
+      <section className="max-w-[750px] h-full mx-auto flex flex-col">
         <header className="bg-card rounded-sm mb-1 p-2 flex items-center  gap-2">
           <Button
-            className="border border-foreground"
+            className="border border-foreground mr-3"
             variant={"ghost"}
             onClick={() => {
               setSelectedMonth(getCurrentMonthNumber());
@@ -60,12 +80,14 @@ export const Calendar = () => {
             <ChevronRight size={16} />
           </Button>
 
-          <p className="text-lg">
+          <p className="flex text-lg flex-1 justify-end sm:justify-start">
             {getMonthName(selectedMonth)} {selectedYear}
           </p>
         </header>
         <Month selectedMonth={selectedMonth} />
       </section>
+      </div>
+      <p>TODO STATS</p>
     </div>
   );
 };

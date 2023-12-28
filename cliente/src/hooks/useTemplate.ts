@@ -24,8 +24,8 @@ export const useTemplate = (id?:string) => {
 
 
   useEffect(() => {
-    //Si ya hay template
-    if ( (template && template.foods) || !templateId) return;
+
+    if ( (templateAtom?._id === template?._id && template && template.foods) || !templateId) return;
 
     //Fetch from server
     databaseGetTemplateById(templateId).then(async ({ data, error }) => {

@@ -14,6 +14,12 @@ export const AppLayout = () => {
   const isSm = useDeviceSm();
   return (
     <div
+    onTouchMove={(e)=>{
+      e.preventDefault()
+    }}
+    onTouchStart={(e)=>{
+      e.preventDefault()
+    }}
       className="h-full bg-background"
       style={
         {
@@ -31,7 +37,10 @@ export const AppLayout = () => {
             onClick={() => {
               if (isSm) close();
             }}
-            className="h-full flex-1 px-5">
+            style={{
+              height: `calc(100dvh - ${55}px)`,
+            }}
+            className="h-full flex-1 px-1 sm:px-5 overflow-y-auto overflow-x-hidden py-2 sm:pt-0 ">
             <Outlet />
           </section>
 

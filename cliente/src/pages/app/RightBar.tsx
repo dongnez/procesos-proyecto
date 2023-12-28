@@ -14,8 +14,10 @@ import { useAuth } from "src/context/AuthProvider";
 import { useAtom } from "jotai";
 import { openRightSideBarAtom } from "src/context/openLayoutsAtoms";
 import { useDeviceSm } from "src/hooks/useDevice";
-import { LogOut } from "lucide-react";
+import { LogOut, Moon, Sun } from "lucide-react";
 import { useOpenDialog } from "src/hooks/useOpenDialog";
+import { Button } from "src/@/components/ui/button";
+import { useTheme } from "src/context/ThemeProvider";
 
 export const RightBar = ({
   className,
@@ -36,6 +38,7 @@ export const RightBar = ({
 
   //Detect is sm
   const isSm = useDeviceSm()
+  const {setTheme,theme} = useTheme()
   
   return (
     <section
@@ -100,8 +103,24 @@ export const RightBar = ({
 
         <div className="flex-1 "></div>
       
-        <div className="flex justify-end">
-          <LogOut className=" text-end cursor-pointer hover:bg-muted/80 p-2 rounded-full duration-200" size={35} 
+        <div className="flex items-center">
+          <Button
+          className="rounded-full "
+           size={'icon'} onClick={()=>{
+            setTheme(theme === 'dark' ? 'light' : 'dark')
+          }}
+          variant={'ghost'}>
+
+            {theme === 'dark' ? (
+              <Moon  size={25} /> 
+            ):(
+              <Sun className="text-yellow-500" size={25} />
+            )}
+          </Button>
+
+          <div className="flex-1"/>
+
+          <LogOut className=" text-end cursor-pointer hover:bg-muted/80 p-2 rounded-full duration-200" size={38} 
           onClick={()=>{
             logout()
           }}/>

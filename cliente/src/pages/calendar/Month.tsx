@@ -8,7 +8,7 @@ export const Month = ({ selectedMonth }: { selectedMonth: number }) => {
   }, [selectedMonth]);
 
   return (
-    <div className="h-full grid grid-cols-7 grid-rows-6 flex-1 rounded-lg">
+    <div className=" grid grid-cols-7 grid-rows-6 flex-1 rounded-lg">
       {month.map((row, cIndex) => (
         <Fragment key={cIndex}>
           {row.map((day, rIndex) => (

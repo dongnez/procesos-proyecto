@@ -11,6 +11,7 @@ import { databaseAddFood } from "src/database/databaseCalendar";
 import { useAuth } from "src/context/AuthProvider";
 import { useToast } from "src/@/components/ui/use-toast";
 import { ToastAction } from "src/@/components/ui/toast";
+import { useNavigate } from "react-router-dom";
 
 const zoomInAndShakeVariants = {
   initial: { scale: 1, transition: { duration: 0.4, ease: "easeInOut" } },
@@ -50,6 +51,7 @@ export const Shaker = ({
 
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!shake && showParticles)
@@ -73,7 +75,7 @@ export const Shaker = ({
               setTimeout(() => setShowParticles(true), 1200);
             }
           }}
-          className="relative h-[220px] w-[220px] sm:w-[300px] sm:h-[300px] bg-transparent rounded-xl mx-auto">
+          className="relative h-[260px] w-[265px] sm:w-[300px] sm:h-[300px] bg-transparent rounded-xl mx-auto">
           {selectedFood ? (
             <>
               <Card
@@ -105,11 +107,15 @@ export const Shaker = ({
 
                           const today = new Date();
 
+                          const day = today.getDate();
+                          const month = today.getMonth();
+                          const year = today.getFullYear();
+                          
                           await databaseAddFood({
                             date: {
-                              day: today.getDate(),
-                              month: today.getMonth(),
-                              year: today.getFullYear(),
+                              day,
+                              month,
+                              year,
                             },
                             foodId: selectedFood._id,
                             userId: user!._id,
@@ -123,7 +129,7 @@ export const Shaker = ({
                                     className="group"
                                     altText="Ver en Calendario"
                                     onClick={() => {
-                                      // navigate("food/" + data._id);
+                                      navigate(`/app/calendar/${day}-${month}-${year}`);
                                     }}>
                                     <p className="group-hover:text-black">
                                       Ver en Calendario
@@ -166,7 +172,7 @@ export const Shaker = ({
                       {" "}
                       Descripcion
                     </p>
-                    <p className=" [backface-visibility:hidden]  text-justify flex-1">
+                    <p className=" [backface-visibility:hidden]  text-justify flex-1 text-sm sm:text-base">
                       {selectedFood.description || "No hay descripción"}
                     </p>
                     {selectedFood.macros && (
@@ -182,7 +188,7 @@ export const Shaker = ({
             </>
           ) : (
             <div
-              className={`w-full h-full flex flex-col gap-1  text-center items-center justify-center`}>
+              className={`w-full h-full flex flex-col gap-1  text-center items-center justify-center border border-muted rounded-xl`}>
               <p className="text-lg sm:text-xl">Ninguna comida seleccionada</p>
               <p className="text-xs sm:text-sm">
                 ¡Pulsa el botón para seleccionar una!

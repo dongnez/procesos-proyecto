@@ -62,6 +62,10 @@ export const router = createBrowserRouter([
         element: <Calendar />,
       },
       {
+        path: "calendar/:dateId",
+        element: <Calendar />,
+      },
+      {
         path: "settings",
         element: <p>Configuracion</p>,
       },

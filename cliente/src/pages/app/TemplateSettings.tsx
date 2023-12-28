@@ -62,7 +62,7 @@ export const TemplateSettings = () => {
         <div className="flex items-center mt-4 mb-1">
           <h3 className="text-lg font-medium  flex-1">{template.users.length} Miembros  </h3>
           <Button className="rounded-full w-7 h-7" size={"icon"} 
-            onClick={()=> openDialog({id:"sharelink",params:{title:'Comparte este link para dar acceso a los usuarios',link:friendsLink}})}>
+            onClick={()=> openDialog({id:"sharelink",params:{title:'Comparte para dar acceso a los usuarios',link:friendsLink}})}>
 
             <UserPlus size={16} className="pl-[1px]" />
           </Button>

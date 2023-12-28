@@ -65,7 +65,7 @@ export const CalendarDayDialog = ({
   return (
     <Dialog defaultOpen {...rest} 
     >
-      <DialogContent>
+      <DialogContent className="pb-6">
         <DialogHeader>
           <DialogTitle>
             {getFullDateName({day, month, year})} <p className="text-xs">{year}</p>

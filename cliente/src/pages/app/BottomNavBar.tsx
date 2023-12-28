@@ -12,7 +12,7 @@ export const BottomNavBar = () => {
   const [openRight, setOpenRight] = useAtom(openRightSideBarAtom);
 
   return (
-    <section className="sm:hidden flex z-30 bg-card p-2">
+    <section className="sm:hidden flex z-30 bg-card p-2 h-[55px]">
       {/* Show LeftBar */}
       <Button
         size={"icon"}

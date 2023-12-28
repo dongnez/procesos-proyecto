@@ -22,7 +22,7 @@ export const CaloriesStats = ({
     [macros]
   );
   return (
-    <div {...rest} className={`flex ${isCompact ?"gap-4":"gap-5"} ${className}`}>
+    <div {...rest} className={`flex ${isCompact ?"gap-2":"gap-5"} ${className}`}>
       {result.map(({ key, value }) => {
         return <MacroStat isCompact={isCompact} key={key} number={value} type={key as any} />;
       })}
