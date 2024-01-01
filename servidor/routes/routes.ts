@@ -10,7 +10,7 @@ export function useRouter(app:Express) {
   app.use("/auth", authRoutes);
 
   //templates with auth
-  app.use("/templates",templateRoutes, );
+  app.use("/templates",templateRoutes);
 
   app.use("/calendar",calendarRoutes)
 

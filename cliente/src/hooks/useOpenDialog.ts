@@ -19,5 +19,16 @@ export const useOpenDialog = () => {
     });
   }
 
-  return { openDialog, };
+  function closeLastDialog() {
+    setDialogStack((stack) => {
+      
+      const newStack = [...stack];
+      
+      newStack[newStack.length - 1].onClose();
+
+      newStack.pop();
+      return newStack;
+    });
+  }
+  return { openDialog, closeLastDialog };
 };

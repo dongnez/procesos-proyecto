@@ -7,9 +7,10 @@ import { DialogProps } from 'src/components/dialogs/DialogStack'
 export type ShareLinkDialogParams = {
 	link:string
 	title:string
+	topChildren?:React.ReactNode
 }
 
-export const ShareLinkDialog = ({title,link,...rest}:DialogProps & ShareLinkDialogParams) => {
+export const ShareLinkDialog = ({title,topChildren,link,...rest}:DialogProps & ShareLinkDialogParams) => {
 
 	const {toast} = useToast();
 
@@ -18,6 +19,7 @@ export const ShareLinkDialog = ({title,link,...rest}:DialogProps & ShareLinkDial
 		<DialogContent>
 			<div className="flex flex-col gap-2 mx-2 pt-2">
 				<h2 className='text-lg font-medium'>{title}</h2>
+				{topChildren}
 				<div className="flex gap-2 flex-col sm:flex-row items-center">
 					<p className='rounded-md bg-muted max-w-[340px] sm:max-w-none overflow-auto text-xs px-1 py-2'>{link}</p>
 					<Button variant={'default'} size={'icon'} onClick={()=>{

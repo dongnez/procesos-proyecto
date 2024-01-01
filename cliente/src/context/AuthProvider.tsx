@@ -54,7 +54,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const {data,error} = await databaseAuthLogin(user);
 
       if(data){
-        // setUser(data);
         saveUser(data);
         window.location.href = "/app";
         return
@@ -66,8 +65,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   function logout() {
 
     databaseAuthLogOut()
-    // Cookies.remove("user");
-    // setUser(null);
+    Cookies.remove("user");
+    setUser(null);
     // window.location.href = "/login";
   }
 

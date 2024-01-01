@@ -61,12 +61,12 @@ export const Login = () => {
                   return e
                 })
 
-                if(error.errorCode === 2){
+                if(error?.errorCode === 2){
                   setShowEmailSend(true);
                   return
                 }
 
-                error.message && setError(error.message);
+                error?.message && setError(error.message);
 
               }}>
             <Input

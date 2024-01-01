@@ -5,7 +5,6 @@ const router = Router();
 import { createAccesstoken } from "../libs/createAccessToken";
 import { enviarEmail } from "servidor/clase/email";
 
-
 // Define rutas y controladores para la autenticación
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -16,8 +15,13 @@ router.post("/login", async (req, res) => {
     if (!userFound)
       return res.status(400).json({ message: "Usuario no encontrado" });
 
-    if( userFound.emailVerificated === undefined || userFound.emailVerificated === false){
-      return res.status(401).json({ message: "Email no verificado", errorCode: 2 });
+    if (
+      userFound.emailVerificated === undefined ||
+      userFound.emailVerificated === false
+    ) {
+      return res
+        .status(401)
+        .json({ message: "Email no verificado", errorCode: 2 });
     }
 
     // Check password is the same
@@ -28,7 +32,7 @@ router.post("/login", async (req, res) => {
     const token = await createAccesstoken({ id: userFound._id });
 
     //Auto save token in cookie
-    res.cookie("token", token);
+    res.cookie("token", token,)
     res.json({
       _id: userFound._id,
       name: userFound.name,
@@ -57,19 +61,18 @@ router.post("/register", async (req, res) => {
     });
 
     const userSaved = await newUser.save();
-    
 
-    if(!userSaved){
-      return res.status(400).json({message: "Error al crear el usuario"})
+    if (!userSaved) {
+      return res.status(400).json({ message: "Error al crear el usuario" });
     }
 
     await enviarEmail(
-       userSaved.email,
-       userSaved._id,
-      "Verifica tu correo",
-    ).then(()=>{
+      userSaved.email,
+      userSaved._id,
+      "Verifica tu correo"
+    ).then(() => {
       console.log("Email enviado");
-    })
+    });
 
     const token = await createAccesstoken({ id: userSaved._id });
 
@@ -78,53 +81,47 @@ router.post("/register", async (req, res) => {
       message: "User created successfully",
       userId: userSaved._id,
     });
-  } catch (error:any) {
-    
-    if(error.code === 11000){
+  } catch (error: any) {
+    if (error.code === 11000) {
       res.status(401).json({ message: "Ese correo ya esta registrado." });
-      return
+      return;
     }
-
 
     console.log("Register", error?.code);
     res.status(4001).json({ message: "Error al crear el usuario" });
   }
 });
 
-router.post("/enviarEmail/", async (req,res)=>{
- const {email} = req.body;
+router.post("/enviarEmail/", async (req, res) => {
+  const { email } = req.body;
 
- if(!email){
-   return res.status(400).json({message: "Faltan datos"})
- }
-
-
-})
-    
-
-router.get("/confirmarUsuario/:email/:key", async (req,res)=>{
-  
-  //Get email and key
-  const {email,key} = req.params;
-  try {
-    
-  const user = await UserModel.findByIdAndUpdate(key,{emailVerificated:true});
-
-  // res.cookie("user", JSON.stringify(user));
-  // res.redirect('/app')
-  res.status(200).json({message: "Usuario verificado correctamente"});
-
-  } catch (error) {
-    console.log("Confirmar usuario", error); 
-    res.send(error);
-    res.redirect('/login')
+  if (!email) {
+    return res.status(400).json({ message: "Faltan datos" });
   }
-})
+});
+
+router.get("/confirmarUsuario/:email/:key", async (req, res) => {
+  //Get email and key
+  const { email, key } = req.params;
+  try {
+    const user = await UserModel.findByIdAndUpdate(key, {
+      emailVerificated: true,
+    });
+
+    // res.cookie("user", JSON.stringify(user));
+    // res.redirect('/app')
+    res.status(200).json({ message: "Usuario verificado correctamente" });
+  } catch (error) {
+    console.log("Confirmar usuario", error);
+    res.send(error);
+    res.redirect("/login");
+  }
+});
 
 router.post("/logout", (req, res) => {
   // Tu lógica de logout
   res.cookie("token", "", { expires: new Date(0) });
- return res.status(200).json({message: "Logout successfully"})
+  return res.status(200).json({ message: "Logout successfully" });
 });
 
 router.post("/google", async (req, res) => {
@@ -158,13 +155,13 @@ router.post("/google", async (req, res) => {
 });
 
 // Remove user account
-router.post("/removeAccount", async (req:any, res) => {
+router.post("/removeAccount", async (req: any, res) => {
   const { id } = req.body;
 
-  console.log("REMOVE ACCOUNT HERE",id)
+  console.log("REMOVE ACCOUNT HERE", id);
 
-  if(!id){
-    return res.status(400).json({message: "Faltan datos"})
+  if (!id) {
+    return res.status(400).json({ message: "Faltan datos" });
   }
 
   try {

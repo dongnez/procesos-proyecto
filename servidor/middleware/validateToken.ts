@@ -27,3 +27,12 @@ export const authRequired = (req, res, next) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+ // destructure token from cookies
+ export const deconstructToken = (token) => {
+   if (!token) {
+     throw new Error('No token provided');
+   }
+  const decoded = jwtL.verify(token, JWT_SECRET);
+  return decoded;
+}

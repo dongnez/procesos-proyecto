@@ -29,7 +29,7 @@ export const CalendarDayDialog = ({
 }: DialogProps & CalendarDayDialogProps) => {
   const { user } = useAuthenticatedUser();
 
-  const dayCalendarRes = useQuery<DayInterface>(
+  const dayCalendarRes = useQuery<DayInterface | null>(
     ["dayCalendar", { userId: user._id, date: { day, month, year } }],
     async () =>
       databaseGetDayCalendar({

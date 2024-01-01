@@ -18,6 +18,7 @@ import { LogOut, Moon, Sun } from "lucide-react";
 import { useOpenDialog } from "src/hooks/useOpenDialog";
 import { Button } from "src/@/components/ui/button";
 import { useTheme } from "src/context/ThemeProvider";
+import { databaseGetDayCalendar } from "src/database/databaseCalendar";
 
 export const RightBar = ({
   className,
@@ -25,28 +26,40 @@ export const RightBar = ({
 }: HTMLAttributes<HTMLDivElement>) => {
   // const [templates, setTemplates] = useTemplateAtoms()
   const [templates, setTemplates] = useState([]);
-  const { user, logout } = useAuth()
-  const {openDialog} = useOpenDialog()
+  const { user, logout } = useAuth();
+  const { openDialog } = useOpenDialog();
 
   useEffect(() => {
     databaseGetUserTemplates(user!._id).then(({ data, error }) => {
       if (!error && data) setTemplates(data);
     });
+    databaseGetDayCalendar({
+      userId: user!._id,
+      date: {
+        day: new Date().getDate(),
+        month: new Date().getMonth(),
+        year: new Date().getFullYear(),
+      },
+    }).then((data) => {
+      if (!data) return;
+
+      console.log(data);
+    });
   }, []);
 
-  const [open,_] = useAtom(openRightSideBarAtom)
+  const [open, _] = useAtom(openRightSideBarAtom);
 
   //Detect is sm
-  const isSm = useDeviceSm()
-  const {setTheme,theme} = useTheme()
-  
+  const isSm = useDeviceSm();
+  const { setTheme, theme } = useTheme();
+
   return (
     <section
       {...rest}
       className={cn(
         " bg-card h-full w-[300px] py-3 px-4 rounded-l-3xl duration-300 top-0 right-0 z-20 flex flex-col",
         " absolute sm:relative  ",
-        isSm && (open ? `opacity-100`:`opacity-0`),
+        isSm && (open ? `opacity-100` : `opacity-0`),
         className
       )}
       style={{
@@ -55,7 +68,9 @@ export const RightBar = ({
       }}>
       <div className="flex items-center gap-2">
         <UserIcon
-          onClick={()=>{openDialog({id:"profile",params:{}})}}
+          onClick={() => {
+            openDialog({ id: "profile", params: {} });
+          }}
           className="hover:drop-shadow-lg duration-200"
           image={user?.photoURL || ""}
           size={45}
@@ -89,7 +104,6 @@ export const RightBar = ({
                 {templates.length === 0 && (
                   <p className="text-center">No hay plantillas</p>
                 )}
-
               </div>
             </AccordionContent>
           </AccordionItem>
@@ -97,35 +111,44 @@ export const RightBar = ({
 
         <div className="mt-5">
           <p className="font-medium">Tu progreso de hoy</p>
-          
-            
+
+          <div>
+            <div className="flex items-baseline">
+              <p className="text-3xl">1800</p>
+              <p className="text-sm">/2000</p>
+              <div className="flex-1" />
+              <p>Kcal</p>
+            </div>
+          </div>
         </div>
 
         <div className="flex-1 "></div>
-      
+
         <div className="flex items-center">
           <Button
-          className="rounded-full "
-           size={'icon'} onClick={()=>{
-            setTheme(theme === 'dark' ? 'light' : 'dark')
-          }}
-          variant={'ghost'}>
-
-            {theme === 'dark' ? (
-              <Moon  size={25} /> 
-            ):(
+            className="rounded-full "
+            size={"icon"}
+            onClick={() => {
+              setTheme(theme === "dark" ? "light" : "dark");
+            }}
+            variant={"ghost"}>
+            {theme === "dark" ? (
+              <Moon size={25} />
+            ) : (
               <Sun className="text-yellow-500" size={25} />
             )}
           </Button>
 
-          <div className="flex-1"/>
+          <div className="flex-1" />
 
-          <LogOut className=" text-end cursor-pointer hover:bg-muted/80 p-2 rounded-full duration-200" size={38} 
-          onClick={()=>{
-            logout()
-          }}/>
+          <LogOut
+            className=" text-end cursor-pointer hover:bg-muted/80 p-2 rounded-full duration-200"
+            size={38}
+            onClick={() => {
+              logout();
+            }}
+          />
         </div>
-
       </div>
     </section>
   );

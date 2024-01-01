@@ -1,12 +1,9 @@
 import { TemplateModel } from "servidor/models/template";
 import { UserModel } from "servidor/models/user";
-import {
-  FoodInterfaceSchema,
-  FoodInterface,
-} from "cliente/src/interfaces/FoodInterfaces";
 import { Router } from "express";
 import { ZodError } from "zod";
 import { FoodModel } from "servidor/models/food";
+import { deconstructToken } from "servidor/middleware/validateToken";
 const router = Router();
 
 router.post("/createTemplate", async (req, res) => {
@@ -14,6 +11,10 @@ router.post("/createTemplate", async (req, res) => {
 
   try {
     delete template._id;
+
+    // Generate a random invite code
+    template.inviteCode = Math.random().toString(36).substring(2, 8);
+
     const newTemplate = new TemplateModel(template);
 
     // Add the new template to the database
@@ -68,40 +69,46 @@ router.post("/getTemplates", async (req, res) => {
   }
 });
 
-router.get("/invite/:groupId/:inviteCode", async (req, res) => {
-  const { groupId, inviteCode } = req.params;
+router.get("/invite/:templateId/:inviteCode", async (req, res) => {
+  const { templateId, inviteCode } = req.params;
 
-  //get user id from user
-  /*     if(req.headers?.cookie)
-      req.headers.cookie.split(";").forEach((cookie) => {
-          const [key, value] = cookie.split("=");
-          if (key.trim() === "user") {
-              const user = JSON.parse(decodeURIComponent(value));
-              console.log("User",user)
-          }
-      }); */
+  const { token } = req.cookies;
+  const { id } = deconstructToken(token);
 
-  return res.status(200).json({
-    message: "Invite code found",
-    inviteCode,
-  });
+  const user = await UserModel.findById(id);
+
+  if (!user) return res.status(400).json({ message: "User not found" });
+
+  //redirect to login
+  if (!token) return res.redirect("/login");
 
   try {
-    const template = await TemplateModel.findByIdAndUpdate(
-      groupId,
-      { inviteCode },
-      { new: true }
-    ); // TemplateModel
+    //Find template by id & check if invite code is correct then add user to template & add template to user
+    await TemplateModel.findById(templateId).then(async (template) => {
+      if(!template) return res.status(400).json({ message: "Template not found" });
 
-    if (!template) {
-      return res.status(404).json({
-        message: "Template not found",
-      });
-    }
+      console.log(template,template.id,template["inviteCode"]);
+      if (template?.inviteCode === inviteCode) {
+        template.users.push({ userRef: user._id, role: "viewer" });
+        template.save();
 
-    return res.status(200).json({
-      message: "Template found",
-      template,
+        // Add the new template ID to the user's templates array
+        await UserModel.findByIdAndUpdate(
+          user._id,
+          { $addToSet: { templates: template._id } },
+          { new: true }
+        )
+
+        res.redirect("/app/templates/"+templateId); 
+        return res.status(200).json({
+          message: "Template joined successfully",
+        });
+      }
+    });
+
+    res.redirect("/app/home/"); 
+    return res.status(400).json({
+      message: "Invite code incorrect",
     });
   } catch (error) {
     console.log("Error en getTemplates", error);
@@ -110,6 +117,35 @@ router.get("/invite/:groupId/:inviteCode", async (req, res) => {
     });
   }
 });
+
+router.post("/newCode", async (req, res) => {
+
+  const { templateId } = req.body;
+
+  // Generate a random invite code
+  const newInviteCode = Math.random().toString(36).substring(2, 8);
+
+  TemplateModel.findByIdAndUpdate(
+    templateId,
+    { inviteCode: newInviteCode },
+    { new: true }
+  ).catch((error) => {
+    console.log("Error en TEMPLATE", error);
+    return res.status(500).json({
+      message: "Error en newCode",
+    });
+
+  });
+
+  return res.status(200).json({
+    message: "New invite code generated",
+    code:newInviteCode,
+  });
+
+
+})
+
+
 
 router.post("/deleteTemplate", async (req, res) => {
   const { templateId } = req.body;
@@ -218,7 +254,7 @@ router.post("/getFoodById", async (req, res) => {
   const { foodId } = req.body;
 
   try {
-    const food = await FoodModel.findById(foodId)
+    const food = await FoodModel.findById(foodId);
 
     if (!food) {
       return res.status(404).json({

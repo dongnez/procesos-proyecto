@@ -1,5 +1,6 @@
 import axios from "axios";
 import { WEB_URL } from "src/constants/config";
+import { DayInterface } from "src/interfaces/CalendarInterface";
 
 const CALENDAR_URL = `${WEB_URL}/calendar/`;
 
@@ -19,7 +20,7 @@ export const databaseAddFood = async (payload: {
 export const databaseGetDayCalendar = async (payload: {
 	userId: string;
 	date: { year: number; month: number; day: number };
-}) => {
+}):Promise<DayInterface | null> => {
 
 	const { data } = await axios.post(`${CALENDAR_URL}getDayCalendar`, payload).catch((error) => {
 		throw error;

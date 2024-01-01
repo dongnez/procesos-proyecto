@@ -9,6 +9,7 @@ import { Home } from "src/pages/home/Home";
 import {Home as HomeApp} from 'src/pages/app/home/Home'
 import { TemplateSettings } from "src/pages/app/TemplateSettings";
 import { Calendar } from "src/pages/calendar/Calendar";
+import { Settings } from "src/pages/settings/Settings";
 
 export const router = createBrowserRouter([
   {
@@ -67,7 +68,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "settings",
-        element: <p>Configuracion</p>,
+        element: <Settings />,
       },
       
     ],

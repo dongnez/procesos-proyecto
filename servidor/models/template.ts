@@ -19,6 +19,10 @@ const TemplateSchema = new Schema<TemplateInterface>(
       ],
       required: true,
     },
+    inviteCode: {
+      type: String,
+      required: false,
+    },
   },
   { collection: "templates" }
 );

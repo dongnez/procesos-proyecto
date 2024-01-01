@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "src/api/axios";
 import { UserInterface } from "src/interfaces/UserInterfaces";
 import { WEB_URL } from "src/constants/config";
 
@@ -38,18 +38,17 @@ export async function databaseAuthLogin(payload: {
 }): Promise<{data:null | UserInterface ,error:any }> {
   let error = null;
   
-  const result = await axios.post(`${WEB_URL}/auth/login`, payload, {
-    headers: {
-      "Content-Type": "application/json", // Configura la cabecera para indicar que estás enviando JSON
-      withCredentials: true
-    },
-  }).catch((error_) => {
+  const result = await axios.post(`${WEB_URL}/auth/login`, payload).catch((error_) => {
     if(!error_){
       throw "Se ha producido un error intentelo más tarde"
     }
+    
     throw error_.response.data;
   });
+  
 
+  //Check if response set a cookie token
+  console.log("Result",result) 
 
   return {data:result?.data,error};
 }
