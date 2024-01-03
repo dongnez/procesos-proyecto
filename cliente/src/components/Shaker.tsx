@@ -12,6 +12,7 @@ import { useAuth } from "src/context/AuthProvider";
 import { useToast } from "src/@/components/ui/use-toast";
 import { ToastAction } from "src/@/components/ui/toast";
 import { useNavigate } from "react-router-dom";
+import { getFoodTimeOption } from "src/components/SelectFoodTime";
 
 const zoomInAndShakeVariants = {
   initial: { scale: 1, transition: { duration: 0.4, ease: "easeInOut" } },
@@ -168,10 +169,14 @@ export const Shaker = ({
                 }
                 back={
                   <div className="p-2 h-full  rounded-xl flex flex-col bg-muted border border-primary">
-                    <p className="text-lg -foreground/80 font-semibold ">
-                      {" "}
+                    <div className="flex items-center">
+
+                    <p className="text-lg -foreground/80 font-semibold flex-1">
                       Descripcion
                     </p>
+                    {getFoodTimeOption(selectedFood.timeType)?.icon}
+
+                    </div>
                     <p className=" [backface-visibility:hidden]  text-justify flex-1 text-sm sm:text-base">
                       {selectedFood.description || "No hay descripción"}
                     </p>
@@ -188,7 +193,7 @@ export const Shaker = ({
             </>
           ) : (
             <div
-              className={`w-full h-full flex flex-col gap-1  text-center items-center justify-center border border-muted rounded-xl`}>
+              className={`w-full h-full flex flex-col gap-1  text-center items-center justify-center border-2 border-muted rounded-xl`}>
               <p className="text-lg sm:text-xl">Ninguna comida seleccionada</p>
               <p className="text-xs sm:text-sm">
                 ¡Pulsa el botón para seleccionar una!

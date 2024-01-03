@@ -9,5 +9,11 @@ export const UserInterfaceSchema = z.object({
 	templates: z.array(z.string()).optional(),
 	provider: z.enum(["google", "github"]).optional(),
 	emailVerificated: z.boolean().optional(),
+	objective: z.object({
+		kcal: z.number(),
+		proteins: z.number(),
+		carbs: z.number(),
+		fats: z.number(),
+	}).optional(),
 })
 export type UserInterface = z.infer<typeof UserInterfaceSchema>

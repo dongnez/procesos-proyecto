@@ -19,6 +19,8 @@ import { useOpenDialog } from "src/hooks/useOpenDialog";
 import { Button } from "src/@/components/ui/button";
 import { useTheme } from "src/context/ThemeProvider";
 import { databaseGetDayCalendar } from "src/database/databaseCalendar";
+import { MacroStat } from "src/components/CaloriesStats";
+import { Progress } from "src/@/components/ui/progress";
 
 export const RightBar = ({
   className,
@@ -26,6 +28,12 @@ export const RightBar = ({
 }: HTMLAttributes<HTMLDivElement>) => {
   // const [templates, setTemplates] = useTemplateAtoms()
   const [templates, setTemplates] = useState([]);
+  const [todayCalories, setTodayCalories] = useState({
+    kcal: 0,
+    proteins: 0,
+    carbs: 0,
+    fats: 0,
+  });
   const { user, logout } = useAuth();
   const { openDialog } = useOpenDialog();
 
@@ -43,7 +51,17 @@ export const RightBar = ({
     }).then((data) => {
       if (!data) return;
 
-      console.log(data);
+      const calories = data.foods?.reduce(
+        (acc, curr) => ({
+          kcal: acc.kcal + (curr.food.macros?.kcal || 0),
+          proteins: acc.proteins + (curr.food.macros?.proteins || 0),
+          carbs: acc.carbs + (curr.food.macros?.carbs || 0),
+          fats: acc.fats + (curr.food.macros?.fats || 0),
+        }),
+        { kcal: 0, proteins: 0, carbs: 0, fats: 0 }
+      );
+
+      setTodayCalories(calories)
     });
   }, []);
 
@@ -114,11 +132,15 @@ export const RightBar = ({
 
           <div>
             <div className="flex items-baseline">
-              <p className="text-3xl">1800</p>
-              <p className="text-sm">/2000</p>
+              <p className="text-3xl">{todayCalories.kcal}</p>
+              <p className="text-sm">/{"2000"}</p>
               <div className="flex-1" />
               <p>Kcal</p>
             </div>
+
+           <p>Proteins</p>
+           <Progress  className="mt-1" value={todayCalories.kcal + 10} color="bg-red-500"/> 
+
           </div>
         </div>
 

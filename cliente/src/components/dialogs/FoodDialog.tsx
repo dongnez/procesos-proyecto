@@ -34,7 +34,7 @@ import {
 } from "src/@/components/ui/accordion";
 import { calculateCalories } from "src/utils/caloriesUtils";
 import { CaloriesStats } from "src/components/CaloriesStats";
-import { SelectFoodTime } from "src/components/SelectFoodTime";
+import { SelectFoodTime, foodTimeOptions, getFoodTimeOption } from "src/components/SelectFoodTime";
 
 export const FoodDialog = ({
   food,
@@ -212,19 +212,20 @@ const FoodSelected = ({
 
   return (
     <>
-      <DialogHeader>
+      <DialogHeader className="flex flex-row items-center ">
         <Button
           variant={"ghost"}
           size={"icon"}
           className="w-6 h-6 "
           onClick={() => navigate(`/app/template/${templateId}/food`)}>
-          <ArrowLeft className="w-5" />
+          <ArrowLeft className="w-5" /  >
         </Button>
+        <div className="flex-1" />
+        <>{food ? getFoodTimeOption(food.timeType)?.icon : <></>}</>
       </DialogHeader>
       {food ? (
         <>
           <DialogTitle className="flex flex-col items-center">
-
             
             <AvatarIcon image={food.image} fallback={food.name} size={205} />
 

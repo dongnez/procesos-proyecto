@@ -37,7 +37,7 @@ const UserSchema = new Schema<UserInterface>({
 	templates: [{
 		type: Schema.Types.ObjectId,
 		ref: 'Template'
-	}]	
+	}]
 
 },{collection: 'usuarios'})
 
