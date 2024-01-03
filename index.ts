@@ -13,6 +13,7 @@ import { createServer } from "http";
 import { connectSockets } from "servidor/sockets.js";
 import { useRouter } from "servidor/routes/routes.ts";
 import { APP_URL, PORT } from "servidor/config.js";
+import { useTRPC } from './servidor/trpc.ts';
 
 const port = PORT
 
@@ -36,6 +37,9 @@ initClases(app);
 // Define rutas y controladores para la autenticación
 useRouter(app);
 
+//TRPC
+useTRPC(app);
+
 // Conecta con la base de datos
 connectMongoDB();
 
@@ -43,6 +47,8 @@ connectMongoDB();
 app.use(function (request, response) {
   response.sendFile(path.join(__dirname, "/cliente/dist/index.html"));
 });
+
+
 
 
 const server = createServer(app); 

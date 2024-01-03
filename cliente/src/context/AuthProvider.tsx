@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import { createContext, useContext, useEffect, useState } from "react";
+import { trpcClient } from "src/api/trpc";
 import { databaseAuthLogOut, databaseAuthLogin, databaseAuthRegister } from "src/database/databaseAuth";
 import { UserInterface } from "src/interfaces/UserInterfaces";
 
@@ -30,18 +31,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const userCache = Cookies.get("user");
-    if (userCache) {
-      setUser(JSON.parse(userCache));
+    const token = Cookies.get("token")
+
+    if (token) {
+      trpcClient.getUser.query({token:token}).then((data)=>{
+        
+        if(!data){
+          setLoading(false);
+          return;
+        }
+
+        setUser(data);
+        setLoading(false);
+
+      }).catch(()=>{
+        setLoading(false);
+      })
+      
     }
-    setLoading(false);
+
   }, []);
 
   const saveUser = (user: UserInterface) => {
     setUser(user);
-    Cookies.set("user", JSON.stringify(user),{
-      expires: 7,
-    });
   }
 
   async function register(user: UserInterface) {

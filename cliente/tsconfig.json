@@ -23,7 +23,7 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "servidor": ["../servidor/*"], // Alias existentes
+      "servidor/*": ["../servidor/*"], // Alias existentes
     }
     
     

@@ -34,5 +34,8 @@ export const authRequired = (req, res, next) => {
      throw new Error('No token provided');
    }
   const decoded = jwtL.verify(token, JWT_SECRET);
-  return decoded;
+
+  const {id} = decoded;
+
+  return {id};
 }

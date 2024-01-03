@@ -1,11 +1,14 @@
 import { Check, Upload, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "src/@/components/ui/button";
+import { trpcClient } from "src/api/trpc";
 import { UserIcon } from "src/components/UserIcon";
 import { useAuthenticatedUser } from "src/hooks/useAuthenticatedUser";
 
 export const Settings = () => {
   const { user } = useAuthenticatedUser();
+
+  console.log(user);
 
   const [objective, setObjective] = useState(
     user.objective || {
@@ -70,6 +73,7 @@ export const Settings = () => {
       </p>
 
       <hr className="my-4" />
+      <h3 className="text-xl">Objetivo diario</h3>
       <section className="flex flex-col gap-2">
         <div className="flex items-center">
           <p className="flex-1">Calorias</p>
@@ -77,7 +81,7 @@ export const Settings = () => {
             type="number"
             className="w-20 p-2 bg-primary rounded-md text-primary-foreground"
             value={objective.kcal}
-			min={0}
+            min={0}
             onChange={(e) =>
               setObjective({ ...objective, kcal: parseInt(e.target.value) })
             }
@@ -88,7 +92,7 @@ export const Settings = () => {
           <p className="flex-1">Proteinas</p>
           <input
             type="number"
-			min={0}
+            min={0}
             className="w-20 p-2 border border-proteins bg-transparent rounded-md text-foreground"
             value={objective.proteins}
             onChange={(e) =>
@@ -100,7 +104,7 @@ export const Settings = () => {
           <p className="flex-1">Carbohidratos</p>
           <input
             type="number"
-			min={0}
+            min={0}
             className="w-20 p-2 bg-transparent border border-carbs rounded-md text-foreground"
             value={objective.carbs}
             onChange={(e) =>
@@ -114,7 +118,7 @@ export const Settings = () => {
           <input
             type="number"
             className="w-20 p-2 bg-transparent border border-fats rounded-md text-foreground"
-			min={0}
+            min={0}
             value={objective.fats}
             onChange={(e) =>
               setObjective({ ...objective, fats: parseInt(e.target.value) })
@@ -130,11 +134,24 @@ export const Settings = () => {
               className="h-6 bg-red-300 hover:bg-red-400 text-foreground">
               <X size={20} className="cursor-pointer" onClick={() => {}} />
             </Button>
+
             <Button
               size={"icon"}
               variant={"link"}
               className="h-6 bg-green-300 hover:bg-green-400 text-foreground">
-              <Check size={20} className="cursor-pointer" onClick={() => {}} />
+              <Check
+                size={20}
+                className="cursor-pointer"
+                onClick={async () => {
+                  await trpcClient.updateUserObjective.mutate({
+                    userId: user._id,
+                    kcal: objective.kcal,
+                    proteins: objective.proteins,
+                    carbs: objective.carbs,
+                    fats: objective.fats,
+                  });
+                }}
+              />
             </Button>
           </div>
         )}
