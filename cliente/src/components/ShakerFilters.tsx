@@ -30,7 +30,8 @@ export const ShakerFilters = ({onFilterSelect,className,...res}:HTMLAttributes<H
   return (
 	<div {...res} className={cn("border-2 border-primary p-1 flex items-center max-w-[400px] mt-4 rounded-sm",className)}>
 
-		<section className="flex-1">
+		<section className="flex-1 p-2">
+			<p className="font-semibold text-primary uppercase">Filtro <span className="text-xs px-1">de</span> horario </p>
 			
 		</section>
 

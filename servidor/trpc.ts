@@ -44,13 +44,6 @@ export const appRouter = router({
     .mutation(async (opts) => {
       const { userId, kcal, proteins, carbs, fats } = opts.input;
 
-      /* const user = await UserModel.findByIdAndUpdate(
-        userId,
-        { objective: { kcal, proteins, carbs, fats } },
-        { new: true },
-      ); */
-
-      // Update name
       const user = await UserModel.findByIdAndUpdate(
         userId,
         { objective: { kcal, proteins, carbs, fats } },

@@ -6,6 +6,7 @@ import { UserInterface } from "src/interfaces/UserInterfaces";
 
 type AuthContextType = {
   user: UserInterface | null;
+  setUser: (user:UserInterface | null) => void;
   register: (user: UserInterface) => any;
   login: (user:{email:string,password:string}) => Promise<any>;
   logout: () => void;
@@ -19,6 +20,7 @@ const AuthContext = createContext<AuthContextType>({
   login: async () => {},
   logout: () => {},
   saveUser: ()=>{},
+  setUser: ()=>{},
   loading: true,
 });
 
@@ -83,7 +85,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ saveUser,user, register, login, logout, loading}}>
+    <AuthContext.Provider value={{ saveUser,user,setUser, register, login, logout, loading}}>
       {children}
     </AuthContext.Provider>
   );

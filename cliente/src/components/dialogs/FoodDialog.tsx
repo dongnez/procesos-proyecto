@@ -16,7 +16,7 @@ import { HighlightedText } from "src/components/HighlightedText";
 import { AvatarIcon } from "src/components/AvatarIcon";
 import { ArrowLeft } from "react-feather";
 import { Button } from "src/@/components/ui/button";
-import { Plus } from "lucide-react";
+import { CalendarPlus, Plus } from "lucide-react";
 import { Loader } from "src/components/Loader";
 import {
   databaseAddFoodToTemplate,
@@ -34,7 +34,12 @@ import {
 } from "src/@/components/ui/accordion";
 import { calculateCalories } from "src/utils/caloriesUtils";
 import { CaloriesStats } from "src/components/CaloriesStats";
-import { SelectFoodTime, foodTimeOptions, getFoodTimeOption } from "src/components/SelectFoodTime";
+import {
+  SelectFoodTime,
+  getFoodTimeOption,
+} from "src/components/SelectFoodTime";
+import { databaseAddFood } from "src/database/databaseCalendar";
+import { useAuthenticatedUser } from "src/hooks/useAuthenticatedUser";
 
 export const FoodDialog = ({
   food,
@@ -151,22 +156,22 @@ const FoodSearch = ({
           <Plus size={24} />
         </Button>
       </DialogTitle>
-        {food
-          .filter((f) => f?.name.includes(filter))
-          .map((food, index) => (
-            <div
-              key={index}
-              className="bg-secondary hover:bg-secondary/50 duration-200 rounded-md p-2 flex gap-2 cursor-pointer"
-              onClick={() => onFoodPick(food)}>
-              <AvatarIcon image={food.image} fallback={food.name} size={22} />
-              <HighlightedText
-                text={food.name}
-                highlight={filter || ""}
-                className="flex-1"
-                color="bg-yellow-500"
-              />
-            </div>
-          ))}
+      {food
+        .filter((f) => f?.name.includes(filter))
+        .map((food, index) => (
+          <div
+            key={index}
+            className="bg-secondary hover:bg-secondary/50 duration-200 rounded-md p-2 flex gap-2 cursor-pointer"
+            onClick={() => onFoodPick(food)}>
+            <AvatarIcon image={food.image} fallback={food.name} size={22} />
+            <HighlightedText
+              text={food.name}
+              highlight={filter || ""}
+              className="flex-1"
+              color="bg-yellow-500"
+            />
+          </div>
+        ))}
     </DialogHeader>
   );
 };
@@ -177,6 +182,7 @@ const FoodSelected = ({
   foodSelected?: FoodInterface | null;
 }) => {
   const navigate = useNavigate();
+  const { user } = useAuthenticatedUser();
   const { templateId, foodId } = useParams();
   const [food, setFood] = useState<FoodInterface | null | undefined>(
     foodSelected
@@ -218,15 +224,65 @@ const FoodSelected = ({
           size={"icon"}
           className="w-6 h-6 "
           onClick={() => navigate(`/app/template/${templateId}/food`)}>
-          <ArrowLeft className="w-5" /  >
+          <ArrowLeft className="w-5" />
         </Button>
         <div className="flex-1" />
+        <Button
+          variant={"ghost"}
+          size={"icon"}
+          className={"rounded-full h-[30px] w-[30px] mr-2"}
+          onClick={async (e) => {
+            e.stopPropagation();
+            if (!food) return;
+
+            const today = new Date();
+            const day = today.getDate();
+            const month = today.getMonth();
+            const year = today.getFullYear();
+
+            await databaseAddFood({
+              date: {
+                day,
+                month,
+                year,
+              },
+              foodId: food._id,
+              userId: user!._id,
+            })
+              .then(() => {
+                toast({
+                  title: "Comida añadida al calendario",
+                  duration: 3000,
+                  action: (
+                    <ToastAction
+                      className="group"
+                      altText="Ver en Calendario"
+                      onClick={() => {
+                        navigate(`/app/calendar/${day}-${month}-${year}`);
+                      }}>
+                      <p className="group-hover:text-black">
+                        Ver en Calendario
+                      </p>
+                    </ToastAction>
+                  ),
+                });
+              })
+              .catch(() => {
+                toast({
+                  title: "Error al añadir comida al calendario",
+                  description: `No se ha podido añadir ${food.name} al calendario`,
+                  variant: "destructive",
+                  duration: 2500,
+                });
+              });
+          }}>
+          <CalendarPlus size={15} />
+        </Button>
         <>{food ? getFoodTimeOption(food.timeType)?.icon : <></>}</>
       </DialogHeader>
       {food ? (
         <>
           <DialogTitle className="flex flex-col items-center">
-            
             <AvatarIcon image={food.image} fallback={food.name} size={205} />
 
             <p className="text-2xl">{food.name}</p>
@@ -259,7 +315,7 @@ const FoodSelected = ({
 const AddFood = ({ close }: { close: () => void }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [timeType,setTimeType] = useState<FoodTimeType>("all");
+  const [timeType, setTimeType] = useState<FoodTimeType>("all");
   const [macros, setMacros] = useState({
     proteins: 0,
     carbs: 0,
@@ -295,7 +351,7 @@ const AddFood = ({ close }: { close: () => void }) => {
                     ...macros,
                   },
             image: res[0].url,
-            timeType: timeType
+            timeType: timeType,
           },
         });
 
@@ -367,7 +423,7 @@ const AddFood = ({ close }: { close: () => void }) => {
           className="flex-1"
           onChange={(e) => setName(e.currentTarget.value)}
         />
-        <SelectFoodTime onSelect={(foodTime)=>setTimeType(foodTime)} />
+        <SelectFoodTime onSelect={(foodTime) => setTimeType(foodTime)} />
       </section>
       <Textarea
         placeholder="Descripcion"

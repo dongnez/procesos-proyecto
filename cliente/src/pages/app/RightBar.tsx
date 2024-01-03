@@ -19,7 +19,6 @@ import { useOpenDialog } from "src/hooks/useOpenDialog";
 import { Button } from "src/@/components/ui/button";
 import { useTheme } from "src/context/ThemeProvider";
 import { databaseGetDayCalendar } from "src/database/databaseCalendar";
-import { MacroStat } from "src/components/CaloriesStats";
 import { Progress } from "src/@/components/ui/progress";
 
 export const RightBar = ({
@@ -27,6 +26,7 @@ export const RightBar = ({
   ...rest
 }: HTMLAttributes<HTMLDivElement>) => {
   // const [templates, setTemplates] = useTemplateAtoms()
+  const { user, logout } = useAuth();
   const [templates, setTemplates] = useState([]);
   const [todayCalories, setTodayCalories] = useState({
     kcal: 0,
@@ -34,7 +34,15 @@ export const RightBar = ({
     carbs: 0,
     fats: 0,
   });
-  const { user, logout } = useAuth();
+
+  const objective = user?.objective ||{
+    kcal: 0,
+    proteins: 0,
+    carbs: 0,
+    fats: 0,
+  };
+
+  
   const { openDialog } = useOpenDialog();
 
   useEffect(() => {
@@ -61,7 +69,7 @@ export const RightBar = ({
         { kcal: 0, proteins: 0, carbs: 0, fats: 0 }
       );
 
-      setTodayCalories(calories)
+      setTodayCalories(calories);
     });
   }, []);
 
@@ -105,7 +113,7 @@ export const RightBar = ({
           type="single"
           collapsible
           defaultValue="item-1"
-          className="w-full bg-muted rounded-lg p-1">
+          className="w-full bg-muted rounded-lg p-1   ">
           <AccordionItem value="item-1">
             <AccordionTrigger className="cursor-default hover:no-underline">
               <div onClick={(e) => e.stopPropagation()} className="flex">
@@ -114,7 +122,7 @@ export const RightBar = ({
               <p className="hover:underline">Mis Plantillas</p>
             </AccordionTrigger>
             <AccordionContent>
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1 max-h-[120px] sm:max-h-[300px] overflow-auto">
                 {templates.map((template, index) => (
                   <TemplateListItem key={index} template={template} />
                 ))}
@@ -127,20 +135,63 @@ export const RightBar = ({
           </AccordionItem>
         </Accordion>
 
-        <div className="mt-5">
+        <div className="mt-5 sm:mt-10">
           <p className="font-medium">Tu progreso de hoy</p>
 
-          <div>
+          <div className="mt-4">
             <div className="flex items-baseline">
-              <p className="text-3xl">{todayCalories.kcal}</p>
-              <p className="text-sm">/{"2000"}</p>
+              <p className="text-4xl">{todayCalories.kcal}</p>
+              <p className="text-sm">/{objective?.kcal || 0}</p>
               <div className="flex-1" />
               <p>Kcal</p>
             </div>
 
-           <p>Proteins</p>
-           <Progress  className="mt-1" value={todayCalories.kcal + 10} color="bg-red-500"/> 
+            <div className="flex flex-col gap-4 mt-4">
+              <div>
+                <p className="flex items-baseline">
+                  <p className="flex-1">Proteinas</p>
+                  <p className="text-xs">{todayCalories.proteins}/{objective.proteins} g</p>
+                </p>
+                <Progress
+                  className="mt-1"
+                  value={
+                    (objective.proteins) /
+                    Math.max(todayCalories.proteins, 1)
+                  }
+                  color="bg-proteins"
+                />
+              </div>
 
+              <div>
+                <p className="flex items-baseline">
+                  <p className="flex-1">Carbohidratos</p>
+                  <p className="text-xs">{todayCalories.carbs}/{objective.carbs} g</p>
+                </p>
+                <Progress
+                  className="mt-1"
+                  value={
+                    (objective.carbs) /
+                    Math.max(todayCalories.carbs, 1)
+                  }
+                  color="bg-carbs"
+                />
+              </div>
+
+              <div>
+                <p className="flex items-baseline">
+                  <p className="flex-1">Grasas</p>
+                  <p className="text-xs">{todayCalories.fats}/{objective.fats} g</p>
+                </p>
+                <Progress
+                  className="mt-1"
+                  value={
+                    (objective.fats) /
+                    Math.max(todayCalories.fats, 1)
+                  }
+                  color="bg-fats"
+                />
+              </div>
+            </div>
           </div>
         </div>
 

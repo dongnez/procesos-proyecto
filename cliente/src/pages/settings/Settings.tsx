@@ -6,9 +6,8 @@ import { UserIcon } from "src/components/UserIcon";
 import { useAuthenticatedUser } from "src/hooks/useAuthenticatedUser";
 
 export const Settings = () => {
-  const { user } = useAuthenticatedUser();
+  const { user,setUser } = useAuthenticatedUser();
 
-  console.log(user);
 
   const [objective, setObjective] = useState(
     user.objective || {
@@ -23,7 +22,7 @@ export const Settings = () => {
     objective !== user.objective || user.objective === undefined;
 
   return (
-    <div className="p-2 overflow-y-auto bg-card rounded-sm">
+    <div className="p-2 overflow-y-auto bg-card rounded-sm max-w-[850px] mx-auto">
       <h2 className="text-2xl">Tu perfil de usuario</h2>
       <p className="text-foreground/80 text-sm">
         Actualiza tu perfil y tus preferencias
@@ -132,7 +131,14 @@ export const Settings = () => {
               size={"icon"}
               variant={"destructive"}
               className="h-6 bg-red-300 hover:bg-red-400 text-foreground">
-              <X size={20} className="cursor-pointer" onClick={() => {}} />
+              <X size={20} className="cursor-pointer" onClick={() => {
+                setObjective(user.objective || {
+                  kcal: 0,
+                  proteins: 0,
+                  carbs: 0,
+                  fats: 0,
+                });
+              }} />
             </Button>
 
             <Button
@@ -143,13 +149,19 @@ export const Settings = () => {
                 size={20}
                 className="cursor-pointer"
                 onClick={async () => {
-                  await trpcClient.updateUserObjective.mutate({
+                  const newObjective = await trpcClient.updateUserObjective.mutate({
                     userId: user._id,
                     kcal: objective.kcal,
                     proteins: objective.proteins,
                     carbs: objective.carbs,
                     fats: objective.fats,
-                  });
+                  })
+
+                  if(newObjective){
+                    setObjective(newObjective);
+                    setUser({...user,objective:newObjective});
+                  }
+
                 }}
               />
             </Button>
