@@ -36,7 +36,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const token = Cookies.get("token")
 
     if (token) {
-      trpcClient.getUser.query({token:token}).then((data)=>{
+      trpcClient.user.getUserByToken.query({token:token}).then((data)=>{
         
         if(!data){
           setLoading(false);

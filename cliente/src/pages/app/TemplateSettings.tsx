@@ -117,6 +117,14 @@ export const TemplateSettings = () => {
           return (
             <div
               key={index}
+              onClick={() =>{
+                openDialog({
+                  id: "profile",
+                  params: {
+                    userId: user.userRef._id,
+                  },
+                });
+              }} 
               className="flex gap-5 p-3 hover:bg-muted duration-200 items-center">
               <UserIcon
                 image={user.userRef?.photoURL}

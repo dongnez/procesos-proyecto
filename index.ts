@@ -7,13 +7,12 @@ import { initClases } from "./servidor/clase/clasesServer.js";
 import { connectMongoDB } from "./servidor/db.js";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-// const PORT =  parseInt(process.env.PORT as any) || 8080;
 
 import { createServer } from "http";
 import { connectSockets } from "servidor/sockets.js";
 import { useRouter } from "servidor/routes/routes.ts";
 import { APP_URL, PORT } from "servidor/config.js";
-import { useTRPC } from './servidor/trpc.ts';
+import { useTRPC } from "servidor/trpc/routers/_app.js";
 
 const port = PORT
 

@@ -149,7 +149,7 @@ export const Settings = () => {
                 size={20}
                 className="cursor-pointer"
                 onClick={async () => {
-                  const newObjective = await trpcClient.updateUserObjective.mutate({
+                  const newObjective = await trpcClient.user.updateUserObjective.mutate({
                     userId: user._id,
                     kcal: objective.kcal,
                     proteins: objective.proteins,

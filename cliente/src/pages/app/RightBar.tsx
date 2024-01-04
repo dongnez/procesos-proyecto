@@ -95,7 +95,7 @@ export const RightBar = ({
       <div className="flex items-center gap-2">
         <UserIcon
           onClick={() => {
-            openDialog({ id: "profile", params: {} });
+            openDialog({ id: "profile", params: {userId:user!._id} });
           }}
           className="hover:drop-shadow-lg duration-200"
           image={user?.photoURL || ""}

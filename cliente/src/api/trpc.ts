@@ -1,5 +1,5 @@
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
-import type { AppRouter } from 'servidor/trpc';
+import type { AppRouter } from 'servidor/trpc/routers/_app';
 //     👆 **type-only** import
 
 // Pass AppRouter as generic here. 👇 This lets the `trpc` object know
