@@ -11,10 +11,10 @@ export const Settings = () => {
 
   const [objective, setObjective] = useState(
     user.objective || {
-      kcal: 0,
-      proteins: 0,
-      carbs: 0,
-      fats: 0,
+      kcal: 1,
+      proteins: 1,
+      carbs: 1,
+      fats: 1,
     }
   );
 
@@ -80,7 +80,7 @@ export const Settings = () => {
             type="number"
             className="w-20 p-2 bg-primary rounded-md text-primary-foreground"
             value={objective.kcal}
-            min={0}
+            min={1}
             onChange={(e) =>
               setObjective({ ...objective, kcal: parseInt(e.target.value) })
             }
@@ -91,7 +91,7 @@ export const Settings = () => {
           <p className="flex-1">Proteinas</p>
           <input
             type="number"
-            min={0}
+            min={1}
             className="w-20 p-2 border border-proteins bg-transparent rounded-md text-foreground"
             value={objective.proteins}
             onChange={(e) =>
@@ -103,7 +103,7 @@ export const Settings = () => {
           <p className="flex-1">Carbohidratos</p>
           <input
             type="number"
-            min={0}
+            min={1}
             className="w-20 p-2 bg-transparent border border-carbs rounded-md text-foreground"
             value={objective.carbs}
             onChange={(e) =>
@@ -117,7 +117,7 @@ export const Settings = () => {
           <input
             type="number"
             className="w-20 p-2 bg-transparent border border-fats rounded-md text-foreground"
-            min={0}
+            min={1}
             value={objective.fats}
             onChange={(e) =>
               setObjective({ ...objective, fats: parseInt(e.target.value) })

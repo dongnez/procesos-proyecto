@@ -13,12 +13,39 @@ import { DayInterface } from "src/interfaces/CalendarInterface";
 import { CaloriesStats } from "src/components/CaloriesStats";
 import { useMemo } from "react";
 import { getFullDateName } from "src/utils/calendarUtils";
+import { atom, useAtom } from "jotai";
 
 export type CalendarDayDialogProps = {
   day: number;
   month: number;
   year: number;
 };
+
+export const todayCaloriesAtom = atom({
+  kcal: 0,
+  proteins: 0,
+  carbs: 0,
+  fats: 0,
+});
+
+export const useTodayCalories = () => {
+  const [todayCalories, setTodayCalories] = useAtom(todayCaloriesAtom);
+
+  const addMacros = (macros: { kcal: number; proteins: number; carbs: number; fats: number }) => {
+    setTodayCalories((prev) => ({
+      kcal: prev.kcal + macros.kcal,
+      proteins: prev.proteins + macros.proteins,
+      carbs: prev.carbs + macros.carbs,
+      fats: prev.fats + macros.fats,
+    }));
+  }
+
+  return {
+    todayCalories,
+    addMacros,
+    setTodayCalories,
+  };
+}
 
 export const CalendarDayDialog = ({
   day,

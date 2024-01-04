@@ -5,7 +5,7 @@ import {
   AccordionTrigger,
 } from "src/@/components/ui/accordion";
 import { TemplateListItem } from "src/components/TemplateListItem";
-import { HTMLAttributes, useEffect, useState } from "react";
+import { HTMLAttributes, useEffect, useMemo, useState } from "react";
 import { cn } from "src/@/lib/utils";
 import { UserIcon } from "src/components/UserIcon";
 import { CreateTemplate } from "src/components/dialogs/CreateTemplate";
@@ -20,6 +20,7 @@ import { Button } from "src/@/components/ui/button";
 import { useTheme } from "src/context/ThemeProvider";
 import { databaseGetDayCalendar } from "src/database/databaseCalendar";
 import { Progress } from "src/@/components/ui/progress";
+import { useTodayCalories } from "src/components/dialogs/CalendarDayDialog";
 
 export const RightBar = ({
   className,
@@ -28,21 +29,20 @@ export const RightBar = ({
   // const [templates, setTemplates] = useTemplateAtoms()
   const { user, logout } = useAuth();
   const [templates, setTemplates] = useState([]);
-  const [todayCalories, setTodayCalories] = useState({
-    kcal: 0,
-    proteins: 0,
-    carbs: 0,
-    fats: 0,
-  });
+  const {todayCalories,setTodayCalories} = useTodayCalories()
 
-  const objective = user?.objective ||{
-    kcal: 0,
-    proteins: 0,
-    carbs: 0,
-    fats: 0,
-  };
+  const objective = useMemo(() => {
+    return (
+      user?.objective || {
+        kcal: 1,
+        proteins: 1,
+        carbs: 1,
+        fats: 1,
+      }
+    );
+  }, [user?.objective]);
 
-  
+
   const { openDialog } = useOpenDialog();
 
   useEffect(() => {
@@ -150,14 +150,13 @@ export const RightBar = ({
               <div>
                 <p className="flex items-baseline">
                   <p className="flex-1">Proteinas</p>
-                  <p className="text-xs">{todayCalories.proteins}/{objective.proteins} g</p>
+                  <p className="text-xs">
+                    {todayCalories.proteins}/{objective.proteins} g
+                  </p>
                 </p>
                 <Progress
                   className="mt-1"
-                  value={
-                    (objective.proteins) /
-                    Math.max(todayCalories.proteins, 1)
-                  }
+                  value={(todayCalories.proteins / objective.proteins) * 100}
                   color="bg-proteins"
                 />
               </div>
@@ -165,14 +164,13 @@ export const RightBar = ({
               <div>
                 <p className="flex items-baseline">
                   <p className="flex-1">Carbohidratos</p>
-                  <p className="text-xs">{todayCalories.carbs}/{objective.carbs} g</p>
+                  <p className="text-xs">
+                    {todayCalories.carbs}/{objective.carbs} g
+                  </p>
                 </p>
                 <Progress
                   className="mt-1"
-                  value={
-                    (objective.carbs) /
-                    Math.max(todayCalories.carbs, 1)
-                  }
+                  value={(todayCalories.carbs / objective.carbs) * 100}
                   color="bg-carbs"
                 />
               </div>
@@ -180,14 +178,13 @@ export const RightBar = ({
               <div>
                 <p className="flex items-baseline">
                   <p className="flex-1">Grasas</p>
-                  <p className="text-xs">{todayCalories.fats}/{objective.fats} g</p>
+                  <p className="text-xs">
+                    {todayCalories.fats}/{objective.fats} g
+                  </p>
                 </p>
                 <Progress
-                  className="mt-1"
-                  value={
-                    (objective.fats) /
-                    Math.max(todayCalories.fats, 1)
-                  }
+                  className="mt-1 duration-300"
+                  value={(todayCalories.fats / objective.fats) * 100}
                   color="bg-fats"
                 />
               </div>

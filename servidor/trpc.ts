@@ -8,7 +8,10 @@ import { deconstructToken } from "servidor/middleware/validateToken";
 const createContext = ({
   req,
   res,
-}: trpcExpress.CreateExpressContextOptions) => ({}); // no context
+}: trpcExpress.CreateExpressContextOptions) => ({
+  req,
+  res,
+}); // no context
 
 export type Context = Awaited<ReturnType<typeof createContext>>;
 

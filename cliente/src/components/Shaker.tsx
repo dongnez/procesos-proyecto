@@ -13,6 +13,7 @@ import { useToast } from "src/@/components/ui/use-toast";
 import { ToastAction } from "src/@/components/ui/toast";
 import { useNavigate } from "react-router-dom";
 import { getFoodTimeOption } from "src/components/SelectFoodTime";
+import { useTodayCalories } from "src/components/dialogs/CalendarDayDialog";
 
 const zoomInAndShakeVariants = {
   initial: { scale: 1, transition: { duration: 0.4, ease: "easeInOut" } },
@@ -53,6 +54,7 @@ export const Shaker = ({
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const {addMacros} = useTodayCalories()
 
   useEffect(() => {
     if (!shake && showParticles)
@@ -86,9 +88,9 @@ export const Shaker = ({
                   <>
                     <div
                       className={cn(
-                        "absolute top-1 right-0 left-0 flex items-center px-1 duration-500",
+                        "absolute top-1 right-0 left-0 flex items-center px-1 duration-500 ease-in-out",
                         shake
-                          ? "opacity-0 translate-y-[5px]"
+                          ? "opacity-0 translate-y-[-45px]"
                           : "opacity-100 translate-y-0"
                       )}>
                       <h3
@@ -122,6 +124,8 @@ export const Shaker = ({
                             userId: user!._id,
                           })
                             .then(() => {
+                              if(selectedFood.macros)
+                                addMacros(selectedFood.macros)
                               toast({
                                 title: "Comida añadida al calendario",
                                 duration: 3000,
