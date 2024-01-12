@@ -15,9 +15,8 @@ const FoodScheme = new Schema<FoodInterface>({
 	},
 	description:{
 		type:String,
-		required:true,
-		minlength:3,
-		maxlength:40
+		required:false,
+		default:''
 	},
 	image:{
 		type:String,
@@ -34,28 +33,31 @@ const FoodScheme = new Schema<FoodInterface>({
 			kcal:{
 				type:Number,
 				required:true,
+				default:0,
 				min:0,
 				max:10000
 			},
 			proteins:{
 				type:Number,
+				default:0,
 				required:true,
 				min:0,
 				max:999
 			},
 			carbs:{
 				type:Number,
+				default:0,
 				required:true,
 				min:0,
 				max:999
 			},
 			fats:{
 				type:Number,
+				default:0,
 				required:true,
 				min:0,
 				max:999
 			},
-
 		},
 		_id:false,
 		required:true

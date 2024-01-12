@@ -38,7 +38,6 @@ export async function databaseCreateTemplate(payload: {
 }
 
 export async function databaseAddFoodToTemplate(payload: {
-  templateId: string;
   food: FoodInterface;
 }) {
   let error = null;

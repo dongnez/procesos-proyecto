@@ -336,11 +336,12 @@ const AddFood = ({ close }: { close: () => void }) => {
       if (res && res.length > 0) {
         const kcal = calculateCalories(macros);
 
+        if(!templateId) return;
+
         const { data } = await databaseAddFoodToTemplate({
-          templateId: templateId || "",
           food: {
             _id: "",
-            templateId: templateId || "",
+            templateId: templateId ,
             name: name,
             description: description === "" ? undefined : description,
             macros:

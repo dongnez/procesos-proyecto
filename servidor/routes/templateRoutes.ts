@@ -87,7 +87,6 @@ router.get("/invite/:templateId/:inviteCode", async (req, res) => {
     await TemplateModel.findById(templateId).then(async (template) => {
       if(!template) return res.status(400).json({ message: "Template not found" });
 
-      console.log(template,template.id,template["inviteCode"]);
       if (template?.inviteCode === inviteCode) {
         template.users.push({ userRef: user._id, role: "viewer" });
         template.save();
@@ -99,14 +98,14 @@ router.get("/invite/:templateId/:inviteCode", async (req, res) => {
           { new: true }
         )
 
-        res.redirect("/app/templates/"+templateId); 
+        res.redirect("/app/templates/"+templateId);
         return res.status(200).json({
           message: "Template joined successfully",
         });
       }
     });
 
-    res.redirect("/app/home/"); 
+    res.redirect("/app/home/");
     return res.status(400).json({
       message: "Invite code incorrect",
     });
@@ -197,8 +196,9 @@ router.post("/getTemplateById", async (req, res) => {
 
 router.post("/addFood", async (req, res) => {
   const { food } = req.body;
-
   try {
+    delete food._id;
+
     //Add food to Foods collection
     const newFood = new FoodModel(food);
     await newFood.save();
@@ -276,7 +276,6 @@ router.post("/getFoodById", async (req, res) => {
 
 router.get("/invite/:inviteCode", async (req, res) => {
   const { inviteCode } = req.params;
-
   res.status(200).json({
     message: "Invite code found",
     inviteCode,
