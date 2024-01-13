@@ -4,6 +4,7 @@ import { Button } from "src/@/components/ui/button";
 import { trpcClient } from "src/api/trpc";
 import { UserIcon } from "src/components/UserIcon";
 import { useAuthenticatedUser } from "src/hooks/useAuthenticatedUser";
+import { PageWraper } from "src/pages/app/PageWraper";
 
 export const Settings = () => {
   const { user,setUser } = useAuthenticatedUser();
@@ -22,7 +23,7 @@ export const Settings = () => {
     objective !== user.objective || user.objective === undefined;
 
   return (
-    <div className="p-2 overflow-y-auto bg-card rounded-sm max-w-[850px] mx-auto">
+    <PageWraper className="p-2 overflow-y-auto bg-card rounded-sm max-w-[850px] mx-auto">
       <h2 className="text-2xl">Tu perfil de usuario</h2>
       <p className="text-foreground/80 text-sm">
         Actualiza tu perfil y tus preferencias
@@ -170,6 +171,6 @@ export const Settings = () => {
       </section>
 
       <br className="mb-5" />
-    </div>
+    </PageWraper>
   );
 };

@@ -10,6 +10,7 @@ import { ShakerFilters } from "src/components/ShakerFilters";
 import { FoodTimeType } from "src/interfaces/FoodInterfaces";
 import { useTemplate } from "src/hooks/useTemplate";
 import { socket } from "src/utils/socket";
+import { PageWraper } from "src/pages/app/PageWraper";
 
 const useRealtimeTemplate = (setTemplate: (template: any) => void) => {
   useEffect(() => {
@@ -47,7 +48,7 @@ export const Template = () => {
     );
 
   return (
-    <div className="w-full h-full bg-background">
+    <PageWraper className="w-full h-full bg-background">
       <section className="w-full h-full">
         <section className="flex flex-col gap-2 md:flex-row items-center mb-10">
           <h2 className="text-3xl font-semibold flex-1">{template?.name}</h2>
@@ -84,6 +85,6 @@ export const Template = () => {
       </section>
 
       <FoodDialog food={template.foods} />
-    </div>
+    </PageWraper>
   );
 };

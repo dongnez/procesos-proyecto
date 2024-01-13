@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "src/@/components/ui/button";
 import { useOpenDialog } from "src/hooks/useOpenDialog";
+import { PageWraper } from "src/pages/app/PageWraper";
 import { Month } from "src/pages/calendar/Month";
 import {
   getCurrentMonthNumber,
@@ -36,7 +37,7 @@ export const Calendar = () => {
   },[dateId]);
 
   return (
-    <div className="h-full overflow-auto">
+    <PageWraper className="h-full overflow-auto">
       <div className="h-[350px] sm:min-h-[600px] sm:max-h-[700px]">
 
       <section className="max-w-[750px] h-full mx-auto flex flex-col">
@@ -88,6 +89,6 @@ export const Calendar = () => {
       </section>
       </div>
       <p>TODO STATS</p>
-    </div>
+    </PageWraper>
   );
 };

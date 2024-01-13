@@ -29,14 +29,13 @@ export const calendarRouter = router({
           date: new Date(year, month, day),
         },
         {
-          $addToSet: {
+          $set: {
             foods: {
               food: foodId,
               quantity: newQuantity,
             },
           },
         },
-        { upsert: true }
       );
 
       return newQuantity;
