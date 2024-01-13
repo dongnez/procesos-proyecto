@@ -29,7 +29,7 @@ export const RightBar = ({
   // const [templates, setTemplates] = useTemplateAtoms()
   const { user, logout } = useAuth();
   const [templates, setTemplates] = useState([]);
-  const {todayCalories,setTodayCalories} = useTodayCalories()
+  const {todayCalories,countMacrosFromDayCalendar} = useTodayCalories()
 
   const objective = useMemo(() => {
     return (
@@ -58,18 +58,7 @@ export const RightBar = ({
       },
     }).then((data) => {
       if (!data) return;
-
-      const calories = data.foods?.reduce(
-        (acc, curr) => ({
-          kcal: acc.kcal + (curr.food.macros?.kcal || 0),
-          proteins: acc.proteins + (curr.food.macros?.proteins || 0),
-          carbs: acc.carbs + (curr.food.macros?.carbs || 0),
-          fats: acc.fats + (curr.food.macros?.fats || 0),
-        }),
-        { kcal: 0, proteins: 0, carbs: 0, fats: 0 }
-      );
-
-      setTodayCalories(calories);
+      countMacrosFromDayCalendar(data.foods);
     });
   }, []);
 

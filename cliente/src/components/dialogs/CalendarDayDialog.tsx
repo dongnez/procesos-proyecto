@@ -9,11 +9,14 @@ import { databaseGetDayCalendar } from "src/database/databaseCalendar";
 import { useAuthenticatedUser } from "src/hooks/useAuthenticatedUser";
 import { useQuery } from "react-query";
 import { Skeleton } from "src/@/components/ui/skeleton";
-import { DayInterface } from "src/interfaces/CalendarInterface";
+import { DayInterface,FoodDayInterface } from "src/interfaces/CalendarInterface";
 import { CaloriesStats } from "src/components/CaloriesStats";
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { getFullDateName } from "src/utils/calendarUtils";
 import { atom, useAtom } from "jotai";
+import { ChevronsLeft, ChevronsRight, X } from "lucide-react";
+import { Button } from "src/@/components/ui/button";
+import { trpcClient } from "src/api/trpc";
 
 export type CalendarDayDialogProps = {
   day: number;
@@ -31,21 +34,42 @@ export const todayCaloriesAtom = atom({
 export const useTodayCalories = () => {
   const [todayCalories, setTodayCalories] = useAtom(todayCaloriesAtom);
 
-  const addMacros = (macros: { kcal: number; proteins: number; carbs: number; fats: number }) => {
+  const addMacros = (macros: {
+    kcal: number;
+    proteins: number;
+    carbs: number;
+    fats: number;
+  }) => {
     setTodayCalories((prev) => ({
       kcal: prev.kcal + macros.kcal,
       proteins: prev.proteins + macros.proteins,
       carbs: prev.carbs + macros.carbs,
       fats: prev.fats + macros.fats,
     }));
-  }
+  };
+
+  const countMacrosFromDayCalendar = (foods: Array<FoodDayInterface>) => {
+    const calories = foods?.reduce(
+      (acc, curr) => ({
+        kcal: acc.kcal + (curr.food.macros?.kcal || 0) * curr.quantity,
+        proteins: acc.proteins + (curr.food.macros?.proteins || 0) * curr.quantity,
+        carbs: acc.carbs + (curr.food.macros?.carbs || 0) * curr.quantity,
+        fats: acc.fats + (curr.food.macros?.fats || 0) * curr.quantity,
+      }),
+      { kcal: 0, proteins: 0, carbs: 0, fats: 0 }
+    );
+
+      setTodayCalories(calories);
+
+  };
 
   return {
     todayCalories,
     addMacros,
+    countMacrosFromDayCalendar,
     setTodayCalories,
   };
-}
+};
 
 export const CalendarDayDialog = ({
   day,
@@ -66,39 +90,30 @@ export const CalendarDayDialog = ({
   );
 
   const { data: dayCalendar } = dayCalendarRes;
+  const {todayCalories:totalMacros,countMacrosFromDayCalendar} = useTodayCalories();
 
-  const totalMacros = useMemo(() => {
-    if (!dayCalendar || !dayCalendar.foods)
-      return {
-        kcal: 0,
-        proteins: 0,
-        carbs: 0,
-        fats: 0,
-      };
+  const [dayCalendarFoods, setDayCalendarFoods] = useState(
+    dayCalendar?.foods || []
+  );
 
-    const { foods } = dayCalendar;
+  useEffect(() => {
+    setDayCalendarFoods(dayCalendar?.foods || []);
+  }, [dayCalendar?.foods]);
 
-    return foods?.reduce(
-      (acc, curr) => ({
-        kcal: acc.kcal + (curr.food.macros?.kcal || 0),
-        proteins: acc.proteins + (curr.food.macros?.proteins || 0),
-        carbs: acc.carbs + (curr.food.macros?.carbs || 0),
-        fats: acc.fats + (curr.food.macros?.fats || 0),
-      }),
-      { kcal: 0, proteins: 0, carbs: 0, fats: 0 }
-    );
-  }, [dayCalendar]);
+  useEffect(() => {
+    countMacrosFromDayCalendar(dayCalendarFoods)
+  }, [dayCalendarFoods]);
+
 
   return (
-    <Dialog defaultOpen {...rest} 
-    >
+    <Dialog defaultOpen {...rest}>
       <DialogContent className="pb-6">
         <DialogHeader>
           <DialogTitle>
-            {getFullDateName({day, month, year})} <p className="text-xs">{year}</p>
+            {getFullDateName({ day, month, year })}{" "}
+            <p className="text-xs">{year}</p>
           </DialogTitle>
         </DialogHeader>
-
         <>
           <div className="flex flex-col w-full gap-1 overflow-auto h-[250px]">
             {dayCalendarRes.isLoading && (
@@ -118,15 +133,14 @@ export const CalendarDayDialog = ({
               </>
             )}
 
-            {(!dayCalendar?.foods || dayCalendar?.foods.length === 0 ) && dayCalendarRes.isFetched && (
-              <p className="text-center text-foreground/60 mt-5">
-                No hay comidas registradas para este día
-              </p>
-            )}
+            {(!dayCalendarFoods || dayCalendarFoods.length === 0) &&
+              dayCalendarRes.isFetched && (
+                <p className="text-center text-foreground/60 mt-5">
+                  No hay comidas registradas para este día
+                </p>
+              )}
 
-            
-            
-            {dayCalendar?.foods.map((item, index) => (
+            {dayCalendarFoods.map((item, index) => (
               <div
                 key={index}
                 className="flex border border-secondary rounded-sm py-1 px-2  items-center">
@@ -137,11 +151,74 @@ export const CalendarDayDialog = ({
                 />
                 <p className="flex-1">{item.food.name}</p>
                 <div className="flex flex-col items-end">
-                  <p className="text-sm mb-[-5px]">{item.quantity}</p>
+                  <div className="flex gap-3 justify-center items-center">
+                    <Button className="p-0 h-3 w-3 rounded-full "
+                    onClick={()=>{
+                      if(item.quantity <= 1) return;
+
+                      trpcClient.calendar.updateQuantityFood.mutate({
+                        date: { day, month, year },
+                        foodId: item.food._id,
+                        userId: user._id,
+                        newQuantity: item.quantity-1
+                      }).then(()=>{
+                        setDayCalendarFoods((prev) =>
+                          prev.map((food) => {
+                            if (food.food._id === item.food._id) {
+                              return { ...food, quantity: food.quantity - 1 };
+                            }
+                            return food;
+                          })
+                        );
+                      })
+                    }}>
+                      <ChevronsLeft size={10} />
+                    </Button>
+                    <p className="text-sm">{item.quantity}</p>
+                    <Button className="p-0 h-3 w-3 rounded-full" 
+                    onClick={()=>{
+                      trpcClient.calendar.updateQuantityFood.mutate({
+                        date: { day, month, year },
+                        foodId: item.food._id,
+                        userId: user._id,
+                        newQuantity: item.quantity+1
+                      }).then(()=>{
+                        setDayCalendarFoods((prev) =>
+                          prev.map((food) => {
+                            if (food.food._id === item.food._id) {
+                              return { ...food, quantity: food.quantity + 1 };
+                            }
+                            return food;
+                          })
+                        );
+                      })
+                    }}>
+                      <ChevronsRight size={10} />
+                    </Button>
+                  </div>
+
                   <p className="text-xs text-foreground/60">
                     {item.food.macros?.kcal} kcal
                   </p>
                 </div>
+                <Button
+                  className="p-0 h-5 w-5 rounded-full ml-4 hover:bg-destructive transition-colors"
+                  variant={"outline"}
+                  onClick={async () => {
+                    await trpcClient.calendar.removeFood
+                      .mutate({
+                        date: { day, month, year },
+                        foodId: item.food._id,
+                        userId: user._id,
+                      })
+                      .then(() => {
+                        setDayCalendarFoods((prev) =>
+                          prev.filter((food) => food.food._id !== item.food._id)
+                        );
+                      });
+                  }}>
+                  <X size={15} />
+                </Button>
               </div>
             ))}
           </div>

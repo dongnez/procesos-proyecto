@@ -15,10 +15,10 @@ router.post("/addFood", async (req, res) => {
         date: new Date(year, month, day),
       },
       {
-        $push: {
+        $addToSet: {
           foods: {
             food: foodId,
-            quantity: 1,
+            quantity: 1
           },
         },
       },
