@@ -31,7 +31,7 @@ export const authRequired = (req, res, next) => {
 // destructure token from cookies
 export const deconstructToken = (token) => {
   if (!token) {
-    throw new Error("No token provided");
+    return { id: null };
   }
   const decoded = jwtL.verify(token, JWT_SECRET);
 

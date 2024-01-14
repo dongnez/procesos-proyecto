@@ -32,6 +32,7 @@ router.post("/createTemplate", async (req, res) => {
 
     res.status(200).json({
       message: "Template creado correctamente",
+      template: newTemplate,
     });
   } catch (error) {
     console.log("Error en createTemplate", error);
@@ -88,6 +89,11 @@ router.get("/invite/:templateId/:inviteCode", async (req, res) => {
       if(!template) return res.status(400).json({ message: "Template not found" });
 
       if (template?.inviteCode === inviteCode) {
+
+        //Check if user is already in template
+        const userAlreadyInTemplate = template.users.find(user => user.userRef == id);
+        if(userAlreadyInTemplate) return res.redirect("/app/templates/"+templateId);
+        
         template.users.push({ userRef: user._id, role: "viewer" });
         template.save();
 
@@ -170,7 +176,13 @@ router.post("/deleteTemplate", async (req, res) => {
 router.post("/getTemplateById", async (req, res) => {
   const { templateId } = req.body;
 
+  const { token } = req.cookies;
+
+  const userId = deconstructToken(token);
+
   try {
+
+    //Find template by id & check if user is in template
     const template = await TemplateModel.findById(templateId)
       .populate([
         {
@@ -181,6 +193,13 @@ router.post("/getTemplateById", async (req, res) => {
 
     if (!template)
       return res.status(400).json({ message: "Template no encontrado" });
+
+      // Check if userId is in template
+      const userIsInTemplate = template.users.some((user) => (user.userRef as any)._id.toString() === userId.id);
+
+      if (!userIsInTemplate && !process.env.DEVELOPMENT) {
+        return res.status(400).json({ message: "User not in template" });
+      } 
 
     res.status(200).json({
       message: "Template obtenido correctamente",

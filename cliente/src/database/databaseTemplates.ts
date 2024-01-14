@@ -26,15 +26,15 @@ export async function databaseGetUserTemplates(userId: string) {
 export async function databaseCreateTemplate(payload: {
   template: TemplateInterface;
   userId: string;
-}) {
+}):Promise<{ data: TemplateInterfaceClient | null; error: string | null }> {
   let error = null;
-  await axios.post(`${TEMPLATES_URL}createTemplate`, payload).catch((error) => {
+  const res:any = await axios.post(`${TEMPLATES_URL}createTemplate`, payload).catch((error) => {
     console.log("Error en databaseCreateTemplate", error);
     error = error.response.data.message || "Error en databaseCreateTemplate";
-    return { data: [] };
+    return { data: null };
   });
 
-  return { data: null, error };
+  return { data: res.data?.template, error };
 }
 
 export async function databaseAddFoodToTemplate(payload: {

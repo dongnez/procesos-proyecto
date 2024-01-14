@@ -21,14 +21,14 @@ import { useTheme } from "src/context/ThemeProvider";
 import { databaseGetDayCalendar } from "src/database/databaseCalendar";
 import { Progress } from "src/@/components/ui/progress";
 import { useTodayCalories } from "src/components/dialogs/CalendarDayDialog";
+import { useTemplateAtoms } from "src/context/templateAtoms";
 
 export const RightBar = ({
   className,
   ...rest
 }: HTMLAttributes<HTMLDivElement>) => {
-  // const [templates, setTemplates] = useTemplateAtoms()
   const { user, logout } = useAuth();
-  const [templates, setTemplates] = useState([]);
+  const [templates, setTemplates] = useTemplateAtoms(user!._id)
   const {todayCalories,countMacrosFromDayCalendar} = useTodayCalories()
 
   const objective = useMemo(() => {
