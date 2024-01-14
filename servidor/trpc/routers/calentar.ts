@@ -1,6 +1,4 @@
-import { deconstructToken } from "servidor/middleware/validateToken";
 import { CalendarModel } from "servidor/models/calendar";
-import { UserModel } from "servidor/models/user";
 import { router, publicProcedure } from "servidor/trpc/trpc";
 import { z } from "zod";
 

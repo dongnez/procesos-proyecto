@@ -28,14 +28,14 @@ export const authRequired = (req, res, next) => {
   }
 };
 
- // destructure token from cookies
- export const deconstructToken = (token) => {
-   if (!token) {
-     throw new Error('No token provided');
-   }
+// destructure token from cookies
+export const deconstructToken = (token) => {
+  if (!token) {
+    throw new Error("No token provided");
+  }
   const decoded = jwtL.verify(token, JWT_SECRET);
 
-  const {id} = decoded;
+  const { id } = decoded;
 
-  return {id};
-}
+  return { id };
+};

@@ -21,7 +21,7 @@ export const ShareLinkDialog = ({title,topChildren,link,...rest}:DialogProps & S
 				<h2 className='text-lg font-medium'>{title}</h2>
 				{topChildren}
 				<div className="flex gap-2 flex-row items-center justify-between">
-					<p className='rounded-md bg-muted max-w-[300px] sm:max-w-none overflow-auto text-xs px-1 py-2'>{link}</p>
+					<p className='rounded-md bg-muted max-w-[300px] sm:max-w-[390px] overflow-auto text-xs px-1 py-2'>{link}</p>
 					<Button variant={'default'} size={'icon'} onClick={()=>{
 						navigator.clipboard.writeText(link);
 						toast({title:'Link copiado al portapapeles',variant:'success',duration:1500});

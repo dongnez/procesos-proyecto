@@ -50,6 +50,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setLoading(false);
       })
       
+    }else{
+      setLoading(false);
     }
 
   }, []);
@@ -94,7 +96,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
 
-  if(loading) return <div>LOADING</div>;
+  if(loading) return (
+  <div className="flex flex-col gap-2 items-center justify-center h-full">
+    <h1 className="text-2xl font-light">LOADING</h1>
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+  </div>
+  )
 
   if (!user) {
     window.location.href = "/login";

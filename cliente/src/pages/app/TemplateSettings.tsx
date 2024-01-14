@@ -22,7 +22,7 @@ export const TemplateSettings = () => {
   const { openDialog, closeLastDialog  } = useOpenDialog();
   const navigate = useNavigate();
 
-  const friendsLink = `${WEB_URL}/invite/${template?._id}/${template?.inviteCode}`;
+  const friendsLink = `${WEB_URL}/templates/invite/${template?._id}/${template?.inviteCode}`;
 
   if (!template) {
     return (
