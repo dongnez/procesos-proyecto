@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import {  TemplateInterfaceClient } from "src/interfaces/TemplateInterfaces";
-import { useTemplateAtoms,} from "src/context/templateAtoms";
+import { useSelectedTemplateAtom,} from "src/context/templateAtoms";
 import { databaseGetFoodsFromTemplate, databaseGetTemplateById } from "src/database/databaseTemplates";
 import { useToast } from "src/@/components/ui/use-toast";
 
@@ -10,12 +10,11 @@ import { useToast } from "src/@/components/ui/use-toast";
  * @param id? 
  * 
  */
-export const useTemplate = (id?:string) => {
+export const useTemplate = () => {
   const { templateId } = useParams();
 
-  const templateIdSelected = templateId || id
 
-  const [templateAtom, setTemplateAtom] = useTemplateAtoms(templateIdSelected || "");
+  const [templateAtom, setTemplateAtom] = useSelectedTemplateAtom();
   
   const [template, setTemplate] = useState<TemplateInterfaceClient | null>(templateAtom);
   

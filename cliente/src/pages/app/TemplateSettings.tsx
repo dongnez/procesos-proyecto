@@ -9,6 +9,9 @@ import { WEB_URL } from "src/constants/config";
 import { useNavigate } from "src/hooks/useNavigate";
 import { cn } from "src/@/lib/utils";
 import { databaseGenerateNewCode } from "src/database/databaseTemplates";
+import { trpcClient } from "src/api/trpc";
+import { useAuth } from "src/context/AuthProvider";
+import { useTemplateList } from "src/context/templateAtoms";
 
 export const TemplateSettings = () => {
   // Limitar el acceso a esta ruta solo a los usuarios que tengan el rol de admin
@@ -19,6 +22,9 @@ export const TemplateSettings = () => {
   //Remove template foods
 
   const { template, setTemplate } = useTemplate();
+  
+  const { user:currentUser } = useAuth();
+  const [_,setTemplateList] = useTemplateList(currentUser!._id);
   const { openDialog, closeLastDialog  } = useOpenDialog();
   const navigate = useNavigate();
 
@@ -143,6 +149,28 @@ export const TemplateSettings = () => {
             </div>
           );
         })}
+
+        <Button variant="destructive" className="w-full mt-10" 
+        onClick={()=>{
+          openDialog({
+            id: "confirm",
+            params: {
+              title: "¿Estás seguro de que quieres salir del grupo?",
+              onConfirm: () => {
+                //Remove user from template
+                trpcClient.user.leaveGroup.mutate({
+                  templateId: template._id,
+                  userId: currentUser!._id,
+                }).then(()=>{
+                  setTemplateList((prev:any)=>prev.filter((item:any)=>item._id !== template._id));
+                  navigate("/app");
+                });
+              },
+            },
+          });
+        }}>
+          Salir del grupo
+        </Button>
       </div>
     </div>
   );

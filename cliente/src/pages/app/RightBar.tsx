@@ -5,7 +5,7 @@ import {
   AccordionTrigger,
 } from "src/@/components/ui/accordion";
 import { TemplateListItem } from "src/components/TemplateListItem";
-import { HTMLAttributes, useEffect, useMemo, useState } from "react";
+import { HTMLAttributes, useEffect, useMemo, } from "react";
 import { cn } from "src/@/lib/utils";
 import { UserIcon } from "src/components/UserIcon";
 import { CreateTemplate } from "src/components/dialogs/CreateTemplate";
@@ -21,14 +21,14 @@ import { useTheme } from "src/context/ThemeProvider";
 import { databaseGetDayCalendar } from "src/database/databaseCalendar";
 import { Progress } from "src/@/components/ui/progress";
 import { useTodayCalories } from "src/components/dialogs/CalendarDayDialog";
-import { useTemplateAtoms } from "src/context/templateAtoms";
+import { useTemplateList } from "src/context/templateAtoms";
 
 export const RightBar = ({
   className,
   ...rest
 }: HTMLAttributes<HTMLDivElement>) => {
   const { user, logout } = useAuth();
-  const [templates, setTemplates] = useTemplateAtoms(user!._id)
+  const [templates, setTemplates] = useTemplateList(user!._id)
   const {todayCalories,countMacrosFromDayCalendar} = useTodayCalories()
 
   const objective = useMemo(() => {
@@ -145,7 +145,7 @@ export const RightBar = ({
                 </p>
                 <Progress
                   className="mt-1"
-                  value={(todayCalories.proteins / objective.proteins) * 100}
+                  value={Math.min((todayCalories.proteins / objective.proteins) * 100,100)}
                   color="bg-proteins"
                 />
               </div>
@@ -159,7 +159,7 @@ export const RightBar = ({
                 </p>
                 <Progress
                   className="mt-1"
-                  value={(todayCalories.carbs / objective.carbs) * 100}
+                  value={Math.min((todayCalories.carbs / objective.carbs) * 100,100)}
                   color="bg-carbs"
                 />
               </div>
@@ -173,7 +173,7 @@ export const RightBar = ({
                 </p>
                 <Progress
                   className="mt-1 duration-300"
-                  value={(todayCalories.fats / objective.fats) * 100}
+                  value={Math.min((todayCalories.fats / objective.fats) * 100,100)}
                   color="bg-fats"
                 />
               </div>

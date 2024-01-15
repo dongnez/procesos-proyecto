@@ -22,7 +22,7 @@ import { databaseCreateTemplate } from "src/database/databaseTemplates";
 import { useAuth } from "src/context/AuthProvider";
 import { useState } from "react";
 import { useToast } from "src/@/components/ui/use-toast";
-import { useTemplateAtoms } from "src/context/templateAtoms";
+import { useTemplateList } from "src/context/templateAtoms";
 
 export const CreateTemplate = ({
   ...rest
@@ -31,7 +31,7 @@ export const CreateTemplate = ({
   const [name, setName] = useState("");
   const [visibility, setVisibility] = useState<"public" | "private">("public");
 
-  const [_,setTemplates] = useTemplateAtoms(user!._id)
+  const [_,setTemplates] = useTemplateList(user!._id)
   const { toast } = useToast();
 
   return (

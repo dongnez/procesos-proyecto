@@ -1,12 +1,14 @@
 import { Dialog } from "@radix-ui/react-dialog";
 import { atom, useAtom } from "jotai";
 import { CalendarDayDialog, CalendarDayDialogProps } from "src/components/dialogs/CalendarDayDialog";
+import { ConfirmDialog, ConfirmDialogProps } from "src/components/dialogs/ConfirmDialog";
 import { ProfileDialogParams,ProfileDialog } from "src/components/dialogs/ProfileDialog";
 import { ShareLinkDialog, ShareLinkDialogParams } from "src/components/dialogs/ShareLinkDialog";
 
 export type DialogParams = { id: "profile"; params: ProfileDialogParams }
 | {id: "sharelink"; params: ShareLinkDialogParams}
 | {id: "calendar_day", params: CalendarDayDialogProps}
+| {id: "confirm", params: ConfirmDialogProps};
 
 export type ROUTE_DIALOG_ID = DialogParams["id"];
 
@@ -17,7 +19,8 @@ export const DialogComponentById: Record<
 > = {
   profile: ProfileDialog,
   sharelink: ShareLinkDialog,
-  calendar_day: CalendarDayDialog
+  calendar_day: CalendarDayDialog,
+  confirm: ConfirmDialog,
 };
 
 export const dialogsAtom = atom<

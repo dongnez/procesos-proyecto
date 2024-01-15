@@ -1,4 +1,5 @@
 import { deconstructToken } from "servidor/middleware/validateToken";
+import { TemplateModel } from "servidor/models/template";
 import { UserModel } from "servidor/models/user";
 import { router, publicProcedure } from "servidor/trpc/trpc";
 import { z } from "zod";
@@ -40,5 +41,21 @@ export const userRouter = router({
       );
 
       return user?.objective;
+    }),
+  leaveGroup: publicProcedure
+    .input(z.object({ userId: z.string(), templateId: z.string() }))
+    .mutation(async (opts) => {
+      const { userId, templateId } = opts.input;
+
+      //remove template from user
+      await UserModel.findByIdAndUpdate(userId, {
+        $pull: { templates: templateId },
+      });
+
+      //remove user from template
+      await TemplateModel.findByIdAndUpdate(templateId, {
+        $pull: { users: { userRef: userId } },
+      });
+      
     }),
 });

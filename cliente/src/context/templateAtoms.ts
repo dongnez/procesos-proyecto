@@ -4,6 +4,12 @@ import { TemplateInterfaceClient } from 'src/interfaces/TemplateInterfaces'
 
 export const templateAtomsFamily = atomFamily((id: string) => atomWithStorage<Array<TemplateInterfaceClient>>(id,[]))
 
-export const useTemplateAtoms = (id:string)=>{
+export const selectedTemplateAtom = atomWithStorage<TemplateInterfaceClient | null>("selectedTemplate",null)
+
+export const useTemplateList = (id:string)=>{
   return useAtom(templateAtomsFamily(id));	
+}
+
+export const useSelectedTemplateAtom = ()=>{
+  return useAtom(selectedTemplateAtom);	
 }
