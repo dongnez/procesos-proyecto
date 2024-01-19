@@ -38,6 +38,12 @@ const UserSchema = new Schema<UserInterface>({
 		type: Schema.Types.ObjectId,
 		ref: 'Template'
 	}],
+	recentFoods: [{
+		type: Schema.Types.ObjectId,
+		ref: 'Food',
+		required: false,
+		maxlength: 10,
+	}],
 	objective: {
 		kcal: {
 			type: Number,

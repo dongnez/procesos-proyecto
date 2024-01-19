@@ -18,7 +18,9 @@ export const userRouter = router({
     .query(async (opts) => {
       const { id: userId } = deconstructToken(opts.input.token);
 
-      const user: any = await UserModel.findById(userId);
+      //Populate recent foods
+      const user: any = await UserModel.findById(userId).populate("recentFoods");
+
       return user;
     }),
   updateUserObjective: publicProcedure
@@ -58,4 +60,23 @@ export const userRouter = router({
       });
       
     }),
+  addRecentFood: publicProcedure
+  .input(z.object({ userId: z.string(), foodId: z.string() }))
+  .mutation(async (opts) => {
+    const { userId, foodId } = opts.input;
+
+    //add food to recent if max reached remove last
+    await UserModel.updateOne(
+      { _id: userId ,recentFoods: { $nin: [foodId]} }, // This line checks if foodId is not in recentFoods},
+      {
+        $push: {
+          recentFoods: {
+            $each: [foodId],
+            $slice: -10,
+          }
+        }
+      }
+    );
+    
+  }),
 });

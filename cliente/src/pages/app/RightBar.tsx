@@ -86,7 +86,7 @@ export const RightBar = ({
           onClick={() => {
             openDialog({ id: "profile", params: {userId:user!._id} });
           }}
-          className="hover:drop-shadow-lg duration-200"
+          className="hover:drop-shadow-lg duration-200 cursor-pointer"
           image={user?.photoURL || ""}
           size={45}
         />

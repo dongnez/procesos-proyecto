@@ -1,7 +1,8 @@
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Button } from "src/@/components/ui/button";
 import { BigCarrousel } from "src/components/BigCarrousel";
+import { useAuthenticatedUser } from "src/hooks/useAuthenticatedUser";
 import { PageWraper } from "src/pages/app/PageWraper";
+import hamburguer from "src/assets/hamburguer-pana.svg";
+import { ButtonAddCalendar } from "src/components/ButtonAddCalendar";
 
 const news = [
   {
@@ -42,9 +43,13 @@ const news = [
 ];
 
 export const Home = () => {
+  const { user } = useAuthenticatedUser();
+
   return (
     <PageWraper>
-
+      <h2 className="ml-1 sm:ml-0 text-2xl sm:text-3xl text-primary mb-2 font-medium uppercase">
+        Noticias y Actividades
+      </h2>
       <div className="h-[350px] w-full flex justify-center  rounded-sm">
         <BigCarrousel
           items={news.map((item) => (
@@ -68,27 +73,61 @@ export const Home = () => {
       </div>
 
       {/* Create a beautiful spacer with espiral lines */}
-    <div className="mb-10">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 100">
-        <path fill="none" stroke="rgb(148, 28, 228)" stroke-width="3" d="M 0 50 Q 300 100 600 50 T 1200 50" />
-      </svg>
-    </div>
+      <div className="mb-10">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 100">
+          <path
+            fill="none"
+            stroke="rgb(148, 28, 228)"
+            stroke-width="3"
+            d="M 0 50 Q 300 100 600 50 T 1200 50"
+          />
+        </svg>
+      </div>
 
-
-      <div className="h-[350px] w-full bg-primary rounded-sm p-2">
+      <div className="sm:h-[280px] flex flex-col w-full bg-primary rounded-sm p-2 pb-3 relative">
         <div className="flex items-center">
           <p className="text-xl text-primary-foreground font-medium uppercase flex-1">
-            Recomendación Diaria
+            Comidas Recientes
           </p>
-          <Button size={"icon"} variant={"secondary"}>
-            <ArrowLeft size={24} />
-          </Button>
-          <Button size={"icon"} variant={"secondary"}>
-            <ArrowRight size={24} />
-          </Button>
         </div>
-        <div className="bg-secondary rounded-sm p-2 w-fit h-[100px]">
-          <p className="text-secondary-foreground">Nombre template</p>
+
+        {!user.recentFoods ||
+          (user.recentFoods.length === 0 && (
+            <div className="flex flex-col  sm:flex-row items-center sm:items-start">
+              <img src={hamburguer} className=" w-[300px]" />
+              <div className="flex-1 text-end pt-10 pr-5">
+                <h3 className="text-xl font-medium   text-background">
+                  No hay comidas recientes
+                </h3>
+                <p className="text-base text-background/60">
+                  Añade una comida a tu calendario para ver tus comidas
+                  recientes.
+                </p>
+              </div>
+            </div>
+          ))}
+
+        <div className="flex  flex-1 items-center justify-start">
+          <BigCarrousel
+            className="max-w-[75%] sm:max-w-[80%] mx-auto "
+            carrouselClassName="basis-1/2 sm:basis-1/3 lg:basis-1/4 xl:basis-1/6  "
+            items={user
+              .recentFoods!.map((food, index) => (
+                <div
+                  key={index}
+                  className="bg-secondary/30  rounded-sm p-2 w-fit h-fit relative">
+                  <img
+                    src={food.image}
+                    className="w-32 h-32 rounded-sm object-cover"
+                  />
+                  <p className="text-center text-secondary-foreground">
+                    {food.name}
+                  </p>
+                  <ButtonAddCalendar selectedFood={food}  className="absolute top-1 right-1 w-5 h-5 rounded-full" variant={"outline"} iconSize={14} />
+                </div>
+              ))
+              .reverse()}
+          />
         </div>
       </div>
     </PageWraper>

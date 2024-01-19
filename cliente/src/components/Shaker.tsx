@@ -5,15 +5,9 @@ import { Heart, Repeat } from "react-feather";
 import { HTMLMotionProps, motion, useAnimation } from "framer-motion";
 import { Card } from "src/components/Card";
 import { CaloriesStats } from "src/components/CaloriesStats";
-import { CalendarPlus } from "lucide-react";
 import { cn } from "src/@/lib/utils";
-import { databaseAddFood } from "src/database/databaseCalendar";
-import { useAuth } from "src/context/AuthProvider";
-import { useToast } from "src/@/components/ui/use-toast";
-import { ToastAction } from "src/@/components/ui/toast";
-import { useNavigate } from "react-router-dom";
 import { getFoodTimeOption } from "src/components/SelectFoodTime";
-import { useTodayCalories } from "src/components/dialogs/CalendarDayDialog";
+import { ButtonAddCalendar } from "src/components/ButtonAddCalendar";
 
 const zoomInAndShakeVariants = {
   initial: { scale: 1, transition: { duration: 0.4, ease: "easeInOut" } },
@@ -50,11 +44,6 @@ export const Shaker = ({
   const [shake, setShake] = useState(false);
   const [showParticles, setShowParticles] = useState(false);
   const [isFlipped, setIsFlipped] = useState(false);
-
-  const { user } = useAuth();
-  const { toast } = useToast();
-  const navigate = useNavigate();
-  const {addMacros} = useTodayCalories()
 
   useEffect(() => {
     if (!shake && showParticles)
@@ -101,59 +90,7 @@ export const Shaker = ({
                         {selectedFood.name}
                       </h3>
 
-                      <Button
-                        variant={"secondary"}
-                        size={"icon"}
-                        className={"rounded-full"}
-                        onClick={async (e) => {
-                          e.stopPropagation();
-
-                          const today = new Date();
-
-                          const day = today.getDate();
-                          const month = today.getMonth();
-                          const year = today.getFullYear();
-                          
-                          await databaseAddFood({
-                            date: {
-                              day,
-                              month,
-                              year,
-                            },
-                            foodId: selectedFood._id,
-                            userId: user!._id,
-                          })
-                            .then(() => {
-                              if(selectedFood.macros)
-                                addMacros(selectedFood.macros)
-                              toast({
-                                title: "Comida añadida al calendario",
-                                duration: 3000,
-                                action: (
-                                  <ToastAction
-                                    className="group"
-                                    altText="Ver en Calendario"
-                                    onClick={() => {
-                                      navigate(`/app/calendar/${day}-${month}-${year}`);
-                                    }}>
-                                    <p className="group-hover:text-black">
-                                      Ver en Calendario
-                                    </p>
-                                  </ToastAction>
-                                ),
-                              });
-                            })
-                            .catch(() => {
-                              toast({
-                                title: "Error al añadir comida al calendario",
-                                description: `No se ha podido añadir ${selectedFood.name} al calendario`,
-                                variant: "destructive",
-                                duration: 2500,
-                              });
-                            });
-                        }}>
-                        <CalendarPlus />
-                      </Button>
+                      <ButtonAddCalendar selectedFood={selectedFood} />
                     </div>
 
                     <motion.img

@@ -16,7 +16,7 @@ import { HighlightedText } from "src/components/HighlightedText";
 import { AvatarIcon } from "src/components/AvatarIcon";
 import { ArrowLeft } from "react-feather";
 import { Button } from "src/@/components/ui/button";
-import { CalendarPlus, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Loader } from "src/components/Loader";
 import {
   databaseAddFoodToTemplate,
@@ -38,9 +38,7 @@ import {
   SelectFoodTime,
   getFoodTimeOption,
 } from "src/components/SelectFoodTime";
-import { databaseAddFood } from "src/database/databaseCalendar";
-import { useAuthenticatedUser } from "src/hooks/useAuthenticatedUser";
-import { useTodayCalories } from "src/components/dialogs/CalendarDayDialog";
+import { ButtonAddCalendar } from "src/components/ButtonAddCalendar";
 
 export const FoodDialog = ({
   food,
@@ -183,14 +181,12 @@ const FoodSelected = ({
   foodSelected?: FoodInterface | null;
 }) => {
   const navigate = useNavigate();
-  const { user } = useAuthenticatedUser();
   const { templateId, foodId } = useParams();
   const [food, setFood] = useState<FoodInterface | null | undefined>(
     foodSelected
   );
 
   const { toast } = useToast();
-  const {addMacros} = useTodayCalories()
 
   useEffect(() => {
     if (!foodSelected) {
@@ -229,61 +225,7 @@ const FoodSelected = ({
           <ArrowLeft className="w-5" />
         </Button>
         <div className="flex-1" />
-        <Button
-          variant={"ghost"}
-          size={"icon"}
-          className={"rounded-full h-[30px] w-[30px] mr-2"}
-          onClick={async (e) => {
-            e.stopPropagation();
-            if (!food) return;
-
-            const today = new Date();
-            const day = today.getDate();
-            const month = today.getMonth();
-            const year = today.getFullYear();
-
-            await databaseAddFood({
-              date: {
-                day,
-                month,
-                year,
-              },
-              foodId: food._id,
-              userId: user!._id,
-            })
-              .then(() => {
-                toast({
-                  title: "Comida añadida al calendario",
-                  duration: 3000,
-                  action: (
-                    <ToastAction
-                      className="group"
-                      altText="Ver en Calendario"
-                      onClick={() => {
-                        navigate(`/app/calendar/${day}-${month}-${year}`);
-                      }}>
-                      <p className="group-hover:text-black">
-                        Ver en Calendario
-                      </p>
-                    </ToastAction>
-                  ),
-                });
-
-                if(!food.macros) return;
-                addMacros(food.macros)
-
-              })
-              .catch(() => {
-                toast({
-                  title: "Error al añadir comida al calendario",
-                  description: `No se ha podido añadir ${food.name} al calendario`,
-                  variant: "destructive",
-                  duration: 2500,
-                });
-              });
-          }}>
-          <CalendarPlus size={15} />
-        </Button>
+        <ButtonAddCalendar selectedFood={food!} variant={'ghost'} className="rounded-full h-[30px] w-[30px] mr-2" iconSize={15} />
         <>{food ? getFoodTimeOption(food.timeType)?.icon : <></>}</>
       </DialogHeader>
       {food ? (

@@ -1,3 +1,4 @@
+import { FoodInterfaceSchema } from 'src/interfaces/FoodInterfaces'
 import {z} from 'zod'
 
 export const UserInterfaceSchema = z.object({
@@ -15,5 +16,6 @@ export const UserInterfaceSchema = z.object({
 		carbs: z.number(),
 		fats: z.number(),
 	}).optional(),
+	recentFoods: z.array(FoodInterfaceSchema).optional(),
 })
 export type UserInterface = z.infer<typeof UserInterfaceSchema>

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { trpcClient } from "src/api/trpc";
 import { WEB_URL } from "src/constants/config";
 import { DayInterface } from "src/interfaces/CalendarInterface";
 
@@ -12,6 +13,11 @@ export const databaseAddFood = async (payload: {
 
 	const { data } = await axios.post(`${CALENDAR_URL}addFood`, payload).catch((error) => {
 		throw error;
+	}).then((res) => {
+		// add food to recent 
+		trpcClient.user.addRecentFood.mutate({...payload});
+
+		return res.data;
 	})
 
   return { data , error:null};
