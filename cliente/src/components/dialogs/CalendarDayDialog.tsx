@@ -101,6 +101,8 @@ export const CalendarDayDialog = ({
   }, [dayCalendar?.foods]);
 
   useEffect(() => {
+    const today = new Date().getDate();
+    if(day !== today) return;
     countMacrosFromDayCalendar(dayCalendarFoods)
   }, [dayCalendarFoods]);
 

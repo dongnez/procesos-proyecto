@@ -40,6 +40,7 @@ import {
 } from "src/components/SelectFoodTime";
 import { databaseAddFood } from "src/database/databaseCalendar";
 import { useAuthenticatedUser } from "src/hooks/useAuthenticatedUser";
+import { useTodayCalories } from "src/components/dialogs/CalendarDayDialog";
 
 export const FoodDialog = ({
   food,
@@ -189,6 +190,7 @@ const FoodSelected = ({
   );
 
   const { toast } = useToast();
+  const {addMacros} = useTodayCalories()
 
   useEffect(() => {
     if (!foodSelected) {
@@ -266,6 +268,10 @@ const FoodSelected = ({
                     </ToastAction>
                   ),
                 });
+
+                if(!food.macros) return;
+                addMacros(food.macros)
+
               })
               .catch(() => {
                 toast({
