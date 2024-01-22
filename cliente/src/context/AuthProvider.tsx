@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   function logout() {
 
     databaseAuthLogOut()
-    Cookies.remove("user");
+    Cookies.remove("token");
     setUser(null);
     // window.location.href = "/login";
   }

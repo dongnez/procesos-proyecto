@@ -144,12 +144,14 @@ router.post("/google", async (req, res) => {
     }
 
     // Devuelve el usuario encontrado (ya sea el existente o el recién creado)
+    const token = await createAccesstoken({ id: userFound._id });
+    res.cookie("token", token)
     res.json({
       message: "User created or found successfully",
       user: userFound,
     });
   } catch (error) {
-    console.log("Google", error);
+    console.log("Google ERROR", error);
     res.send(error);
   }
 });

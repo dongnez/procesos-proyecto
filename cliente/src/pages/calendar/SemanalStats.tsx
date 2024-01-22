@@ -5,7 +5,6 @@ import {
   CartesianGrid,
   Tooltip,
   XAxis,
-  YAxis,
 } from "recharts";
 import { HTMLAttributes, useEffect, useState } from "react";
 import {
@@ -85,7 +84,7 @@ export const SemanalStats = ({ ...rest }: HTMLAttributes<HTMLDivElement>) => {
         </defs>
         <XAxis axisLine={false} interval={0} dataKey="name" tickLine={false}  tickFormatter={(name)=> isSm ? name.slice(0,3) : name}/>
         {/* <YAxis axisLine={false} tick={false} tickLine={false}/> */}
-        <CartesianGrid strokeDasharray="3 3"  />
+        <CartesianGrid strokeDasharray="3 3"  vertical={false}/>
         <Tooltip labelClassName="text-primary "/>
         <Area
           type="monotone"
@@ -94,6 +93,7 @@ export const SemanalStats = ({ ...rest }: HTMLAttributes<HTMLDivElement>) => {
           stroke="#ae2db7"
           fillOpacity={1}
           fill="url(#colorPv)"
+		  dot={{stroke:"#ae2db7", strokeWidth:2, fill:"white"}} 
         />
       </AreaChart>
     </div>

@@ -107,28 +107,30 @@ export const Home = () => {
             </div>
           ))}
 
-        <div className="flex  flex-1 items-center justify-start">
-          <BigCarrousel
-            className="max-w-[75%] sm:max-w-[80%] mx-auto "
-            carrouselClassName="basis-1/2 sm:basis-1/3 lg:basis-1/4 xl:basis-1/6  "
-            items={user
-              .recentFoods!.map((food, index) => (
-                <div
-                  key={index}
-                  className="bg-secondary/30  rounded-sm p-2 w-fit h-fit relative">
-                  <img
-                    src={food.image}
-                    className="w-32 h-32 rounded-sm object-cover"
-                  />
-                  <p className="text-center text-secondary-foreground">
-                    {food.name}
-                  </p>
-                  <ButtonAddCalendar selectedFood={food}  className="absolute top-1 right-1 w-5 h-5 rounded-full" variant={"outline"} iconSize={14} />
-                </div>
-              ))
-              .reverse()}
-          />
-        </div>
+        {user.recentFoods && (
+          <div className="flex  flex-1 items-center justify-start">
+            <BigCarrousel
+              className="max-w-[75%] sm:max-w-[80%] mx-auto "
+              carrouselClassName="basis-1/2 sm:basis-1/3 lg:basis-1/4 xl:basis-1/6  "
+              items={user
+                .recentFoods!.map((food, index) => (
+                  <div
+                    key={index}
+                    className="bg-secondary/30  rounded-sm p-2 w-fit h-fit relative">
+                    <img
+                      src={food.image}
+                      className="w-32 h-32 rounded-sm object-cover"
+                    />
+                    <p className="text-center text-secondary-foreground">
+                      {food.name}
+                    </p>
+                    <ButtonAddCalendar selectedFood={food}  className="absolute top-1 right-1 w-5 h-5 rounded-full" variant={"outline"} iconSize={14} />
+                  </div>
+                ))
+                .reverse()}
+            />
+          </div>
+        )}
       </div>
     </PageWraper>
   );

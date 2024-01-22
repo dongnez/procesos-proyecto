@@ -90,8 +90,10 @@ export const Calendar = () => {
       </section>
       </div>
       
-      <h2 className="text-lg my-1 font-semibold text-primary/60">Estadística semanal</h2>
-      <SemanalStats  className="flex items-center justify-center"/>
+      <div className="max-w-[750px] mx-auto">
+        <h2 className="text-lg my-1 font-semibold text-primary/60">Estadística semanal</h2>
+        <SemanalStats  className="flex items-center justify-center overflow-hidden"/>
+      </div>
     </PageWraper>
   );
 };

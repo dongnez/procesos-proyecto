@@ -35,7 +35,7 @@ export function initClases(app) {
       const name = req.user.displayName;
       const photoURL = req.user.photos[0].value;
 
-      const response = await axios.post(process.env.APP_URL+'/auth/google', {
+      const {data,headers} = await axios.post(process.env.APP_URL+'/auth/google', {
         email,
         name,
         photoURL,
@@ -44,14 +44,15 @@ export function initClases(app) {
         'Content-Type': 'application/json'
       }});
 
-      // console.log("RESPONSE",response)
-      if(response.data.error){
+      const cookieString = headers['set-cookie'][0]; // "token=valor; Path=/"
+      const token = cookieString.split('=')[1].split(';')[0]; // "valor"
+
+      if(data.error || !token){
         res.status(500).json({ error: "Error in Google authentication" });
       }
 
-      if(response.data.user){
-        console.log("Google USR",response.data.user)
-        res.cookie("user", JSON.stringify(response.data.user));
+      if(data.user){
+        res.cookie("token",token) 
         res.redirect("/app");
       }
     }

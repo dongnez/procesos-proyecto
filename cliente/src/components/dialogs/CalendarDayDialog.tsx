@@ -11,7 +11,7 @@ import { useQuery } from "react-query";
 import { Skeleton } from "src/@/components/ui/skeleton";
 import { DayInterface,FoodDayInterface } from "src/interfaces/CalendarInterface";
 import { CaloriesStats } from "src/components/CaloriesStats";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { calculateDayMacros, getFullDateName } from "src/utils/calendarUtils";
 import { atom, useAtom } from "jotai";
 import { ChevronsLeft, ChevronsRight, X } from "lucide-react";
@@ -81,7 +81,8 @@ export const CalendarDayDialog = ({
   );
 
   const { data: dayCalendar } = dayCalendarRes;
-  const {todayCalories:totalMacros,countMacrosFromDayCalendar} = useTodayCalories();
+  const {countMacrosFromDayCalendar} = useTodayCalories();
+  
 
   const [dayCalendarFoods, setDayCalendarFoods] = useState(
     dayCalendar?.foods || []
@@ -93,9 +94,12 @@ export const CalendarDayDialog = ({
 
   useEffect(() => {
     const today = new Date().getDate();
+
     if(day !== today) return;
     countMacrosFromDayCalendar(dayCalendarFoods)
   }, [dayCalendarFoods]);
+
+  const totalMacros = useMemo(() => calculateDayMacros(dayCalendarFoods), [dayCalendarFoods])
 
 
   return (
