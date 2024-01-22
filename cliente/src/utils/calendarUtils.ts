@@ -93,8 +93,9 @@ export const prevMonth = (currentMonth: number, currentYear: number) => {
  * @param monthNumber: number
  * @returns month [][]
  */
-export function getMonth(month: number = Number(dayjs().month())) {
-  const year = dayjs().year();
+export function getMonth(month: number = Number(dayjs().month()), year: number) {
+  // const year = dayjs().year();
+  // console.log("MONTH", month,year);
   const firstDayMonth = dayjs(new Date(year, Number(month), 1)).day();
   let currentMonthCount = 0 - firstDayMonth;
   let arrayNumber = 5;

@@ -36,6 +36,7 @@ export const router = createBrowserRouter([
       {
         path: "",
         element: <Navigate to="home" />,
+        index: true,
       },
       {
         path: "home",

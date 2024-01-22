@@ -84,7 +84,7 @@ export const Home = () => {
         </svg>
       </div>
 
-      <div className="sm:h-[280px] flex flex-col w-full bg-primary rounded-sm p-2 pb-3 relative">
+      <div className="max-w-[1100px] mx-auto sm:h-[280px] flex flex-col w-full bg-primary rounded-sm p-2 pb-3 relative">
         <div className="flex items-center">
           <p className="text-xl text-primary-foreground font-medium uppercase flex-1">
             Comidas Recientes
@@ -94,7 +94,7 @@ export const Home = () => {
         {!user.recentFoods ||
           (user.recentFoods.length === 0 && (
             <div className="flex flex-col  sm:flex-row items-center sm:items-start">
-              <img src={hamburguer} className=" w-[300px]" />
+              <img src={hamburguer} className="w-[240px]" />
               <div className="flex-1 text-end pt-10 pr-5">
                 <h3 className="text-xl font-medium   text-background">
                   No hay comidas recientes
@@ -107,7 +107,7 @@ export const Home = () => {
             </div>
           ))}
 
-        {user.recentFoods && (
+        {user.recentFoods && user.recentFoods.length !== 0 && (
           <div className="flex  flex-1 items-center justify-start">
             <BigCarrousel
               className="max-w-[75%] sm:max-w-[80%] mx-auto "

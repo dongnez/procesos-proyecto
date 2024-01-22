@@ -1,13 +1,11 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { RightBar } from "src/pages/app/RightBar";
-// import { NavBar } from "src/modules/header/NavBar";
-// import { componentMeasures } from "src/constants/compontents";
-
 import { LeftBar } from "src/pages/app/LeftBar";
 import { BottomNavBar } from "src/pages/app/BottomNavBar";
 import { useCloseAll } from "src/hooks/useCloseAll";
 import { useDeviceSm } from "src/hooks/useDevice";
 import { DialogStack } from "src/components/dialogs/DialogStack";
+import { useNavigate } from "src/hooks/useNavigate";
 
 export const AppLayout = () => {
   const { close } = useCloseAll();

@@ -1,3 +1,4 @@
+import { WEB_URL } from 'src/constants/config';
 import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
 import type { AppRouter } from 'servidor/trpc/routers/_app';
 //     👆 **type-only** import
@@ -7,7 +8,7 @@ import type { AppRouter } from 'servidor/trpc/routers/_app';
 export const trpcClient = createTRPCProxyClient<AppRouter>({
   links: [
     httpBatchLink({
-      url: 'http://localhost:8080/trpc',
+      url: WEB_URL+'/trpc',
     }),
   ],
 });

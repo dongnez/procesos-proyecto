@@ -1,9 +1,10 @@
+import { APP_URL } from "servidor/config";
 import { Server } from "socket.io";
 
 export function connectSockets(server){
 	const io = new Server(server,{
 		cors: {
-			origin: ["http://localhost:8080","http://localhost:5173"],
+			origin: [APP_URL,"http://localhost:5173"],
     		methods: ["GET", "POST"],
 			credentials: false
 		}

@@ -53,7 +53,7 @@ export function initClases(app) {
 
       if(data.user){
         res.cookie("token",token) 
-        res.redirect("/app");
+        res.redirect("/app/home");
       }
     }
   );
@@ -75,7 +75,7 @@ export function initClases(app) {
       function (user) {
         console.log("Usuario GOOGLE AUTH...", user);
         response.cookie("user", JSON.stringify(user));
-        response.redirect("/app");
+        response.redirect("/app/home");
       }
     );
   });
@@ -130,7 +130,7 @@ export function initClases(app) {
       function (user) {
         console.log("Usuario GOOGLE AUTH...", user);
         response.cookie("user", JSON.stringify(user));
-        response.redirect("/app");
+        response.redirect("/app/home");
       }
     );
   });

@@ -86,7 +86,7 @@ export const Calendar = () => {
             {getMonthName(selectedMonth)} {selectedYear}
           </p>
         </header>
-        <Month selectedMonth={selectedMonth} />
+        <Month selectedMonth={selectedMonth} selectedYear={selectedYear} />
       </section>
       </div>
       

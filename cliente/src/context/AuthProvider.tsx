@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if(data){
         saveUser(data);
-        window.location.href = "/app";
+        window.location.href = "/app/home";
         return
       }
 

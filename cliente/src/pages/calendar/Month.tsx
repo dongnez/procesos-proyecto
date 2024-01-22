@@ -2,9 +2,9 @@ import { Fragment, useMemo } from "react";
 import { Day } from "src/pages/calendar/Day";
 import { getMonth } from "src/utils/calendarUtils";
 
-export const Month = ({ selectedMonth }: { selectedMonth: number }) => {
+export const Month = ({ selectedMonth,selectedYear }: { selectedMonth: number,selectedYear:number }) => {
   const month = useMemo(() => {
-    return getMonth(selectedMonth);
+    return getMonth(selectedMonth,selectedYear);
   }, [selectedMonth]);
 
   return (
