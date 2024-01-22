@@ -14,12 +14,6 @@ export const AppLayout = () => {
   const isSm = useDeviceSm();
   return (
     <div
-    onTouchMove={(e)=>{
-      e.preventDefault()
-    }}
-    onTouchStart={(e)=>{
-      e.preventDefault()
-    }}
       className="h-full bg-background"
       style={
         {

@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const CalendarSchema = new Schema<any>(
+const CalendarSchema = new Schema(
   {
     userId: {
       type: String,

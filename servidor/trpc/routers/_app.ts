@@ -2,7 +2,7 @@ import { router,createContext } from 'servidor/trpc/trpc';
 import {createExpressMiddleware} from "@trpc/server/adapters/express";
 import { Express } from "express";
 import { userRouter, } from "servidor/trpc/routers/user";
-import { calendarRouter } from 'servidor/trpc/routers/calentar';
+import { calendarRouter } from 'servidor/trpc/routers/calendar';
  
  
 export const appRouter = router({

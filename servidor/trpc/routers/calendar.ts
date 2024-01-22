@@ -71,4 +71,37 @@ export const calendarRouter = router({
 
       return true;
     }),
+  getSemanalStats: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        month: z.number(),
+        year: z.number(),
+        week: z.array(z.number()),
+      })
+    ).query(async (opts) => {
+      const { userId, week,month,year } = opts.input;
+
+      //Get days of the week of that yearn & month from user
+      const days = await CalendarModel.find({
+        userId: userId,
+        date: {
+          $gte: new Date(year,month,week[0]),
+          $lte: new Date(year,month,week[6]),
+        },
+      }).populate("foods.food"); 
+
+      //Return days of the week or null with an array
+      const weekDays = week.map((dayNum) => {
+        const dayFinal = days.find((day) => day.date.getDate() === dayNum);
+        if (dayFinal) {
+          return dayFinal;
+        } else {
+          return null;
+        }
+      })
+
+      return weekDays;
+    })
+      
 });

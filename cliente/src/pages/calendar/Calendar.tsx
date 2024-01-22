@@ -6,6 +6,7 @@ import { Button } from "src/@/components/ui/button";
 import { useOpenDialog } from "src/hooks/useOpenDialog";
 import { PageWraper } from "src/pages/app/PageWraper";
 import { Month } from "src/pages/calendar/Month";
+import { SemanalStats } from "src/pages/calendar/SemanalStats";
 import {
   getCurrentMonthNumber,
   getCurrentYear,
@@ -88,7 +89,9 @@ export const Calendar = () => {
         <Month selectedMonth={selectedMonth} />
       </section>
       </div>
-      <p>TODO STATS</p>
+      
+      <h2 className="text-lg my-1 font-semibold text-primary/60">Estadística semanal</h2>
+      <SemanalStats  className="flex items-center justify-center"/>
     </PageWraper>
   );
 };

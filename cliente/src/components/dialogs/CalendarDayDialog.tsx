@@ -12,7 +12,7 @@ import { Skeleton } from "src/@/components/ui/skeleton";
 import { DayInterface,FoodDayInterface } from "src/interfaces/CalendarInterface";
 import { CaloriesStats } from "src/components/CaloriesStats";
 import { useEffect, useState } from "react";
-import { getFullDateName } from "src/utils/calendarUtils";
+import { calculateDayMacros, getFullDateName } from "src/utils/calendarUtils";
 import { atom, useAtom } from "jotai";
 import { ChevronsLeft, ChevronsRight, X } from "lucide-react";
 import { Button } from "src/@/components/ui/button";
@@ -49,18 +49,9 @@ export const useTodayCalories = () => {
   };
 
   const countMacrosFromDayCalendar = (foods: Array<FoodDayInterface>) => {
-    const calories = foods?.reduce(
-      (acc, curr) => ({
-        kcal: acc.kcal + (curr.food.macros?.kcal || 0) * curr.quantity,
-        proteins: acc.proteins + (curr.food.macros?.proteins || 0) * curr.quantity,
-        carbs: acc.carbs + (curr.food.macros?.carbs || 0) * curr.quantity,
-        fats: acc.fats + (curr.food.macros?.fats || 0) * curr.quantity,
-      }),
-      { kcal: 0, proteins: 0, carbs: 0, fats: 0 }
-    );
-
-      setTodayCalories(calories);
-
+    const calories = calculateDayMacros(foods);
+    
+    setTodayCalories(calories);
   };
 
   return {
