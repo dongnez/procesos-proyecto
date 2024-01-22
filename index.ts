@@ -25,7 +25,7 @@ app.use(
   })
 );
 
-app.use(express.static(__dirname + "/cliente/dist/"));
+
 app.use(express.json());
 app.use(cookieParser())
 
@@ -41,13 +41,12 @@ useTRPC(app);
 
 // Conecta con la base de datos
 connectMongoDB();
+app.use(express.static(__dirname + "/cliente/dist/"));
 
 //Ruta para cualquier otro GET que no sea las rutas definidas (APP)
 app.use(function (request, response) {
   response.sendFile(path.join(__dirname, "/cliente/dist/index.html"));
 });
-
-
 
 
 const server = createServer(app); 
