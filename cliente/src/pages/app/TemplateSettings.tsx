@@ -163,7 +163,7 @@ export const TemplateSettings = () => {
                   userId: currentUser!._id,
                 }).then(()=>{
                   setTemplateList((prev:any)=>prev.filter((item:any)=>item._id !== template._id));
-                  navigate("/app");
+                  navigate("/app/home");
                 });
               },
             },

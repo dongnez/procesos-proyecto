@@ -31,7 +31,7 @@ export const useOneTap = () => {
 			databaseAuthGoogle({email,name,photoURL,provider:'google'}).then(async (res:any) => {
 				//Call Register
 				saveUser(res.data.user);
-				window.location.href = "/app";
+				window.location.href = "/app/home";
 			})
 			
 		  },

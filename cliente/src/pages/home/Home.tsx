@@ -9,7 +9,7 @@ export const Home = () => {
   const startButton = (
     <>
       {user ? (
-        <Link to="/app/">
+        <Link to="/app/home">
           <Button>Entrar a la app</Button>
         </Link>
       ) : (
