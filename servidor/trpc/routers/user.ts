@@ -10,7 +10,6 @@ export const userRouter = router({
     .query(async (opts) => {
       const { userId } = opts.input;
       const user: any = await UserModel.findById(userId);
-      console.log(user);
       return user;
     }),
   getUserByToken: publicProcedure

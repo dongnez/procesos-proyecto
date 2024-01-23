@@ -47,7 +47,6 @@ export const SemanalStats = ({ ...rest }: HTMLAttributes<HTMLDivElement>) => {
         res.map((day: any, index) => {
          const name = dayNamesES[index];
           if (!day) {
-            console.log(name);
             weekD.push({
               name: name,
               kcal: 0,

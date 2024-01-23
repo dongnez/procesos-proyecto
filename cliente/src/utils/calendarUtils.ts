@@ -75,7 +75,6 @@ export const prevMonth = (currentMonth: number, currentYear: number) => {
   // get previous month & year number
   let prevMonthNumber = currentMonth - 1;
 
-  console.log("C", prevMonthNumber);
 
   let prevYear = currentYear;
 
@@ -122,7 +121,7 @@ export function getWeekDays(month: number, day: number, year: number) {
   let weekDays: any = [];
 
   // Add each day of the week to the array
-  for (let i = 1; i < 8; i++) {
+  for (let i = 0; i < 7; i++) {
     weekDays.push(startOfWeek.add(i, "day").toDate().getDate());
   }
 
