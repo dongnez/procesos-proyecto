@@ -20,10 +20,7 @@ describe("Authentication API", () => {
         "message",
         "User created successfully"
       );
-
       testUser.id = response.data.userId;
-      console.log("TestUser",testUser)
-
     });
 
   });

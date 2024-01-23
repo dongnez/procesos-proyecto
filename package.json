@@ -9,7 +9,8 @@
     "test": "jest tests",
     "build": "cd cliente && npm install && npm run build",
     "dev": "tsx watch index.ts",
-    "dev-c": "cd cliente && npm run dev"
+    "dev-c": "cd cliente && npm run dev",
+    "test-dev": "NODE_ENV=test npm run dev"
   },
   "engines": {
     "node": ">=16.0.0"

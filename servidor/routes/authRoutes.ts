@@ -66,13 +66,15 @@ router.post("/register", async (req, res) => {
       return res.status(400).json({ message: "Error al crear el usuario" });
     }
 
-    await enviarEmail(
-      userSaved.email,
-      userSaved._id,
-      "Verifica tu correo"
-    ).then(() => {
-      console.log("Email enviado");
-    });
+    if (process.env.NODE_ENV !== 'test') {
+      await enviarEmail(
+        userSaved.email,
+        userSaved._id,
+        "Verifica tu correo"
+      ).then(() => {
+        console.log("Email enviado");
+      });
+    }
 
     const token = await createAccesstoken({ id: userSaved._id });
 
@@ -87,8 +89,8 @@ router.post("/register", async (req, res) => {
       return;
     }
 
-    console.log("Register", error?.code);
-    res.status(4001).json({ message: "Error al crear el usuario" });
+    console.log("Register", error);
+    res.status(401).json({ message: "Error al crear el usuario" });
   }
 });
 
@@ -104,7 +106,17 @@ router.get("/confirmarUsuario/:email/:key", async (req, res) => {
   //Get email and key
   const { email, key } = req.params;
   try {
-    const user = await UserModel.findByIdAndUpdate(key, {
+    
+    console.log("Confirmar usuario", email, key);
+
+    //Find user by email and key
+    const user = await UserModel.findOne({ email });
+
+    if(!user) return res.status(400).json({message:"Usuario no encontrado"})
+
+    if(user.email !== email) return res.status(400).json({message:"Email no coincide"})
+
+    await UserModel.findByIdAndUpdate(key, {
       emailVerificated: true,
     });
 
