@@ -31,7 +31,6 @@ describe("Authentication API", () => {
       const response = await axios.get(`${testURL}/confirmarUsuario/${testUser.email}/${testUser.id}`);
 
       expect(response.status).toBe(200);
-      
     });
   });
 
