@@ -6,7 +6,7 @@
   "main": "index.ts",
   "scripts": {
     "start": "tsx index.ts",
-    "test": "jest tests",
+    "test": "jest servidor/tests",
     "build": "cd cliente && npm install && npm run build",
     "dev": "tsx watch index.ts",
     "dev-c": "cd cliente && npm run dev",
@@ -39,7 +39,7 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.23.3",
+    "@babel/preset-env": "^7.23.8",
     "@types/express": "^4.17.20",
     "@types/node": "^20.8.8",
     "babel-jest": "^29.7.0",
