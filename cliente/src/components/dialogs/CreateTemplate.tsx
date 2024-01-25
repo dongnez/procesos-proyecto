@@ -22,6 +22,7 @@ import { databaseCreateTemplate } from "src/database/databaseTemplates";
 import { useAuth } from "src/context/AuthProvider";
 import { useState } from "react";
 import { useToast } from "src/@/components/ui/use-toast";
+import { useTemplateList } from "src/context/templateAtoms";
 
 export const CreateTemplate = ({
   ...rest
@@ -30,6 +31,7 @@ export const CreateTemplate = ({
   const [name, setName] = useState("");
   const [visibility, setVisibility] = useState<"public" | "private">("public");
 
+  const [_,setTemplates] = useTemplateList(user!._id)
   const { toast } = useToast();
 
   return (
@@ -77,14 +79,17 @@ export const CreateTemplate = ({
                       foods: [],
                       users: [
                         {
-                          userId: user!._id,
+                          userRef: user!._id,
                           role: "owner",
                         },
                       ],
                       visibility: visibility,
                     },
                     userId: user!._id,
-                  }).then(() => {
+                  }).then((newT) => {
+                    const template = newT.data; 
+                    if (!template) return;
+                    setTemplates((t) => [...t, template]);
                     toast({
                       title: "Template creado ✅",
                       description: "El template se ha creado correctamente",

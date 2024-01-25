@@ -1,12 +1,12 @@
 import nodemailer from "nodemailer";
-const email = "gnez.developer@gmail.com";
+const email = "jimenezjimenezguillermo@gmail.com";
 const url = process.env.APP_URL || "http://localhost:8080/";
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: email,
-    pass: "tjfn pyrv lwpd tosz",
+    pass: "qgnh fjlo nbeg alth",
   },
 });
 

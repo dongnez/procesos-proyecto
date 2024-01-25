@@ -10,9 +10,11 @@ export const UserIcon = ({
   size = 24,
   fallbackProps,
   imageProps,
+  fallback,
   ...rest
 }: React.ComponentPropsWithoutRef<typeof Avatar> & {
-  image: string;
+  image: string | undefined;
+  fallback?: string;
   size?: number;
   imageProps?: React.ComponentPropsWithoutRef<typeof AvatarImage>;
   fallbackProps?: React.ComponentPropsWithoutRef<typeof AvatarFallback>;
@@ -26,8 +28,8 @@ export const UserIcon = ({
       }}>
       <AvatarImage {...imageProps} src={image} />
 
-      <AvatarFallback {...fallbackProps}>
-	  	<User2 size={size / 2} />
+      <AvatarFallback {...fallbackProps} className="border border-muted">
+        {fallback ? <p>{fallback.slice(0, 3)}</p> : <User2 size={size / 2} />}
       </AvatarFallback>
     </Avatar>
   );

@@ -5,12 +5,14 @@ import { Heart, Repeat } from "react-feather";
 import { HTMLMotionProps, motion, useAnimation } from "framer-motion";
 import { Card } from "src/components/Card";
 import { CaloriesStats } from "src/components/CaloriesStats";
-
+import { cn } from "src/@/lib/utils";
+import { getFoodTimeOption } from "src/components/SelectFoodTime";
+import { ButtonAddCalendar } from "src/components/ButtonAddCalendar";
 
 const zoomInAndShakeVariants = {
   initial: { scale: 1, transition: { duration: 0.4, ease: "easeInOut" } },
   animate: { scale: 1.2, transition: { duration: 1, ease: "easeInOut" } },
-exit: { scale: 1 },
+  exit: { scale: 1 },
 };
 
 const shakeAndResetVariants = {
@@ -65,53 +67,78 @@ export const Shaker = ({
               setTimeout(() => setShowParticles(true), 1200);
             }
           }}
-          className="relative h-[220px] w-[220px] sm:w-[300px] sm:h-[300px] bg-transparent rounded-xl mx-auto">
+          className="relative h-[260px] w-[265px] sm:w-[300px] sm:h-[300px] bg-transparent rounded-xl mx-auto">
           {selectedFood ? (
             <>
-                <Card
-                  color="bg-food"
-                  className="w-full h-full rounded-xl cursor-default "
-                  front={
-                    <>
+              <Card
+                color="bg-food"
+                className="w-full h-full rounded-xl cursor-default "
+                front={
+                  <>
+                    <div
+                      className={cn(
+                        "absolute top-1 right-0 left-0 flex items-center px-1 duration-500 ease-in-out",
+                        shake
+                          ? "opacity-0 translate-y-[-45px]"
+                          : "opacity-100 translate-y-0"
+                      )}>
                       <h3
-                        className={`absolute top-1 right-0 left-0 text-center font-bold text-3xl text-white bg-black/20 w-fit mx-auto rounded-full py-1 px-4 z-10 
-                        ${
-                          shake
-                            ? "opacity-0 translate-y-[5px]"
-                            : "opacity-100 translate-y-0"
-                        } duration-500`}>
+                        className={`text-center font-bold text-xl text-secondary-foreground
+                            bg-secondary
+                           w-fit mx-auto rounded-full py-1 px-4 z-10 
+                          `}>
                         {selectedFood.name}
                       </h3>
-                      <motion.img
-                        key={selectedFood._id}
-                        src={selectedFood.image}
-                        alt={selectedFood.name}
-                        className={`w-full h-full object-cover rounded-xl z-20 
+
+                      <ButtonAddCalendar selectedFood={selectedFood} />
+                    </div>
+
+                    <motion.img
+                      key={selectedFood._id}
+                      src={selectedFood.image}
+                      alt={selectedFood.name}
+                      className={`w-full h-full object-cover rounded-xl z-20 
                         pointer-events-none
                         ${shake ? "blur-[1px]" : ""}`}
-                        initial={{ opacity: 0.5 }}
-                        animate={{
-                          opacity: shake ? 0.5 : 1,
-                          transition: { duration: 0.6 },
-                        }}
-                      />
-                    </>
-                  }
-                  back={
-                    <div className="p-2 h-full  rounded-xl flex flex-col bg-muted border border-primary">
-                      <p className="text-lg -foreground/80 font-semibold "> Descripcion</p>
-                      <p className=" [backface-visibility:hidden]  text-justify flex-1">
-                        {selectedFood.description || "No hay descripción"}
-                      </p>
-                      {selectedFood.macros && (<CaloriesStats isCompact macros={selectedFood.macros}  className="mx-auto w-fit my-3"/>)}
+                      initial={{ opacity: 0.5 }}
+                      animate={{
+                        opacity: shake ? 0.5 : 1,
+                        transition: { duration: 0.6 },
+                      }}
+                    />
+                  </>
+                }
+                back={
+                  <div className="p-2 h-full  rounded-xl flex flex-col bg-muted border border-primary">
+                    <div className="flex items-center">
+
+                    <p className="text-lg -foreground/80 font-semibold flex-1">
+                      Descripcion
+                    </p>
+                    {getFoodTimeOption(selectedFood.timeType)?.icon}
+
                     </div>
-                  }
-                />
+                    <p className=" [backface-visibility:hidden]  text-justify flex-1 text-sm sm:text-base">
+                      {selectedFood.description || "No hay descripción"}
+                    </p>
+                    {selectedFood.macros && (
+                      <CaloriesStats
+                        isCompact
+                        macros={selectedFood.macros}
+                        className="mx-auto w-fit my-3"
+                      />
+                    )}
+                  </div>
+                }
+              />
             </>
           ) : (
-            <div className={`w-full h-full flex flex-col gap-1  text-center items-center justify-center`}>
+            <div
+              className={`w-full h-full flex flex-col gap-1  text-center items-center justify-center border-2 border-muted rounded-xl`}>
               <p className="text-lg sm:text-xl">Ninguna comida seleccionada</p>
-              <p className="text-xs sm:text-sm">¡Pulsa el botón para seleccionar una!</p>
+              <p className="text-xs sm:text-sm">
+                ¡Pulsa el botón para seleccionar una!
+              </p>
             </div>
           )}
         </motion.div>

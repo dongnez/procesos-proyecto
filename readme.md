@@ -21,6 +21,7 @@ UPLOADTHING_SECRET=sk_live_cb86d0d2bfb8ff1ca1f13cbac28e801e86aa411f1fead0a10a420
 UPLOADTHING_APP_ID=4n1ivgmtmq
 PORT=8080
 APP_URL=http://localhost:8080
+NODE_ENV=development
 ```
 
 ## Desplegar en GCLOUD

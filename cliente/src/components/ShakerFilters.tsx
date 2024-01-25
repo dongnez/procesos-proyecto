@@ -1,8 +1,9 @@
 import { HTMLAttributes } from "react"
 import { FoodTimeType } from "src/interfaces/FoodInterfaces"
 import { SelectFoodTime } from "src/components/SelectFoodTime"
+import { cn } from "src/@/lib/utils"
 
-export const ShakerFilters = ({onFilterSelect,...res}:HTMLAttributes<HTMLDivElement> & {
+export const ShakerFilters = ({onFilterSelect,className,...res}:HTMLAttributes<HTMLDivElement> & {
 	onFilterSelect: (filter: FoodTimeType) => void
 }) => {
 
@@ -27,9 +28,10 @@ export const ShakerFilters = ({onFilterSelect,...res}:HTMLAttributes<HTMLDivElem
 
 
   return (
-	<div {...res} className="border-2 border-primary p-1 flex items-center max-w-[400px] mx-auto mt-4 rounded-sm">
+	<div {...res} className={cn("border-2 border-primary p-1 flex items-center max-w-[400px] mt-4 rounded-sm",className)}>
 
-		<section className="flex-1">
+		<section className="flex-1 p-2">
+			<p className="font-semibold text-primary uppercase">Filtro <span className="text-xs px-1">de</span> horario </p>
 			
 		</section>
 

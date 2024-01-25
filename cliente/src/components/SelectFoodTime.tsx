@@ -18,6 +18,38 @@ type FoodTimeSelect = {
   name: string;
 };
 
+export const foodTimeOptions: Array<FoodTimeSelect> = [
+  {
+    type: "all",
+    icon: <Asterisk className="w-4 h-4" />,
+    name: "Todos",
+  },
+  {
+    type: "breakfast",
+    icon: <EggFried className="w-4 h-4" />,
+    name: "Desayuno",
+  },
+  {
+    type: "lunch",
+    icon: <Sun className="w-4 h-4" />,
+    name: "Comida",
+  },
+  {
+    type: "dinner",
+    icon: <Moon className="w-4 h-4" />,
+    name: "Cena",
+  },
+  {
+    type: "snack",
+    icon: <Sandwich className="w-4 h-4" />,
+    name: "Snack",
+  },
+];
+
+export const getFoodTimeOption = (type: FoodTimeType) => {
+  return foodTimeOptions.find((item) => item.type === type);
+}
+
 export function SelectFoodTime({
   onSelect,
   primaryColor = false,
@@ -27,33 +59,7 @@ export function SelectFoodTime({
   onSelect: (foodTime: FoodTimeType) => void;
   primaryColor?: boolean;
 }) {
-  const foodTimeOptions: Array<FoodTimeSelect> = [
-    {
-      type: "all",
-      icon: <Asterisk className="w-4 h-4" />,
-      name: "Todos",
-    },
-    {
-      type: "breakfast",
-      icon: <EggFried className="w-4 h-4" />,
-      name: "Desayuno",
-    },
-    {
-      type: "lunch",
-      icon: <Sun className="w-4 h-4" />,
-      name: "Comida",
-    },
-    {
-      type: "dinner",
-      icon: <Moon className="w-4 h-4" />,
-      name: "Cena",
-    },
-    {
-      type: "snack",
-      icon: <Sandwich className="w-4 h-4" />,
-      name: "Snack",
-    },
-  ];
+  
   return (
     <Select
       onValueChange={(value:FoodTimeType) => onSelect(value)}

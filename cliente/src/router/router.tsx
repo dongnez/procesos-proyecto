@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { Navigate, createBrowserRouter } from "react-router-dom";
 import { Template } from "src/pages/app/Template";
 import { AppLayout } from "src/pages/app/AppLayout";
 import { Login } from "src/pages/auth/Login";
@@ -8,6 +8,8 @@ import { ProtectedRoute } from "src/context/AuthProvider";
 import { Home } from "src/pages/home/Home";
 import {Home as HomeApp} from 'src/pages/app/home/Home'
 import { TemplateSettings } from "src/pages/app/TemplateSettings";
+import { Calendar } from "src/pages/calendar/Calendar";
+import { Settings } from "src/pages/settings/Settings";
 
 export const router = createBrowserRouter([
   {
@@ -30,10 +32,14 @@ export const router = createBrowserRouter([
     <ProtectedRoute>
       <AppLayout />
     </ProtectedRoute>,
-    
     children: [
       {
         path: "",
+        element: <Navigate to="home" />,
+        index: true,
+      },
+      {
+        path: "home",
         element: <HomeApp />,
         index: true,
       },
@@ -55,11 +61,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "calendar",
-        element: <p>Calendar</p>,
+        element: <Calendar />,
+      },
+      {
+        path: "calendar/:dateId",
+        element: <Calendar />,
       },
       {
         path: "settings",
-        element: <p>Configuracion</p>,
+        element: <Settings />,
       },
       
     ],

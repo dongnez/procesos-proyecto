@@ -1,12 +1,11 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { RightBar } from "src/pages/app/RightBar";
-// import { NavBar } from "src/modules/header/NavBar";
-// import { componentMeasures } from "src/constants/compontents";
-
 import { LeftBar } from "src/pages/app/LeftBar";
 import { BottomNavBar } from "src/pages/app/BottomNavBar";
 import { useCloseAll } from "src/hooks/useCloseAll";
 import { useDeviceSm } from "src/hooks/useDevice";
+import { DialogStack } from "src/components/dialogs/DialogStack";
+import { useNavigate } from "src/hooks/useNavigate";
 
 export const AppLayout = () => {
   const { close } = useCloseAll();
@@ -30,7 +29,10 @@ export const AppLayout = () => {
             onClick={() => {
               if (isSm) close();
             }}
-            className="h-full flex-1 px-5">
+            style={{
+              height: `calc(100dvh - ${55}px)`,
+            }}
+            className="h-full flex-1 px-1 sm:px-5 overflow-y-auto overflow-x-hidden py-2 sm:pt-0 ">
             <Outlet />
           </section>
 
@@ -40,6 +42,7 @@ export const AppLayout = () => {
         <BottomNavBar />
       </div>
       
+      <DialogStack />
     </div>
   );
 };

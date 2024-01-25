@@ -11,7 +11,7 @@ export const LeftBar = ({
   ...rest
 }: HTMLAttributes<HTMLDivElement>) => {
   const navLinks = [
-    { name: "Home", icon: <Home />, path: "/app/" },
+    { name: "Home", icon: <Home />, path: "/app/home" },
     { name: 'Calendario', icon: <Calendar />, path: "/app/calendar" },
     { name: "Configuración", icon: <Settings />, path: "/app/settings" },
     // { name: "Perfil", icon: <User2 />, path: "/app/profile" },
@@ -26,7 +26,7 @@ export const LeftBar = ({
     <section
       {...rest}
       className={cn(
-        "bg-card h-full w-[300px] sm:w-[200px] py-3 pl-4  rounded-r-3xl  duration-300 z-20 left-0 top-0 flex flex-col gap-10 justify-center",
+        "bg-card h-full w-fit  py-3 pl-4  rounded-r-3xl  duration-300 z-20 left-0 top-0 flex flex-col gap-10 justify-center items-center",
         "absolute sm:relative",
         isSm && (open ? `opacity-100` : `opacity-0`),
         className
@@ -41,12 +41,12 @@ export const LeftBar = ({
           key={index}
           className={({ isActive, isPending }) => {
             return cn(
-              "flex items-center gap-5 py-3 pl-3 rounded-l-lg hover:bg-background/80 duration-200 font-medium",
-              isPending ? "pending" : isActive ? "bg-background" : ""
+              "flex items-center gap-5 py-3 pl-3 pr-4 rounded-l-lg hover:bg-background/80 duration-200 font-medium",
+              isPending ? "pending" : isActive ? "bg-background group is-selected" : ""
             );
           }}>
-          {link.icon}
-          <span>{link.name}</span>
+          <span className="group-[.is-selected]:bg-card rounded-sm px-2 py-1">{link.icon}</span>
+          {/* <span>{link.name}</span> */}
         </NavLink>
       ))}
     </section>

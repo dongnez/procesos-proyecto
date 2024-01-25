@@ -1,13 +1,13 @@
-import axios from "axios";
+import axios from "src/api/axios";
 import { UserInterface } from "src/interfaces/UserInterfaces";
-import { API_URL } from "src/constants/config";
+import { WEB_URL } from "src/constants/config";
 
 export async function databaseAuthRegister(payload: {
   name: string;
   email: string;
   password: string;
 }) {
-  const error = await axios.post(`${API_URL}auth/register`, payload, {
+  const error = await axios.post(`${WEB_URL}/auth/register`, payload, {
     headers: {
       "Content-Type": "application/json", // Configura la cabecera para indicar que estás enviando JSON
     },
@@ -24,7 +24,7 @@ export async function databaseAuthRegister(payload: {
 export async function databaseSendEmailVerification(payload: {
   email: string;
 }) {
-  const result = await axios.post(`${API_URL}auth/enviarEmail`, payload, {
+  const result = await axios.post(`${WEB_URL}/auth/enviarEmail`, payload, {
     headers: {
       "Content-Type": "application/json", // Configura la cabecera para indicar que estás enviando JSON
     },
@@ -35,27 +35,26 @@ export async function databaseSendEmailVerification(payload: {
 export async function databaseAuthLogin(payload: {
   email: string;
   password: string;
-}): Promise<{data:null | UserInterface,error:any }> {
+}): Promise<{data:null | UserInterface ,error:any }> {
   let error = null;
   
-  const result = await axios.post(`${API_URL}auth/login`, payload, {
-    headers: {
-      "Content-Type": "application/json", // Configura la cabecera para indicar que estás enviando JSON
-    },
-  }).catch((error_) => {
+  const result = await axios.post(`${WEB_URL}/auth/login`, payload).catch((error_) => {
+    if(!error_){
+      throw "Se ha producido un error intentelo más tarde"
+    }
+    
     throw error_.response.data;
   });
+  
 
+  //Check if response set a cookie token
+  console.log("Result",result) 
 
   return {data:result?.data,error};
 }
 
-export async function databaseAuthLogOut(payload: {
-  name: string;
-  email: string;
-  password: string;
-}) {
-  const result = await axios.post(`${API_URL}auth/logout`, payload, {
+export async function databaseAuthLogOut() {
+  const result = await axios.post(`${WEB_URL}/auth/logout`, {}, {
     headers: {
       "Content-Type": "application/json", // Configura la cabecera para indicar que estás enviando JSON
     },
@@ -64,7 +63,7 @@ export async function databaseAuthLogOut(payload: {
 }
 
 export function databaseAuthGoogle(user:{email:string,name:string,photoURL:string,provider:string}) {
-  return axios.post(`${API_URL}auth/google`, user, {
+  return axios.post(`${WEB_URL}/auth/google`, user, {
   headers: {
     'Content-Type': 'application/json' // Configura la cabecera para indicar que estás enviando JSON
   }

@@ -37,7 +37,43 @@ const UserSchema = new Schema<UserInterface>({
 	templates: [{
 		type: Schema.Types.ObjectId,
 		ref: 'Template'
-	}]	
+	}],
+	recentFoods: [{
+		type: Schema.Types.ObjectId,
+		ref: 'Food',
+		required: false,
+		maxlength: 10,
+	}],
+	objective: {
+		kcal: {
+			type: Number,
+			unique: false,
+			required: false,
+			default: 0,
+			min: 0,
+		},
+		proteins: {
+			type: Number,
+			unique: false,
+			default: 0,
+			required: false,
+			min: 0,
+		},
+		carbs: {
+			type: Number,
+			unique: false,
+			default: 0,
+			required: false,
+			min: 0,
+		},
+		fats: {
+			type: Number,
+			unique: false,
+			default: 0,
+			required: false,
+			min: 0,
+		},
+	},
 
 },{collection: 'usuarios'})
 

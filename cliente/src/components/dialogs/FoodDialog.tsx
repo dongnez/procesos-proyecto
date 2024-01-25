@@ -34,7 +34,11 @@ import {
 } from "src/@/components/ui/accordion";
 import { calculateCalories } from "src/utils/caloriesUtils";
 import { CaloriesStats } from "src/components/CaloriesStats";
-import { SelectFoodTime } from "src/components/SelectFoodTime";
+import {
+  SelectFoodTime,
+  getFoodTimeOption,
+} from "src/components/SelectFoodTime";
+import { ButtonAddCalendar } from "src/components/ButtonAddCalendar";
 
 export const FoodDialog = ({
   food,
@@ -124,7 +128,7 @@ export const FoodDialog = ({
 };
 
 const FoodSearch = ({
-  food,
+  food = [],
   onFoodPick,
   onFoodCreate,
 }: {
@@ -151,22 +155,22 @@ const FoodSearch = ({
           <Plus size={24} />
         </Button>
       </DialogTitle>
-        {food
-          .filter((f) => f.name.includes(filter))
-          .map((food, index) => (
-            <div
-              key={index}
-              className="bg-secondary hover:bg-secondary/50 duration-200 rounded-md p-2 flex gap-2 cursor-pointer"
-              onClick={() => onFoodPick(food)}>
-              <AvatarIcon image={food.image} fallback={food.name} size={22} />
-              <HighlightedText
-                text={food.name}
-                highlight={filter || ""}
-                className="flex-1"
-                color="bg-yellow-500"
-              />
-            </div>
-          ))}
+      {food
+        .filter((f) => f?.name.includes(filter))
+        .map((food, index) => (
+          <div
+            key={index}
+            className="bg-secondary hover:bg-secondary/50 duration-200 rounded-md p-2 flex gap-2 cursor-pointer"
+            onClick={() => onFoodPick(food)}>
+            <AvatarIcon image={food.image} fallback={food.name} size={22} />
+            <HighlightedText
+              text={food.name}
+              highlight={filter || ""}
+              className="flex-1"
+              color="bg-yellow-500"
+            />
+          </div>
+        ))}
     </DialogHeader>
   );
 };
@@ -212,7 +216,7 @@ const FoodSelected = ({
 
   return (
     <>
-      <DialogHeader>
+      <DialogHeader className="flex flex-row items-center ">
         <Button
           variant={"ghost"}
           size={"icon"}
@@ -220,12 +224,13 @@ const FoodSelected = ({
           onClick={() => navigate(`/app/template/${templateId}/food`)}>
           <ArrowLeft className="w-5" />
         </Button>
+        <div className="flex-1" />
+        <ButtonAddCalendar selectedFood={food!} variant={'ghost'} className="rounded-full h-[30px] w-[30px] mr-2" iconSize={15} />
+        <>{food ? getFoodTimeOption(food.timeType)?.icon : <></>}</>
       </DialogHeader>
       {food ? (
         <>
           <DialogTitle className="flex flex-col items-center">
-
-            
             <AvatarIcon image={food.image} fallback={food.name} size={205} />
 
             <p className="text-2xl">{food.name}</p>
@@ -258,7 +263,7 @@ const FoodSelected = ({
 const AddFood = ({ close }: { close: () => void }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [timeType,setTimeType] = useState<FoodTimeType>("all");
+  const [timeType, setTimeType] = useState<FoodTimeType>("all");
   const [macros, setMacros] = useState({
     proteins: 0,
     carbs: 0,
@@ -279,10 +284,12 @@ const AddFood = ({ close }: { close: () => void }) => {
       if (res && res.length > 0) {
         const kcal = calculateCalories(macros);
 
+        if(!templateId) return;
+
         const { data } = await databaseAddFoodToTemplate({
-          templateId: templateId || "",
           food: {
             _id: "",
+            templateId: templateId ,
             name: name,
             description: description === "" ? undefined : description,
             macros:
@@ -293,7 +300,7 @@ const AddFood = ({ close }: { close: () => void }) => {
                     ...macros,
                   },
             image: res[0].url,
-            timeType: timeType
+            timeType: timeType,
           },
         });
 
@@ -365,7 +372,7 @@ const AddFood = ({ close }: { close: () => void }) => {
           className="flex-1"
           onChange={(e) => setName(e.currentTarget.value)}
         />
-        <SelectFoodTime onSelect={(foodTime)=>setTimeType(foodTime)} />
+        <SelectFoodTime onSelect={(foodTime) => setTimeType(foodTime)} />
       </section>
       <Textarea
         placeholder="Descripcion"

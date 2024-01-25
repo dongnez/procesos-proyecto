@@ -6,10 +6,11 @@
   "main": "index.ts",
   "scripts": {
     "start": "tsx index.ts",
+    "test": "jest servidor/tests",
     "build": "cd cliente && npm install && npm run build",
     "dev": "tsx watch index.ts",
-    "dev-c": "cd cliente && npm run dev"
-
+    "dev-c": "cd cliente && npm run dev",
+    "test-dev": "NODE_ENV=test npm run dev"
   },
   "engines": {
     "node": ">=16.0.0"
@@ -17,8 +18,10 @@
   "author": "Google LLC",
   "license": "Apache-2.0",
   "dependencies": {
+    "@trpc/server": "^10.45.0",
     "axios": "^1.6.0",
     "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
     "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -30,13 +33,17 @@
     "nodemailer": "^6.9.7",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^2.0.0",
+    "socket.io": "^4.7.2",
     "tsx": "^3.14.0",
     "uploadthing": "^5.7.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.23.8",
     "@types/express": "^4.17.20",
     "@types/node": "^20.8.8",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
     "typescript": "^5.2.2"
   }
 }

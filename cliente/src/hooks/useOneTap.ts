@@ -30,9 +30,8 @@ export const useOneTap = () => {
 
 			databaseAuthGoogle({email,name,photoURL,provider:'google'}).then(async (res:any) => {
 				//Call Register
-				console.log("useOneTap CALLBACK", res.data.user);
 				saveUser(res.data.user);
-				window.location.href = "/app";
+				window.location.href = "/app/home";
 			})
 			
 		  },

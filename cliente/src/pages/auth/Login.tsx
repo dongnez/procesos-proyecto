@@ -45,28 +45,9 @@ export const Login = () => {
 
           </div>
 
-          <div className="flex flex-col gap-4 w-full">
-            <Input
-              type="email"
-              className="text-lg"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-            />
-            <Input
-              type="password"
-              className="text-lg"
-              placeholder="Contraseña"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            />
-            <Button
-              size={"sm"}
-              onClick={async () => {
+          <form className="flex flex-col gap-4 w-full"
+          onSubmit={async (e) => {
+                e.preventDefault();
                 setError("");
                 if (email === "" || password === "")
                   return toast({
@@ -80,14 +61,35 @@ export const Login = () => {
                   return e
                 })
 
-                if(error.errorCode === 2){
+                if(error?.errorCode === 2){
                   setShowEmailSend(true);
                   return
                 }
 
-                error.message && setError(error.message);
+                error?.message && setError(error.message);
 
+              }}>
+            <Input
+              type="email"
+              className="text-lg"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
               }}
+            />
+            <Input
+              type="password"
+               
+              className="text-lg"
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+            <Button
+              size={"sm"}
               type="submit">
               Iniciar Sesión
             </Button>
@@ -111,7 +113,7 @@ export const Login = () => {
                 </a>
               </p>
             </div>
-          </div>
+          </form>
         </section>
       </div>
     </div>
