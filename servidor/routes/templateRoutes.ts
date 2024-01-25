@@ -58,7 +58,7 @@ router.post("/getTemplates", async (req, res) => {
     if (!userFound)
       return res.status(400).json({ message: "Usuario no encontrado" });
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Templates obtenidos correctamente",
       templates: userFound.templates,
     });
@@ -85,36 +85,34 @@ router.get("/invite/:templateId/:inviteCode", async (req, res) => {
 
   try {
     //Find template by id & check if invite code is correct then add user to template & add template to user
-    await TemplateModel.findById(templateId).then(async (template) => {
-      if(!template) return res.status(400).json({ message: "Template not found" });
+    const template = await TemplateModel.findById(templateId);
 
-      if (template?.inviteCode === inviteCode) {
+    if (!template) {
+      return res.status(400).json({ message: "Template not found" });
+    }
 
-        //Check if user is already in template
-        const userAlreadyInTemplate = template.users.find(user => user.userRef == id);
-        if(userAlreadyInTemplate) return res.redirect("/app/templates/"+templateId);
-        
-        template.users.push({ userRef: user._id, role: "viewer" });
-        template.save();
+    if (template.inviteCode === inviteCode) {
+      const userAlreadyInTemplate = template.users.find(
+        (user) => user.userRef == id
+      );
 
-        // Add the new template ID to the user's templates array
-        await UserModel.findByIdAndUpdate(
-          user._id,
-          { $addToSet: { templates: template._id } },
-          { new: true }
-        )
-
-        res.redirect("/app/templates/"+templateId);
-        return res.status(200).json({
-          message: "Template joined successfully",
-        });
+      if (userAlreadyInTemplate) {
+        return res.redirect("/app/template/" + templateId);
       }
-    });
 
-    res.redirect("/app/home/");
-    return res.status(400).json({
-      message: "Invite code incorrect",
-    });
+      template.users.push({ userRef: user._id, role: "viewer" });
+      await template.save();
+
+      await UserModel.findByIdAndUpdate(
+        user._id,
+        { $addToSet: { templates: template._id } },
+        { new: true }
+      );
+
+      return res.redirect("/app/template/" + templateId);
+    }
+
+    return res.redirect("/app/home/");
   } catch (error) {
     console.log("Error en getTemplates", error);
     res.status(500).json({
@@ -124,7 +122,6 @@ router.get("/invite/:templateId/:inviteCode", async (req, res) => {
 });
 
 router.post("/newCode", async (req, res) => {
-
   const { templateId } = req.body;
 
   // Generate a random invite code
@@ -139,18 +136,13 @@ router.post("/newCode", async (req, res) => {
     return res.status(500).json({
       message: "Error en newCode",
     });
-
   });
 
   return res.status(200).json({
     message: "New invite code generated",
-    code:newInviteCode,
+    code: newInviteCode,
   });
-
-
-})
-
-
+});
 
 router.post("/deleteTemplate", async (req, res) => {
   const { templateId } = req.body;
@@ -181,7 +173,6 @@ router.post("/getTemplateById", async (req, res) => {
   const userId = deconstructToken(token);
 
   try {
-
     //Find template by id & check if user is in template
     const template = await TemplateModel.findById(templateId)
       .populate([
@@ -194,12 +185,14 @@ router.post("/getTemplateById", async (req, res) => {
     if (!template)
       return res.status(400).json({ message: "Template no encontrado" });
 
-      // Check if userId is in template
-      const userIsInTemplate = template.users.some((user) => (user.userRef as any)._id.toString() === userId.id);
+    // Check if userId is in template
+    const userIsInTemplate = template.users.some(
+      (user) => (user.userRef as any)._id.toString() === userId.id
+    );
 
-      if (!userIsInTemplate && !process.env.DEVELOPMENT) {
-        return res.status(400).json({ message: "User not in template" });
-      } 
+    if (!userIsInTemplate && !process.env.DEVELOPMENT) {
+      return res.status(400).json({ message: "User not in template" });
+    }
 
     res.status(200).json({
       message: "Template obtenido correctamente",

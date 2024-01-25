@@ -121,8 +121,7 @@ router.get("/confirmarUsuario/:email/:key", async (req, res) => {
     });
 
     // res.cookie("user", JSON.stringify(user));
-    // res.redirect('/app')
-    res.status(200).json({ message: "Usuario verificado correctamente" });
+    res.redirect('/login')
   } catch (error) {
     console.log("Confirmar usuario", error);
     res.send(error);
