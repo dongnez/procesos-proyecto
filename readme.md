@@ -16,9 +16,9 @@ Estas variables sirven para que la app funcione correctamente.
 En producción cambia la URL
 
 ```js
-MONGODB_URI=mongodb+srv://gnez:gnez@cluster0.43kwtts.mongodb.net/sistema?retryWrites=true&w=majority
-UPLOADTHING_SECRET=sk_live_cb86d0d2bfb8ff1ca1f13cbac28e801e86aa411f1fead0a10a420b7aa630658c
-UPLOADTHING_APP_ID=4n1ivgmtmq
+MONGODB_URI={Clave Mongo cluster}
+UPLOADTHING_SECRET={Uploadthing secret}
+UPLOADTHING_APP_ID={Uploadthing app id}
 PORT=8080
 APP_URL=http://localhost:8080
 NODE_ENV=development
